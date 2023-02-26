@@ -1,4 +1,23 @@
 <html lang="en-US">
+  <style>
+    body {
+      color: black;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+    }
+
+    .img1{
+
+      position:  absolute;
+      left: 14px;
+      top: 7px;
+    }
+    #main_header {
+      position: absolute;
+      left: 7%;
+      top: 60px;
+    }
+
+  </style>
     <head>
       <meta charset="utf-8">
       <style type="text/css"></style>
@@ -7,12 +26,20 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
       <meta name="apple-mobile-web-app-capable" content="yes">
       <meta name="apple-mobile-web-app-title" content="DeviceLog">
-      <title>Title of Website</title>
+      <link rel="stylesheet" type="text/css" href="static/stylesheet_main.css">
+      <link rel="icon" type="image" href="data/favicon-16x16.png">
+      <title>Student Log - Dash</title>
     </head>
     <body>
-        <h2>Main Header of Website</h2>
         <div class="header">
-          <iframe src="header.html"></iframe>
+          <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0; left:0;"></div>
+          <br><br><br>
+          <img class="img1" src="data/shc-logo.svg" z-index="-1" width="300px" height="65px" alt="sacred heart logo">
+          <div style="width:6%; height: 100%; border:none; z-index:-3; background-color: #0d3e7d; position: absolute; top: 0; left: 0;"></div>
+          <h1 id="main_header">Student Device Log</h1>
+
+        </div>
+        <div class="main">
         </div>
     </body>
 </html>
