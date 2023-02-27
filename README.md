@@ -1,5 +1,7 @@
 # Welcome to my Scholarship Project for 2023
 
+## Project Proposal
+
 ## Please find important links below
 ### Main Code Branch:
 https://github.com/rgdragon9/scholarship_main.git
