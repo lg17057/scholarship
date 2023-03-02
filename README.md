@@ -8,15 +8,15 @@ A website framework in which students can sign in and out rental devices based o
 
 #### My digital outcome will outline the following features;
 
--A website framework hosted online to be used by potentially several teacher at once on different platforms
--Simple and accessible UI for easy pickup use by new teachers
--Ability to create or remove new devices
--Student ID database used to correlate student with their ID - (potential Kamar integration)
--Rental logs which display all relevant data to teachers
--Data analysis of rental statistics, and downloadable data of rental logs
--Ability to add new teachers and moderators
--Ability to manually add device rental logs
--Ability to report errors or issues 
+- A website framework hosted online to be used by potentially several teacher at once on different platforms
+- Simple and accessible UI for easy pickup use by new teachers
+- Ability to create or remove new devices
+- Student ID database used to correlate student with their ID - (potential Kamar integration)
+- Rental logs which display all relevant data to teachers
+- Data analysis of rental statistics, and downloadable data of rental logs
+- Ability to add new teachers and moderators
+- Ability to manually add device rental logs
+- Ability to report errors or issues 
 
 #### This project may use the following programs / languages
 
