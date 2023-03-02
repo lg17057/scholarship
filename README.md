@@ -20,15 +20,15 @@ A website framework in which students can sign in and out rental devices based o
 
 #### This project may use the following programs / languages
 
--Written using VSCode
--Utilising website hosting service
--Form of SQL
--HTML
--Javascript
--CSS
--PHP
--jQuery
--Python
+- Written using VSCode
+- Utilising website hosting service
+- Form of SQL
+- HTML
+- Javascript
+- CSS
+- PHP
+- jQuery
+- Python
 Further in development of this project may refine or change the languages used to craft this outcome
 
 ## Please find important links below
