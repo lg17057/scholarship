@@ -37,9 +37,9 @@ https://github.com/rgdragon9/scholarship_main.git
 ### Google Drive Folder:
 https://drive.google.com/drive/folders/1g9hFqIwX8920iHGPcCoy-_57lBHYSjZt?usp=share_link
 ### Feature Development Board:
-https://github.com/users/rgdragon9/projects/2/views/1
+https://github.com/users/lg17057/projects/2/views/1
 ### Project Schedule Board:
 https://github.com/users/lg17057/projects/5/views/3
 ### Project Wiki:
-https://github.com/rgdragon9/scholarship_main/wiki
+https://github.com/lg17057/scholarship_main/wiki
 
