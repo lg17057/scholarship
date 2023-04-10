@@ -1,8 +1,27 @@
 # python -m flask run
-
-from flask import Flask, render_template, url_for, redirect
+from select import select
+import sqlite3 as sql
+from sqlite3 import *
+import hashlib
+import re
+from datetime import date
+import time
+from time import sleep
+from flask import Flask, render_template, url_for, redirect, request
 app = Flask(__name__, static_url_path='/static')
 
+class opendb():
+    def __init__(self, file_name):
+        self.obj = sql.connect(file_name)
+        self.cursor = self.obj.cursor()
+    
+    def __enter__(self):
+        return self.cursor
+    
+    def __exit__(self, value, traceback, type):
+        time.sleep(1)
+        self.obj.commit()
+        self.obj.close()
 
 
 # Home page
@@ -34,7 +53,22 @@ def login_page():
 @app.route('/signup-page')
 def signup_page():
     return render_template('/signup_page.html')
+#
+@app.route('/signup-page', methods=['POST'])
+def signup_page_post():
+    with opendb('main.db') as c:
+        username = request.form['username']
+        email = request.form['email']
+        passkey = request.form['password']
+        passkey_h = hashlib.sha256(passkey.encode('utf-8')).hexdigest()
+        c.execute('INSERT INTO users (teacher_name, email, password) VALUES (?, ?, ?)', (username, email, passkey_h))
+    
+        return redirect('/loginmessage')
 
+#
+@app.route('/message')
+def message():
+    return render_template('loginmessage.html')
 
 ############################################# Error catching
 #Handles 400 errors -
@@ -65,7 +99,7 @@ def method_not_allowed_error(error):
 #Handles 500 errors -
 @app.errorhandler(500)
 def internal_server_error(error):
-    db.session.rollback()
+    sql.session.rollback()
     return render_template('error_page.html'), 500
 
 #Handles 503 errors -
