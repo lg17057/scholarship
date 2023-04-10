@@ -97,38 +97,38 @@ def message():
 #Handles 400 errors -
 @app.errorhandler(400)
 def bad_request_error(error):
-    return render_template('error_page.html'), 400
+    return render_template('error_page.html',error_code="400", error_message="Bad Request"), 400
 
 #Handles 401 errors - 
 @app.errorhandler(401)
 def unauthorized_error(error):
-    return render_template('error_page.html'), 401
+    return render_template('error_page.html',error_code="401", error_message="Unauthorized"), 401
 
 #Handles 403 errors -
 @app.errorhandler(403)
 def forbidden_error(error):
-    return render_template('error_page.html'), 403
+    return render_template('error_page.html',error_code="403", error_message="Forbidden"), 403
 
 #Handles 404 errors -
 @app.errorhandler(404)
 def page_not_found_error(error):
-    return render_template('error_page.html'), 404
+    return render_template('error_page.html',error_code="404", error_message="Not Found"), 404
 
 #Handles 405 errors -
 @app.errorhandler(405)
 def method_not_allowed_error(error):
-    return render_template('error_page.html'), 405
+    return render_template('error_page.html',error_code="405", error_message="Method Not Allowed"), 405
 
 #Handles 500 errors -
 @app.errorhandler(500)
 def internal_server_error(error):
     sql.session.rollback()
-    return render_template('error_page.html'), 500
+    return render_template('error_page.html',error_code="500", error_message="Internal Server Error"), 500
 
 #Handles 503 errors -
 @app.errorhandler(503)
 def service_unavailable_error(error):
-    return render_template('error_page.html'), 503
+    return render_template('error_page.html',error_code="503", error_message="Service Unavailable"), 503
 
 
 
