@@ -48,6 +48,21 @@ def admin():
 @app.route('/login-page')
 def login_page():
     return render_template('/login_page.html')
+#
+@app.route('/login-page', methods=["POST"])
+def login_page_post():
+    with opendb('main.db') as c:
+        username = request.form['username']
+        passkey = request.form['password']
+        passkey_h = hashlib.sha256(passkey.encode('utf-8')).hexdigest()
+        c.execute('SELECT * FROM users WHERE teacher_name=? AND password=?', (username, passkey_h))
+        user_validation = c.fetchone()
+        if user_validation:
+            return 'login success'
+        else:
+            
+            return 'login failer'
+
 
 #
 @app.route('/signup-page')
@@ -63,7 +78,7 @@ def signup_page_post():
         passkey_h = hashlib.sha256(passkey.encode('utf-8')).hexdigest()
         c.execute('INSERT INTO users (teacher_name, email, password) VALUES (?, ?, ?)', (username, email, passkey_h))
     
-        return redirect('/loginmessage')
+        return redirect('/message')
 
 #
 @app.route('/message')
