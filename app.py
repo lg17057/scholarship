@@ -5,9 +5,10 @@ from sqlite3 import *
 import hashlib
 import re
 from datetime import date
+import datetime
 import time
 from time import sleep
-from flask import Flask, render_template, url_for, redirect, request
+from flask import Flask, render_template, url_for, redirect, request, make_response
 app = Flask(__name__, static_url_path='/static')
 
 class opendb():
@@ -37,6 +38,7 @@ def index():
 #
 @app.route('/dev-admin')
 def dev_admin():
+    
     return render_template('/dev_admin.html')
 
 #
@@ -48,21 +50,20 @@ def admin():
 @app.route('/login-page')
 def login_page():
     return render_template('/login_page.html')
+
 #
 @app.route('/login-page', methods=["POST"])
 def login_page_post():
     with opendb('main.db') as c:
-        username = request.form['username']
+        teacher_name = request.form['teacher_name']
         passkey = request.form['password']
         passkey_h = hashlib.sha256(passkey.encode('utf-8')).hexdigest()
-        c.execute('SELECT * FROM users WHERE teacher_name=? AND password=?', (username, passkey_h))
+        c.execute('SELECT * FROM users WHERE teacher_name=? AND password=?', (teacher_name, passkey_h))
         user_validation = c.fetchone()
         if user_validation:
-            return 'login success'
+            return render_template('message.html', message="Login Success")
         else:
-            
-            return 'login failer'
-
+            return render_template('message.html', message="Login Failure")
 
 #
 @app.route('/signup-page')
@@ -72,18 +73,25 @@ def signup_page():
 @app.route('/signup-page', methods=['POST'])
 def signup_page_post():
     with opendb('main.db') as c:
-        username = request.form['username']
-        email = request.form['email']
-        passkey = request.form['password']
-        passkey_h = hashlib.sha256(passkey.encode('utf-8')).hexdigest()
-        c.execute('INSERT INTO users (teacher_name, email, password) VALUES (?, ?, ?)', (username, email, passkey_h))
-    
-        return redirect('/message')
+        teacher_name = request.form['teacher_name']
+        cursor = c.execute('SELECT teacher_name FROM users WHERE teacher_name=?', (teacher_name,))
+        user_check = cursor.fetchall()
+        now = datetime.datetime.now()
+        date_created = now.strftime("%d/%m/%Y %H:%M")
+        if user_check != 0: #checks if user exists
+            email = request.form['email']
+            passkey = request.form['password']
+            logins=0
+            passkey_h = hashlib.sha256(passkey.encode('utf-8')).hexdigest()
+            c.execute('INSERT INTO users (teacher_name, email, password, logins, date_created) VALUES (?, ?, ?, ?, ?)', (teacher_name, email, passkey_h, logins, date_created))
+            return render_template('message.html', message="Sign Up success")
+        else:
+            return render_template('message.html', message='Sign Up failure.')
 
 #
 @app.route('/message')
 def message():
-    return render_template('loginmessage.html')
+    return render_template('message.html')
 
 ############################################# Error catching
 #Handles 400 errors -
