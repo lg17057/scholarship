@@ -35,6 +35,28 @@ def main():
 def index():
     return render_template('/device_logs.html')
 
+#
+@app.route('/new-log')
+@app.route('/new-log', methods=['POST'])
+def new_log():
+    with opendb('logs.db') as c:
+        if request.method == "POST":
+            date_borrowed = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            student_name = request.form.get('student_name')
+            homeroom = request.form.get('homeroom')
+            device_type = request.form.get('device_type')
+            device_id = request.form.get('device_id')
+            period_borrowed = request.form.get('period_borrowed')
+            reason_borrowed = request.form.get('reason_borrowed')
+            period_returned = request.form.get('period_returned')
+            teacher_signoff = request.form.get('teacher_signoff')
+
+            c.execute("INSERT INTO device_logs (date_borrowed, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (date_borrowed, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff))
+            return render_template('message.html', message="successful device log")
+        else:
+            return render_template('new_log.html')
+
+#
 @app.route('/new-item')
 @app.route('/new-item', methods=['POST'])
 def new_item():
