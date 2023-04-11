@@ -35,10 +35,12 @@ def main():
 def index():
     return render_template('/device_logs.html')
 
+@app.route('/new-item')
+def new_item():
+    return render_template('new_item.html')
 #
 @app.route('/dev-admin')
 def dev_admin():
-    
     return render_template('/dev_admin.html')
 
 #
@@ -93,38 +95,36 @@ def signup_page_post():
 def message():
     return render_template('message.html')
 
-############################################# Error catching
+############################################# End-user oriented
+# help page
+@app.route('/help')
+def help():
+    return render_template('help.html')
 #Handles 400 errors -
 @app.errorhandler(400)
 def bad_request_error(error):
     return render_template('error_page.html',error_code="400", error_message="Bad Request"), 400
-
 #Handles 401 errors - 
 @app.errorhandler(401)
 def unauthorized_error(error):
     return render_template('error_page.html',error_code="401", error_message="Unauthorized"), 401
-
 #Handles 403 errors -
 @app.errorhandler(403)
 def forbidden_error(error):
     return render_template('error_page.html',error_code="403", error_message="Forbidden"), 403
-
 #Handles 404 errors -
 @app.errorhandler(404)
 def page_not_found_error(error):
     return render_template('error_page.html',error_code="404", error_message="Not Found"), 404
-
 #Handles 405 errors -
 @app.errorhandler(405)
 def method_not_allowed_error(error):
     return render_template('error_page.html',error_code="405", error_message="Method Not Allowed"), 405
-
 #Handles 500 errors -
 @app.errorhandler(500)
 def internal_server_error(error):
     sql.session.rollback()
     return render_template('error_page.html',error_code="500", error_message="Internal Server Error"), 500
-
 #Handles 503 errors -
 @app.errorhandler(503)
 def service_unavailable_error(error):
