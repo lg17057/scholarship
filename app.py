@@ -32,8 +32,12 @@ def main():
 
 #device log page
 @app.route('/device-logs')
-def index():
-    return render_template('/device_logs.html')
+def device_logs():
+    with opendb('logs.db') as c:
+        c.execute("SELECT * from devices")
+        devices = c.fetchall()
+
+        return render_template('/device_logs.html', rows=devices)
 
 #
 @app.route('/sign-off')
@@ -45,15 +49,17 @@ def sign_off():
 def modify_device():
     return render_template('modify_devices.html')
 
+@app.route('/circulations')
+def circulations():
+    return render_template('circulations.html')
+
+@app.route('/statistics')
+def statistics():
+    return render_template('statistics.html')
 #
 @app.route('/students')
 def students():
     return render_template('students.html')
-
-#
-@app.route('/date-stats')
-def date_stats():
-    return render_template('date_stats.html')
 
 #
 @app.route('/rental-logs')

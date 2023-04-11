@@ -29,19 +29,20 @@
             <a onclick="window.location.href='/new-log'">Log new entry</a>
             <a onclick="window.location.href='/sign-off'">Sign off entry</a>
             <a onclick="window.location.href='/rental-logs'">View rental logs</a>
-            <a onclick="window.location.href='/device-logs'">View device logs</a>
           </div>
           <hr>
-          <button class="accordion">Device Options</button>
+          <button class="accordion">Circulations</button>
           <div class="panel">
             <a onclick="window.location.href='/new-item'">Create new device</a>
+            <a onclick="window.location.href='/device-logs'">View device logs</a>
+            <a onclick="window.location.href='/circulations'">View circulating devices</a>
             <a onclick="window.location.href='/modify-device'">Modify current device</a>
           </div>
           <hr>
           <button class="accordion">Statistics</button>
           <div class="panel">
-            <a onclick="window.location.href='/date-stats'">Select Date</a>
-            <a onclick="window.location.href='/students'">Student Data</a>
+            <a onclick="window.location.href='/statistics'">Statistics</a>
+            <a onclick="window.location.href='/students'">Students</a>
           </div>
           <hr>
           <button class="accordion">Admins</button>
@@ -120,12 +121,15 @@ padding: 10px;
 text-decoration: none;
 color: white;
 font-size: 15px;
+cursor: pointer;
 }
 
 .sidebar a:hover {
 background-color: rgba(255, 255, 255, 0.1);
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
 font-size: 15px;
+cursor: pointer;
+
 }
 
 .accordion {
@@ -137,6 +141,8 @@ padding: 10px;
 font-size: 17px;
 width: 100%;
 text-align: left;
+cursor: pointer;
+
 border: none;
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
 outline: none;
@@ -145,6 +151,8 @@ outline: none;
 .active, .accordion:hover {
 background-color: #0f4a97;
 color: rgb(183, 176, 176);
+cursor: pointer;
+
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
 
 }
@@ -153,6 +161,8 @@ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
 padding: 0 10px;
 background-color: #0d3e7d;
 display: none;
+cursor: pointer;
+
 overflow: hidden;
 transition: max-height 0.2s ease-out;
 
@@ -162,6 +172,8 @@ transition: max-height 0.2s ease-out;
 display: block;
 padding: 10px;
 text-decoration: none;
+cursor: pointer;
+
 color: #ccc;
 }
 
@@ -181,6 +193,8 @@ border-radius: 5px;
 font-size: 30px;
 position: fixed;
 top: 80px;
+cursor: pointer;
+
 left: 1px;
 }
 
@@ -191,6 +205,8 @@ background-color: #f1f1f1;
 .closebtn {
 position: relative;
 top: -10px;
+cursor: pointer;
+
 right: -220px;
 font-size: 30px;
 color: #007bff;
@@ -208,4 +224,5 @@ border-color: #ccc;
 }
 </style>
 </html>
-<h1>student regs</h1>
+<title>Student Records</title>
+<h1>Student Records</h1>
