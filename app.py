@@ -36,6 +36,31 @@ def index():
     return render_template('/device_logs.html')
 
 #
+@app.route('/sign-off')
+def sign_off():
+    return render_template('sign_off.html')
+
+#
+@app.route('/modify-device')
+def modify_device():
+    return render_template('modify_devices.html')
+
+#
+@app.route('/students')
+def students():
+    return render_template('students.html')
+
+#
+@app.route('/date-stats')
+def date_stats():
+    return render_template('date_stats.html')
+
+#
+@app.route('/rental-logs')
+def rental_logs():
+    return render_template('rental_logs.html')
+
+#
 @app.route('/new-log')
 @app.route('/new-log', methods=['POST'])
 def new_log():

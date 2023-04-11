@@ -26,27 +26,28 @@
           <hr>
           <button class="accordion">Logs</button>
           <div class="panel">
-            <a href="#">Log new entry</a>
-            <a href="#">Sign off entry</a>
-            <a href="#">View entry logs</a>
+            <a onclick="window.location.href='/new-log'">Log new entry</a>
+            <a onclick="window.location.href='/sign-off'">Sign off entry</a>
+            <a onclick="window.location.href='/rental-logs'">View rental logs</a>
+            <a onclick="window.location.href='/device-logs'">View device logs</a>
           </div>
           <hr>
           <button class="accordion">Device Options</button>
           <div class="panel">
-            <a href="#">Create new device</a>
-            <a href="#">Modify current device</a>
-            <a href="#"></a>
+            <a onclick="window.location.href='/new-item'">Create new device</a>
+            <a onclick="window.location.href='/modify-device'">Modify current device</a>
           </div>
           <hr>
           <button class="accordion">Statistics</button>
           <div class="panel">
-            <a href="#">Select Date</a>
-            <a href="#">Student Registers</a>
+            <a onclick="window.location.href='/date-stats'">Select Date</a>
+            <a onclick="window.location.href='/students'">Student Data</a>
           </div>
           <hr>
           <button class="accordion">Admins</button>
           <div class="panel">
-            <a href="#">View admin options</a>
+            <a onclick="window.location.href='/admin'">View admin options</a>
+            <a onclick="window.location.href='/dev-admin'">Dev admin page</a>
           </div>
         </div>
         
@@ -206,4 +207,5 @@ hr {
 border-color: #ccc;
 }
 </style>
+</html>
 <h1>admin page</h1>
