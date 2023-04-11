@@ -208,7 +208,85 @@ border-color: #ccc;
 }
 </style>
 </html>
-      <body> 
-        <title>Rental Log - Dash</title>
-      </body>
-  </html>
+<body> 
+  <title>Rental Log - Dash</title>
+</body>
+<h1>Example of rental logs table</h1>
+<table id="myTable" class="rental_table">
+  <thead>
+    <th>
+      Date Borrowed
+    </th>
+    <th>
+      Student Name
+    </th>
+    <th>
+      Homeroom
+    </th>
+    <th>
+      Device Type
+    </th>
+    <th>
+      Device ID
+    </th>
+    <th>
+      Period Borrowed
+    </th>
+    <th>
+      Reason
+    </th>
+    <th>
+      Period Returned
+    </th>
+    <th>
+      Sign-Off
+    </th>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+    <tr>
+        <td>{{ row[0] }}</td>
+        <td>{{ row[1] }}</td>
+        <td>{{ row[2] }}</td>
+        <td>{{ row[3] }}</td>
+        <td>{{ row[4] }}</td>
+        <td>{{ row[5] }}</td>
+        <td>{{ row[6] }}</td>
+        <td>{{ row[7] }}</td>
+        <td>{{ row[8] }}</td>
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+<style>
+      .rental_table {
+        border: 2px solid #000000;
+      }
+      .rental_table tr {
+        font-family: open-sans,sans-serif;
+        font-weight: 400;
+        font-style:normal;
+      }
+      
+      .rental_table td {
+        border: 1px solid #000000;
+        border-style:solid;
+      }
+                  
+      .rental_table th {
+        padding-top: 6px;
+        padding-bottom: 6px;
+        text-align: left;
+        background-color: #04AA6D;
+        color: rgb(0, 0, 0);
+        font-family: open-sans, sans-serif;
+        font-weight: 300;
+        font-style: normal;
+      }
+      /* changes row colours */
+      .rental_table tr:nth-child(even,odd){background-color: #f2f2f2;}
+      .rental_table tr:hover {background-color: #ddd;}
+      .rental_table tr:hover TD:nth-child(1){font-weight: bold}
+</style>
+</html>

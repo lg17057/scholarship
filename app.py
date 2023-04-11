@@ -58,7 +58,10 @@ def date_stats():
 #
 @app.route('/rental-logs')
 def rental_logs():
-    return render_template('rental_logs.html')
+    with opendb('logs.db') as c:
+        c.execute("SELECT * from device_logs")
+        logs = c.fetchall()
+        return render_template('rental_logs.html', rows=logs)
 
 #
 @app.route('/new-log')
@@ -111,6 +114,12 @@ def login_page():
     return render_template('/login_page.html')
 
 #
+def login_success(teacher_name, last_login):
+    with opendb('main.db') as c:
+        c.execute("SELECT logins FROM users WHERE teacher_name = ?", (teacher_name,))
+        c.execute("UPDATE users SET logins = logins + 1 WHERE teacher_name = ?", (teacher_name,))
+        c.execute("UPDATE users SET last_login = ?", (last_login,))
+#   
 @app.route('/login-page', methods=["POST"])
 def login_page_post():
     with opendb('main.db') as c:
@@ -120,6 +129,10 @@ def login_page_post():
         c.execute('SELECT * FROM users WHERE teacher_name=? AND password=?', (teacher_name, passkey_h))
         user_validation = c.fetchone()
         if user_validation:
+            last_login = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+
+            login_success(teacher_name, last_login)
+
             return render_template('message.html', message="Login Success")
         else:
             return render_template('message.html', message="Login Failure")
@@ -142,7 +155,7 @@ def signup_page_post():
             passkey = request.form['password']
             logins=0
             passkey_h = hashlib.sha256(passkey.encode('utf-8')).hexdigest()
-            c.execute('INSERT INTO users (teacher_name, email, password, logins, date_created) VALUES (?, ?, ?, ?, ?)', (teacher_name, email, passkey_h, logins, date_created))
+            c.execute('INSERT INTO users (teacher_name, email, password, logins, date_created, last_login) VALUES (?, ?, ?, ?, ?, ?)', (teacher_name, email, passkey_h, logins, date_created, "N/A"))
             return render_template('message.html', message="Sign Up success")
         else:
             return render_template('message.html', message='Sign Up failure.')
