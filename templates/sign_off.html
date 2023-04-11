@@ -226,3 +226,82 @@ border-color: #ccc;
 </html>
 <title>Sign off circulations</title>
 <h1>Sign off circulations</h1>
+<table class="signoff_table">
+  <thead>
+    <tr>
+      <th>
+        Date Borrowed
+      </th>
+      <th>
+        Student Name
+      </th>
+      <th>
+        Homeroom
+      </th>
+      <th>
+        Device Type
+      </th>
+      <th>
+        Device ID
+      </th>
+      <th>
+        Period Borrowed
+      </th>
+      <th>
+        Reason
+      </th>
+      <th>
+        Period Returned
+      </th>
+      <th>
+        Sign-Off
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+    <tr>
+      <td>{{ row[0] }}</td>
+      <td>{{ row[1] }}</td>
+      <td>{{ row[2] }}</td>
+      <td>{{ row[3] }}</td>
+      <td>{{ row[4] }}</td>
+      <td>{{ row[5] }}</td>
+      <td>{{ row[6] }}</td>
+      <td>{{ row[7] }}</td>
+      <td>{{ row[8] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<style>
+  .signoff_table {
+    border: 2px solid #000000;
+  }
+  .signoff_table tr {
+    font-family: open-sans,sans-serif;
+    font-weight: 400;
+    font-style:normal;
+  }
+  
+  .signoff_table td {
+    border: 1px solid #000000;
+    border-style:solid;
+  }
+              
+  .signoff_table th {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    text-align: left;
+    background-color: #04AA6D;
+    color: rgb(0, 0, 0);
+    font-family: open-sans, sans-serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+  /* changes row colours */
+  .signoff_table tr:nth-child(even,odd){background-color: #f2f2f2;}
+  .signoff_table tr:hover {background-color: #ddd;}
+  .signoff_table tr:hover TD:nth-child(1){font-weight: bold}
+</style>

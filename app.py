@@ -42,7 +42,10 @@ def device_logs():
 #
 @app.route('/sign-off')
 def sign_off():
-    return render_template('sign_off.html')
+    with opendb('logs.db') as c:
+        c.execute("SELECT * FROM device_logs WHERE teacher_signoff='Unconfirmed'")
+        rows = c.fetchall()
+        return render_template('sign_off.html', rows=rows)
 
 #
 @app.route('/modify-device')
