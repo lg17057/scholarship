@@ -36,8 +36,18 @@ def index():
     return render_template('/device_logs.html')
 
 @app.route('/new-item')
+@app.route('/new-item', methods=['POST'])
 def new_item():
-    return render_template('new_item.html')
+    with opendb('logs.db') as c:
+        if request.method == "POST":
+            device_id = request.form['device_id']
+            device_type = request.form['device_type']
+            date_submitted = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            submitted_by = request.form['submitted_by']
+            c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by) VALUES (?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by))
+            return render_template('message.html', message="new device logged")
+        else:
+            return render_template('new_item.html')
 #
 @app.route('/dev-admin')
 def dev_admin():

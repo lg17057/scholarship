@@ -49,11 +49,7 @@
             <a href="#">View admin options</a>
           </div>
         </div>
-    <body>
-        <title>Student Log - Dash</title>
-    </body>
-</html>
-
+        
 <script>
     var accordions = document.getElementsByClassName("accordion");
     for (var i = 0; i < accordions.length; i++) {
@@ -210,3 +206,18 @@ hr {
 border-color: #ccc;
 }
 </style>
+</html>
+<body>
+    <title>New Device</title>
+    <form style="position: relative;top:20px" method="POST" action="/new-item">
+		<label for="device_id">Device ID:</label><hr>
+		<input type="text" id="device_id" name="device_id"><br>
+
+		<label for="device_type">Device Type:</label><hr>
+		<input type="text" id="device_type" name="device_type"><br>
+        <label for="submitted_by">Submitted By:</label><hr>
+		<input type="text" id="submitted_by" name="submitted_by" ><br>
+        <hr>
+		<input type="submit" value="Submit">
+	</form>
+</body>

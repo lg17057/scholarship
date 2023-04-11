@@ -1,141 +1,214 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Side Navigation Bar with Collapsible Accordions</title>
-  <style>
-    .sidebar {
-      width: 200px;
-      height: 100%;
-      background-color: #0d3e7d;
-      padding: 20px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 1;
-      display: none;
-    }
-
-    .sidebar a {
-      display: block;
-      padding: 10px;
-      text-decoration: none;
-      color: white;
-    }
-
-    .sidebar a:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .accordion {
-      background-color: #0d3e7d;
-      color: #ffffff;
-      cursor: pointer;
-      padding: 10px;
-      width: 100%;
-      text-align: left;
-      border: none;
-      outline: none;
-    }
-
-    .active, .accordion:hover {
-      background-color: #0f4a97;
-      color: rgb(183, 176, 176);
-      
-    }
-
-    .panel {
-      padding: 0 10px;
-      background-color: #0d3e7d;
-      display: none;
-      overflow: hidden;
-      transition: max-height 0.2s ease-out;
-
-    }
-
-    .panel a {
-      display: block;
-      padding: 10px;
-      text-decoration: none;
-      color: #ccc;
-    }
-
-    .panel.active {
-      max-height: 500px; /* Adjust this value to match the height of your content */
-    }
-    .panel a:hover{
+<!DOCTYPE html> 
+  <html lang="en-US">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <head>
+        <meta charset="utf-8">
+        <style type="text/css"></style>
+        <meta name="author" content="LG17057">
+        <meta name="description" content="A website framework designed for scholarship, with the aim to provide a device logbook for students using rental devices">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="DeviceLog">
+        <link rel="stylesheet" type="text/css" href="static/stylesheet_main.css">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-16x16.png') }}">
+        
+      </head>
+        <div class="topheader">
+          <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
+          <br><br><br>
+          <img style="position:relative; top:-55px;" class="img1" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo">          
+        </div>
+        <button class="openbtn" onclick="toggleNav()">☰ </button>
+        
+        <div class="sidebar" id="mySidebar">
+          <button class="closebtn" onclick="toggleNav()">×</button>
+          <h3c class="sidenavheader">Options</h3>
+          <hr>
+          <button class="accordion">Logs</button>
+          <div class="panel">
+            <a href="#">Log new entry</a>
+            <a href="#">Sign off entry</a>
+            <a href="#">View entry logs</a>
+          </div>
+          <hr>
+          <button class="accordion">Device Options</button>
+          <div class="panel">
+            <a href="#">Create new device</a>
+            <a href="#">Modify current device</a>
+            <a href="#"></a>
+          </div>
+          <hr>
+          <button class="accordion">Statistics</button>
+          <div class="panel">
+            <a href="#">Select Date</a>
+            <a href="#">Student Registers</a>
+          </div>
+          <hr>
+          <button class="accordion">Admins</button>
+          <div class="panel">
+            <a href="#">View admin options</a>
+          </div>
+        </div>
+        <script>
+            var accordions = document.getElementsByClassName("accordion");
+            for (var i = 0; i < accordions.length; i++) {
+              accordions[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                  panel.style.display = "none";
+                } else {
+                  panel.style.display = "block";
+                }
+              });
+            }
+        
+            function toggleNav() {
+            var sidebar = document.getElementById("mySidebar");
+            if (sidebar.style.display === "block") {
+              sidebar.style.display = "none";
+            } else {
+              sidebar.style.display = "block";
+            }
+        }        
+        </script>
+        <style>
+        .sidenavheader {
+            color: white;
+            font-size: 20px;
+            position: relative;
+            right: 15px;
+            top: -10px
+        }          
+        body, h1, h2, h3, h4, h5 {
+        color: black;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+        }
+        .img {
+        position:  absolute;
+        left: 14px;
+        top: 7px;
+        }
+        
+        .main_header{
+        left: 60px;
+        top: -60px;
+        position: relative;
+        }
+        body {
+        font-family: "Lato", sans-serif;
+        }
+        
+            .sidebar {
+        width: 200px;
+        height: 100%;
+        background-color: #0d3e7d;
+        padding: 20px;
+        position: fixed;
+        top: 80px;
+        left: 0;
+        z-index: 1;
+        display: none;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+        }
+        
+        .sidebar a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: white;
+        font-size: 15px;
+        }
+        
+        .sidebar a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+        font-size: 15px;
+        }
+        
+        .accordion {
+        background-color: #0d3e7d;
+        color: #ffffff;
+        cursor: pointer;
+        top: -20px;
+        padding: 10px;
+        font-size: 17px;
+        width: 100%;
+        text-align: left;
+        border: none;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+        outline: none;
+        }
+        
+        .active, .accordion:hover {
+        background-color: #0f4a97;
+        color: rgb(183, 176, 176);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+        
+        }
+        
+        .panel {
+        padding: 0 10px;
+        background-color: #0d3e7d;
+        display: none;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+        
+        }
+        
+        .panel a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #ccc;
+        }
+        
+        .panel.active {
+        max-height: 500px; /* Adjust this value to match the height of your content */
+        }
+        .panel a:hover{
         color: #007bff;
-    }
-    .openbtn {
-      background-color: #ffffff;
-      color: black;
-      cursor: pointer;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 5px;
-      font-size: 20px;
-      position: fixed;
-      top: 20px;
-      left: 20px;
-    }
-
-    .openbtn:hover {
-      background-color: #f1f1f1;
-    }
-
-    .closebtn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 30px;
-      color: white;
-      cursor: pointer;
-      border: none;
-      background-color: transparent;
-    }
-
-    .closebtn:hover {
-      color: #ccc;
-    }
-
-    hr {
+        }
+        .openbtn {
+        background-color: #ffffff;
+        color: black;
+        cursor: pointer;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        font-size: 30px;
+        position: fixed;
+        top: 80px;
+        left: 1px;
+        }
+        
+        .openbtn:hover {
+        background-color: #f1f1f1;
+        }
+        
+        .closebtn {
+        position: relative;
+        top: -10px;
+        right: -220px;
+        font-size: 30px;
+        color: #007bff;
+        cursor: pointer;
+        border: none;
+        background-color: transparent;
+        }
+        
+        .closebtn:hover {
+        color: #000000;
+        }
+        
+        hr {
         border-color: #ccc;
-    }
-  </style>
-</head>
-<body>
-
-  <button class="openbtn" onclick="toggleNav()">☰ </button>
-
-  <div class="sidebar" id="mySidebar">
-    <button class="closebtn" onclick="toggleNav()">×</button>
-    <hr>
-    <button class="accordion">Logs</button>
-    <div class="panel">
-      <a href="#">Log new entry</a>
-      <a href="#">Sign off entry</a>
-      <a href="#">View entry logs</a>
-    </div>
-    <hr>
-    <button class="accordion">Device Options</button>
-    <div class="panel">
-      <a href="#">Create new device</a>
-      <a href="#">Modify current device</a>
-      <a href="#"></a>
-    </div>
-    <hr>
-    <button class="accordion">Statistics</button>
-    <div class="panel">
-      <a href="#">Select Date</a>
-      <a href="#">Student Registers</a>
-    </div>
-    <hr>
-    <button class="accordion">Admins</button>
-    <div class="panel">
-      <a href="#">View admin options</a>
-    </div>
-  </div>
-
-  
-
-</body>
+        }
+        </style>
+        <body>
+            <title>Help Page</title>
+        </body>
 </html>
+
+
+
