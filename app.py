@@ -8,7 +8,7 @@ from datetime import date
 import datetime
 import time
 from time import sleep
-from flask import Flask, render_template, url_for, redirect, request, make_response
+from flask import Flask, render_template, url_for, redirect, request, make_response, jsonify
 app = Flask(__name__, static_url_path='/static')
 
 class opendb():
@@ -88,6 +88,7 @@ def new_log():
             period_returned = request.form.get('period_returned')
             teacher_signoff = request.form.get('teacher_signoff')
 
+           
             c.execute("INSERT INTO device_logs (date_borrowed, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (date_borrowed, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff))
             return render_template('message.html', message="successful device log")
         else:

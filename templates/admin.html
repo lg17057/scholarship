@@ -2,6 +2,7 @@
   <html lang="en-US">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <head>
+
         <meta charset="utf-8">
         <style type="text/css"></style>
         <meta name="author" content="LG17057">
@@ -9,9 +10,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-title" content="DeviceLog">
-        <link rel="stylesheet" type="text/css" href="static/stylesheet_main.css">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-16x16.png') }}">
-        
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/side_nav.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+        <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
+
+
       </head>
         <div class="topheader">
           <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
@@ -50,179 +55,25 @@
             <a onclick="window.location.href='/admin'">View admin options</a>
             <a onclick="window.location.href='/dev-admin'">Dev admin page</a>
           </div>
+          <div class="help">
+            <a onclick="window.location.href='/help'">Help</a>
+          </div>
         </div>
         
 <script>
-    var accordions = document.getElementsByClassName("accordion");
-    for (var i = 0; i < accordions.length; i++) {
-      accordions[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        var panel = this.nextElementSibling;
-        if (panel.style.display === "block") {
-          panel.style.display = "none";
-        } else {
-          panel.style.display = "block";
-        }
-      });
-    }
-
-    function toggleNav() {
-    var sidebar = document.getElementById("mySidebar");
-    if (sidebar.style.display === "block") {
-      sidebar.style.display = "none";
-    } else {
-      sidebar.style.display = "block";
-    }
-}        
+  var accordions = document.getElementsByClassName("accordion");
+  for (var i = 0; i < accordions.length; i++) {
+    accordions[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var panel = this.nextElementSibling;
+      if (panel.style.display === "block") {
+        panel.style.display = "none";
+      } else {
+        panel.style.display = "block";
+      }
+    });
+  }
 </script>
-<style>
-.sidenavheader {
-    color: white;
-    font-size: 20px;
-    position: relative;
-    right: 15px;
-    top: -10px
-}          
-body, h1, h2, h3, h4, h5 {
-color: black;
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
-}
-.img {
-position:  absolute;
-left: 14px;
-top: 7px;
-}
-
-.main_header{
-left: 60px;
-top: -60px;
-position: relative;
-}
-body {
-font-family: "Lato", sans-serif;
-}
-
-    .sidebar {
-width: 200px;
-height: 100%;
-background-color: #0d3e7d;
-padding: 20px;
-position: fixed;
-top: 80px;
-left: 0;
-z-index: 1;
-display: none;
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
-}
-
-.sidebar a {
-display: block;
-padding: 10px;
-text-decoration: none;
-color: white;
-font-size: 15px;
-cursor: pointer;
-}
-
-.sidebar a:hover {
-background-color: rgba(255, 255, 255, 0.1);
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
-font-size: 15px;
-cursor: pointer;
-
-}
-
-.accordion {
-background-color: #0d3e7d;
-color: #ffffff;
-cursor: pointer;
-top: -20px;
-padding: 10px;
-font-size: 17px;
-width: 100%;
-text-align: left;
-cursor: pointer;
-
-border: none;
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
-outline: none;
-}
-
-.active, .accordion:hover {
-background-color: #0f4a97;
-color: rgb(183, 176, 176);
-cursor: pointer;
-
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
-
-}
-
-.panel {
-padding: 0 10px;
-background-color: #0d3e7d;
-display: none;
-cursor: pointer;
-
-overflow: hidden;
-transition: max-height 0.2s ease-out;
-
-}
-
-.panel a {
-display: block;
-padding: 10px;
-text-decoration: none;
-cursor: pointer;
-
-color: #ccc;
-}
-
-.panel.active {
-max-height: 500px; /* Adjust this value to match the height of your content */
-}
-.panel a:hover{
-color: #007bff;
-}
-.openbtn {
-background-color: #ffffff;
-color: black;
-cursor: pointer;
-padding: 10px 15px;
-border: none;
-border-radius: 5px;
-font-size: 30px;
-position: fixed;
-top: 80px;
-cursor: pointer;
-
-left: 1px;
-}
-
-.openbtn:hover {
-background-color: #f1f1f1;
-}
-
-.closebtn {
-position: relative;
-top: -10px;
-cursor: pointer;
-
-right: -220px;
-font-size: 30px;
-color: #007bff;
-cursor: pointer;
-border: none;
-background-color: transparent;
-}
-
-.closebtn:hover {
-color: #000000;
-}
-
-hr {
-border-color: #ccc;
-}
-</style>
 </html>
 <title>Admin Page</title>
 <h1>Admin page</h1>
