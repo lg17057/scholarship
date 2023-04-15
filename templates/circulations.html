@@ -77,3 +77,27 @@
 </html>
 <title>Circulations</title>
 <h1>Circulations</h1>
+<h3>Ipads: {{ipads_c}}</h3> <h3>Laptops: {{laptops_c}}</h3><h3>Chromebooks {{chromebooks_c}}</h3>
+
+<table class="devices">
+  <thead>
+    <tr>
+      <th>Date Borrowed</th>
+      <th>Device Type</th>
+      <th>Device ID</th>
+      <th>Period Borrowed</th>
+      <th>Reason Borrowed</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+    <tr>
+      <td>{{ row[0] }}</td>
+      <td>{{ row[1] }}</td>
+      <td>{{ row[2] }}</td>
+      <td>{{ row[3] }}</td>
+      <td>{{ row[4] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -9,6 +9,7 @@ import datetime
 import time
 from time import sleep
 from flask import Flask, render_template, url_for, redirect, request, make_response, jsonify
+
 app = Flask(__name__, static_url_path='/static')
 
 class opendb():
@@ -54,7 +55,19 @@ def modify_device():
 
 @app.route('/circulations')
 def circulations():
-    return render_template('circulations.html')
+    with opendb('logs.db') as c:
+        ipads_circulating = 'None circulating'
+        chromebooks_circulating = 'None circulating'
+        laptops_circulating = 'None circulating'
+        c.execute("SELECT COUNT(*) FROM devices WHERE device_type='iPad' AND in_circulation='Yes'")
+        ipads_circulating = c.fetchone()[0]
+        c.execute("SELECT COUNT(*) FROM devices WHERE device_type='Chromebook' AND in_circulation='Yes'")
+        chromebooks_circulating = c.fetchone()[0]
+        c.execute("SELECT COUNT(*) FROM devices WHERE device_type='Laptop' AND in_circulation='Yes'")
+        laptops_circulating = c.fetchone()[0]
+        c.execute('SELECT device_logs.date_borrowed, devices.device_type, device_logs.device_id, device_logs.period_borrowed, device_logs.reason_borrowed FROM device_logs INNER JOIN devices ON device_logs.device_id = devices.device_id')
+        circulating_data = c.fetchall()
+        return render_template('circulations.html', ipads_c=ipads_circulating, chromebooks_c=chromebooks_circulating, laptops_c=laptops_circulating, rows=circulating_data )
 
 @app.route('/statistics')
 def statistics():
