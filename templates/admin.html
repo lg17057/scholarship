@@ -29,17 +29,17 @@
           <button class="closebtn" onclick="toggleNav()">×</button>
           <h3c class="sidenavheader">Options</h3>
           <hr>
-          <button class="accordion">Logs</button>
+          <button class="accordion">Entry Logs</button>
           <div class="panel">
             <a onclick="window.location.href='/new-log'">Log new entry</a>
             <a onclick="window.location.href='/sign-off'">Sign off entry</a>
+            <a onclick="window.location.href='/device-logs'">View device logs</a>
             <a onclick="window.location.href='/rental-logs'">View rental logs</a>
           </div>
           <hr>
           <button class="accordion">Circulations</button>
           <div class="panel">
             <a onclick="window.location.href='/new-item'">Create new device</a>
-            <a onclick="window.location.href='/device-logs'">View device logs</a>
             <a onclick="window.location.href='/circulations'">View circulating devices</a>
             <a onclick="window.location.href='/modify-device'">Modify current device</a>
           </div>
@@ -60,6 +60,21 @@
           </div>
         </div>
         
+<script>
+  var accordions = document.getElementsByClassName("accordion");
+  for (var i = 0; i < accordions.length; i++) {
+    accordions[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var panel = this.nextElementSibling;
+      if (panel.style.display === "block") {
+        panel.style.display = "none";
+      } else {
+        panel.style.display = "block";
+      }
+    });
+  }
+</script>
+</html>  
 <script>
   var accordions = document.getElementsByClassName("accordion");
   for (var i = 0; i < accordions.length; i++) {
