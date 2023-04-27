@@ -127,24 +127,10 @@
             <option selected value="Unconfirmed">Unconfirmed</option>
         </select><br>
         <hr>
+
+    <label for="reason_borrowed">Notes:</label>
+    <input type="text" id="notes" name="notes"><br><hr>
+
 		<input type="submit" value="Submit">
 	</form>
 </body>
-<div id="error-message"></div>
-
-  <script>
-		const form = document.querySelector('form');
-		form.addEventListener('submit', (event) => {
-			event.preventDefault();
-			const deviceId = document.querySelector('#device_id').value;
-			fetch(`check-device.php?device_id=${deviceId}`)
-				.then(response => {
-					if (response.ok) {
-						form.submit();
-					} else {
-						const errorMessage = document.querySelector('#error-message');
-						errorMessage.textContent = 'Device not found. Please enter a valid Device ID.';
-					}
-				});
-		});
-</script>

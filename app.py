@@ -100,9 +100,10 @@ def new_log():
             reason_borrowed = request.form.get('reason_borrowed')
             period_returned = request.form.get('period_returned')
             teacher_signoff = request.form.get('teacher_signoff')
+            notes = request.form.get('notes')
 
            
-            c.execute("INSERT INTO device_logs (date_borrowed, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (date_borrowed, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff))
+            c.execute("INSERT INTO device_logs (date_borrowed, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (date_borrowed, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
             return render_template('message.html', message="successful device log")
         else:
             return render_template('new_log.html')
@@ -117,7 +118,9 @@ def new_item():
             device_type = request.form['device_type']
             date_submitted = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
             submitted_by = request.form['submitted_by']
-            c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by) VALUES (?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by))
+            notes_device = request.form['notes']
+            in_circulation = "No"
+            c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes) VALUES (?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device))
             return render_template('message.html', message="new device logged")
         else:
             return render_template('new_item.html')
