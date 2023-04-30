@@ -40,6 +40,8 @@ https://drive.google.com/drive/folders/1g9hFqIwX8920iHGPcCoy-_57lBHYSjZt?usp=sha
 https://github.com/users/lg17057/projects/2/views/1
 ### Project Schedule Board:
 https://github.com/users/lg17057/projects/5/views/3
+### Individual Schedule:
+https://github.com/users/lg17057/projects/6
 ### Project Wiki:
 [https://github.com/lg17057/scholarship_main/wiki](https://github.com/lg17057/scholarship/wiki)
 
