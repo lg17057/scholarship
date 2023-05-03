@@ -80,15 +80,20 @@
     <title>New Device</title>
     <form style="position: relative;top:20px" method="POST" action="/new-item">
 		<label for="device_id">Device ID:</label><hr>
-		<input type="text" id="device_id" name="device_id"><br>
+		<input required type="text" id="device_id" name="device_id"><br>
 
 		<label for="device_type">Device Type:</label><hr>
-		<input type="text" id="device_type" name="device_type"><br>
-<!--        <label for="submitted_by">Submitted By:</label><hr>
-		<input type="text" id="submitted_by" name="submitted_by" ><br> -->
+		<select id="device_type" name="device_type" required>
+      <option value="">--Select--</option>
+
+      <option value="iPad">iPad</option>
+      <option value="Laptop">Laptop</option>
+      <option value="Chromebook">Chromebook</option>
+    </select>
+    
         <hr>
     <label for="notes">Notes</label><hr>
-    <input type="text" id="notes" name="notes" ><br>
+    <input  type="text" id="notes" name="notes" ><br>
 		<input type="submit" value="Submit">
 	</form>
 </body>
