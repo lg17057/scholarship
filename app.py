@@ -1,17 +1,38 @@
-# python -m flask run
+#used for sql
 from select import select
 import sqlite3 as sql
 from sqlite3 import *
+#used for hashing
 import hashlib
 import re
-from datetime import date
+#for generating secrect key
+import os
+#used for data on dates
+from datetime import date, timedelta
 import datetime
+#used for preventing sql errors
 import time
 from time import sleep
-from flask import Flask, render_template, url_for, redirect, request, make_response, jsonify
+#general imports for flask
+from flask import Flask, render_template, url_for, redirect, request, make_response, jsonify, session
 
 app = Flask(__name__, static_url_path='/static')
+#randomly generates secret key
+app.secret_key = os.urandom(24)
 
+#Notes:
+#
+#
+#
+
+
+
+
+
+
+#This class is used to open a database connection and automatically close it
+#Use as such:
+# with opendb('filename') as c:
 class opendb():
     def __init__(self, file_name):
         self.obj = sql.connect(file_name)
@@ -35,6 +56,7 @@ def main():
 @app.route('/device-logs')
 def device_logs():
     with opendb('logs.db') as c:
+        #fetches all devices and all associated data
         c.execute("SELECT * from devices")
         devices = c.fetchall()
 
@@ -44,6 +66,7 @@ def device_logs():
 @app.route('/sign-off')
 def sign_off():
     with opendb('logs.db') as c:
+        #selects all data from rental logs where data is unconfirmed
         c.execute("SELECT * FROM device_logs WHERE teacher_signoff='Unconfirmed'")
         rows = c.fetchall()
         return render_template('sign_off.html', rows=rows)
@@ -56,9 +79,12 @@ def modify_device():
 @app.route('/circulations')
 def circulations():
     with opendb('logs.db') as c:
+        #The below section is proof of concept. The ipads,chromebooks and laptops_circulating variables will become dynamic
         ipads_circulating = 'None circulating'
         chromebooks_circulating = 'None circulating'
         laptops_circulating = 'None circulating'
+
+        #Finding the number of each device type that is in circulation; key in_circulation Yes
         c.execute("SELECT COUNT(*) FROM devices WHERE device_type='iPad' AND in_circulation='Yes'")
         ipads_circulating = c.fetchone()[0]
         c.execute("SELECT COUNT(*) FROM devices WHERE device_type='Chromebook' AND in_circulation='Yes'")
@@ -69,18 +95,22 @@ def circulations():
         circulating_data = c.fetchall()
         return render_template('circulations.html', ipads_c=ipads_circulating, chromebooks_c=chromebooks_circulating, laptops_c=laptops_circulating, rows=circulating_data )
 
+#Page created for displaying different device rental and creation statistics
 @app.route('/statistics')
 def statistics():
     return render_template('statistics.html')
-#
+
+#Page designed for data on students
 @app.route('/students')
 def students():
     return render_template('students.html')
 
+#Displays all rental logs in a table
 #
 @app.route('/rental-logs')
 def rental_logs():
     with opendb('logs.db') as c:
+        #selects all data from device_logs, resulting in all rental data being displayed
         c.execute("SELECT * from device_logs")
         logs = c.fetchall()
         return render_template('rental_logs.html', rows=logs)
@@ -90,20 +120,22 @@ def rental_logs():
 @app.route('/new-log', methods=['POST'])
 def new_log():
     with opendb('logs.db') as c:
-        if request.method == "POST":
-            date_borrowed = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-            student_name = request.form.get('student_name')
-            homeroom = request.form.get('homeroom')
+        if request.method == "POST": #If user clicks submit button
+            date_borrowed = datetime.datetime.now().strftime("%Y-%m-%d %H:%M") #Automatically logs the date and time a device was rented
+            student_name = request.form.get('student_name') 
+            homeroom = request.form.get('homeroom') 
             device_type = request.form.get('device_type')
             device_id = request.form.get('device_id')
             period_borrowed = request.form.get('period_borrowed')
             reason_borrowed = request.form.get('reason_borrowed')
             period_returned = request.form.get('period_returned')
+            submitted_under = session['user_id']
+
             teacher_signoff = request.form.get('teacher_signoff')
             notes = request.form.get('notes')
 
-           
-            c.execute("INSERT INTO device_logs (date_borrowed, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (date_borrowed, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
+           #submits log data
+            c.execute("INSERT INTO device_logs (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
             return render_template('message.html', message="successful device log")
         else:
             return render_template('new_log.html')
@@ -113,11 +145,13 @@ def new_log():
 @app.route('/new-item', methods=['POST'])
 def new_item():
     with opendb('logs.db') as c:
-        if request.method == "POST":
-            device_id = request.form['device_id']
+        if request.method == "POST": #when user clicks submit button
+            #used for creating a new device
+            device_id = request.form['device_id'] #may be replaced by a unique qr code instead of an id 
             device_type = request.form['device_type']
-            date_submitted = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-            submitted_by = request.form['submitted_by']
+            date_submitted = datetime.datetime.now().strftime("%Y-%m-%d %H:%M") #records date and time device was created
+            #^ re-evaluate the data format
+            submitted_by = session['user_id']
             notes_device = request.form['notes']
             in_circulation = "No"
             c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes) VALUES (?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device))
@@ -127,12 +161,23 @@ def new_item():
 #
 @app.route('/dev-admin')
 def dev_admin():
+
     return render_template('/dev_admin.html')
 
 #
 @app.route('/admin')
 def admin():
     return render_template('/admin.html')
+
+@app.route('/logout', methods=["GET", "POST"])
+def logout():
+    if 'logged_in' in session and session['logged_in']:
+        #setting login status and user id to False and invalid, respectfully
+        session['logged_in'] = False
+        session['user_id'] = "Invalid"
+        return render_template('/message.html', message="You have been logged out")
+    else:
+        return render_template('/message.html', message="You are already not logged in")
 
 #
 @app.route('/login-page')
@@ -144,23 +189,29 @@ def login_success(teacher_name, last_login):
     with opendb('main.db') as c:
         c.execute("SELECT logins FROM users WHERE teacher_name = ?", (teacher_name,))
         c.execute("UPDATE users SET logins = logins + 1 WHERE teacher_name = ?", (teacher_name,))
+        #updates number of successful logins for a teaceher
         c.execute("UPDATE users SET last_login = ?", (last_login,))
+        #sets last_login value to current date and time 
 #   
 @app.route('/login-page', methods=["POST"])
 def login_page_post():
     with opendb('main.db') as c:
-        teacher_name = request.form['teacher_name']
-        passkey = request.form['password']
-        passkey_h = hashlib.sha256(passkey.encode('utf-8')).hexdigest()
-        c.execute('SELECT * FROM users WHERE teacher_name=? AND password=?', (teacher_name, passkey_h))
+        teacher_name = request.form['teacher_name'] #fetches teacher name
+        passkey = request.form['password'] #fetches password
+        passkey_h = hashlib.sha256(passkey.encode('utf-8')).hexdigest() #hashes password
+        c.execute('SELECT * FROM users WHERE teacher_name=? AND password=?', (teacher_name, passkey_h)) #selects username and hashed pword from database
         user_validation = c.fetchone()
         if user_validation:
+            session['logged_in'] = True
+            session['user_id'] = teacher_name
             last_login = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
             login_success(teacher_name, last_login)
 
             return render_template('message.html', message="Login Success")
         else:
+            session['logged_in'] = False
+            session['user_id'] = "Invalid"
             return render_template('message.html', message="Login Failure")
 
 #
@@ -232,3 +283,4 @@ def service_unavailable_error(error):
 # Responsible for running the website
 if __name__ == '__main__':
     app.run(debug="True")
+
