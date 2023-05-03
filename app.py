@@ -18,7 +18,7 @@ from flask import Flask, render_template, url_for, redirect, request, make_respo
 
 app = Flask(__name__, static_url_path='/static')
 #randomly generates secret key
-app.secret_key = os.urandom(24)
+app.secret_key = 'keykeykeykeykeykeykey'
 
 #Notes:
 #

@@ -82,16 +82,16 @@
 	<h2>Device Submission Form</h2>
 	<form method="POST" action="/new-log">
 		<label for="student_name">Student Name:</label>
-		<input type="text" id="student_name" name="student_name"><br><hr>
+		<input type="text" id="student_name" name="student_name" pattern="[A-Za-z ]+" required><br><hr>
 
 		<label for="homeroom">Homeroom:</label>
-		<input type="text" id="homeroom" name="homeroom"><br><hr>
+		<input type="text" id="homeroom" name="homeroom"  required><br><hr>
 
 		<label for="device_id">Device ID:</label>
-		<input type="text" id="device_id" name="device_id"><br><hr>
+		<input min="0" type="number" id="device_id" name="device_id"><br><hr>
 
 		<label for="reason_borrowed">Reason Borrowed:</label>
-		<input type="text" id="reason_borrowed" name="reason_borrowed"><br><hr>
+		<input type="text" id="reason_borrowed" name="reason_borrowed" max="60"><br><hr>
 
 		<label for="period_borrowed">Period Borrowed:</label>
 		<select id="period_borrowed" name="period_borrowed">
@@ -116,14 +116,18 @@
 		</select><br><hr>
 
 		<label for="device_type">Device Type:</label>
-		<select id="device_type" name="device_type">
+		<select required id="device_type" name="device_type">
+      <option value="">--Select--</option>
+
 			<option value="laptop">Laptop</option>
 			<option value="tablet">Chromebook</option>
 			<option value="phone">iPad</option>
 		</select><br><hr>
 
         <label for="checkbox_id">Teacher Signoff:</label>
-        <select id="teacher_signoff" name="teacher_signoff">
+        <select required id="teacher_signoff" name="teacher_signoff">
+          <option value="">--Select--</option>
+
             <option value="Confirmed">Confirmed</option>
             <option selected value="Unconfirmed">Unconfirmed</option>
         </select><br>
