@@ -85,7 +85,8 @@
 		<input type="text" id="student_name" name="student_name" pattern="[A-Za-z ]+" required><br><hr>
 
 		<label for="homeroom">Homeroom:</label>
-		<input type="text" id="homeroom" name="homeroom"  required><br><hr>
+    <!-- Regaular expression added to restrict homeroom input-->
+		<input type="text" id="homeroom" name="homeroom" pattern="^[7-9]|1[0-3][A-Z]{3}$" required><br><hr>
 
 		<label for="device_id">Device ID:</label>
 		<input min="0" type="number" id="device_id" name="device_id"><br><hr>
@@ -101,7 +102,7 @@
 			<option value="3">3</option>
 			<option value="4">4</option>
 			<option value="5">5</option>
-            <option value="6">6</option>
+      <option value="6">6</option>
 		</select><br><hr>
 
 		<label for="period_returned">Period Returned:</label>
@@ -112,7 +113,7 @@
 			<option value="4">4</option>
 			<option value="5">5</option>
       <option value="6">6</option>
-			<option selected value="Not Returned">Not Retured</option>
+			<option selected value="Not Returned">Not Returned</option>
 		</select><br><hr>
 
 		<label for="device_type">Device Type:</label>
