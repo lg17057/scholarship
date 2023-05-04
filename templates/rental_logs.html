@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <head>
         <meta charset="utf-8">
-        <style type="text/css"></style>
+        <style type="text/css" ></style>
         <meta name="author" content="LG17057">
         <meta name="description" content="A website framework designed for scholarship, with the aim to provide a device logbook for students using rental devices">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
@@ -13,19 +13,21 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/side_nav.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/title.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
+
 
 
       </head>
         <div class="topheader">
           <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
           <br><br><br>
-          <a style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-55px;" class="img1" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>   
+          <a style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>   
         </div>
         <button class="openbtn" onclick="toggleNav()">☰ </button>
         
@@ -67,8 +69,7 @@
  
 </html>
 <body> 
-<title class="main_title" >Rental Log - Dash</title>
- <!------------------------------------------------------------------------------------------------------->
+<title>Rental Log - Dash</title>
 <script>
  function filterTable() {
   let datepicker = document.getElementById("datepicker");
@@ -88,72 +89,73 @@
           "order": [[0, "desc"]]
       });
   });
-  </script>
-
-
+</script>
+<button onclick="window.location.href='/rental-logs/'" id="return-btn" class="return-btn">View All Logs</button>
 <div class="datepicker-container">
   <div class="datepicker">
-    <input type="date" id="datepicker">
+    <div id="chevron-arrow-left" onclick="goToPreviousDay()"></div>
+    <input type="date" min="2023-01-01" max="2023-25-12"  id="datepicker">
+    <div id="chevron-arrow-right" onclick="goToNextDay()"></div>
     <button id="confirm-btn" onclick="filterTable()">Confirm</button>
   </div>
 </div>
-
-<h1>Rental Logs</h1><hr>
+<h1 class="main_title">{{message}}</h1><hr class="main_hr" >
 <br>
-<table id="devices" class="devices">
-  <thead>
-    <th>
-      Date Borrowed
-    </th>
-    <th>
-      Submitted Under
-      
-    </th>
-    <th>
-      Student Name
-    </th>
-    <th>
-      Homeroom
-    </th>
-    <th>
-      Device Type
-    </th>
-    <th>
-      Device ID
-    </th>
-    <th>
-      Period Borrowed
-    </th>
-    <th>
-      Reason
-    </th>
-    <th>
-      Period Returned
-    </th>
-    <th>
-      Sign-Off
-    </th>
-    <th>
-      Notes
-    </th>
-  </thead>
-  <tbody>
-    {% for row in rows %}
-    <tr>
-        <td>{{ row[0] }}</td>
-        <td>{{ row[1] }}</td>
-        <td>{{ row[2] }}</td>
-        <td>{{ row[3] }}</td>
-        <td>{{ row[4] }}</td>
-        <td>{{ row[5] }}</td>
-        <td>{{ row[6] }}</td>
-        <td>{{ row[7] }}</td>
-        <td>{{ row[8] }}</td>
-        <td>{{ row[9] }}</td>
-        <td>{{ row[10] }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-<!--------------------------->
+<div class="table-container">
+  <table id="devices" class="devices">
+    <thead>
+      <th>
+        Date Borrowed
+      </th>
+      <th>
+        Submitted Under
+
+      </th>
+      <th>
+        Student Name
+      </th>
+      <th>
+        Homeroom
+      </th>
+      <th>
+        Device Type
+      </th>
+      <th>
+        Device ID
+      </th>
+      <th>
+        Period Borrowed
+      </th>
+      <th>
+        Reason
+      </th>
+      <th>
+        Period Returned
+      </th>
+      <th>
+        Sign-Off
+      </th>
+      <th>
+        Notes
+      </th>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+          <td>{{ row[0] }}</td>
+          <td>{{ row[1] }}</td>
+          <td>{{ row[2] }}</td>
+          <td>{{ row[3] }}</td>
+          <td>{{ row[4] }}</td>
+          <td>{{ row[5] }}</td>
+          <td>{{ row[6] }}</td>
+          <td>{{ row[7] }}</td>
+          <td>{{ row[8] }}</td>
+          <td>{{ row[9] }}</td>
+          <td>{{ row[10] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 </html>

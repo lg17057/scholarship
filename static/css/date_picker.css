@@ -1,7 +1,7 @@
 .datepicker-container {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
+    position: relative;
+    top: -40px;
+    left: 10px;
   }
   
   .datepicker {
@@ -16,16 +16,50 @@
   }
   
   #confirm-btn {
-    background-color: #008000;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
+    background-color: #ffffff;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 4px;
+    padding: 8px 16px;
+    position: relative;
+    left: 10px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
   }
   
   #confirm-btn:hover {
-    background-color: #005000;
+    background-color: #008000;
+    border: #008000 1px solid;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 8px 16px;
+    position: relative;
+    left: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
   }
   
+  #chevron-arrow-left {
+    display: inline-block;
+    position: relative;
+    z-index: 5;
+    left: 8px;
+    border-right: 4.8px solid black;
+    border-bottom: 4.8px solid black;
+    width: 13px; height: 13px;
+    transform: rotate(-225deg);
+    cursor: pointer;
+  }
+  
+  #chevron-arrow-right {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    z-index: 5;
+    right: 8px;
+    border-right: 4.8px solid black;
+    border-bottom: 4.8px solid black;
+    width: 13px; height: 13px;
+    transform: rotate(-45deg);
+  }
+

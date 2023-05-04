@@ -112,15 +112,18 @@ def rental_logs(date):
     with opendb('logs.db') as c:
         c.execute("SELECT * FROM device_logs WHERE date_borrowed LIKE ?", (f"%{date}%",))
         rows = c.fetchall()
-        return render_template('rental_logs.html', rows=rows)
-
+        return render_template('rental_logs.html', rows=rows, message="Viewing rental logs for {}".format(date))
+        
+        
 @app.route('/rental-logs/')
 def date_logs():
     with opendb('logs.db') as c:
     #selects all data from device_logs, resulting in all rental data being displayed
+        today = date.today()
+        formatted_date = today.strftime("%Y-%H-%m")
         c.execute("SELECT * from device_logs")
         logs = c.fetchall()
-        return render_template('rental_logs.html', rows=logs)
+        return render_template('rental_logs.html', rows=logs, message="Viewing all rental logs", formatted_date=formatted_date)
 
 #
 @app.route('/new-log')

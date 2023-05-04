@@ -39,7 +39,7 @@ padding: 20px;
 position: fixed;
 top: 80px;
 left: 0;
-z-index: 1;
+z-index: 10;
 display: none;
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
 }
@@ -120,11 +120,10 @@ padding: 10px 15px;
 border: none;
 border-radius: 5px;
 font-size: 30px;
-position: fixed;
-top: 80px;
+position:relative;
+top: 105px;
 cursor: pointer;
-
-left: 1px;
+left: -7px;
 }
 
 .openbtn:hover {
@@ -135,7 +134,7 @@ background-color: #f1f1f1;
 position: relative;
 top: -10px;
 cursor: pointer;
-
+z-index: 9;
 right: -220px;
 font-size: 30px;
 color: #007bff;

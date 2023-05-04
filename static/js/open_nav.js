@@ -22,3 +22,9 @@ window.onclick = function(event) {
 }        
 
 
+const sidenav = document.getElementById("mySidenav");
+window.addEventListener("click", function(event) {
+  if (event.target.closest("#mySidenav") === null) {
+    sidenav.style.width = "0";
+  }
+});
