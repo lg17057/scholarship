@@ -13,6 +13,8 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-16x16.png') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/side_nav.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/datepicker.css') }}">
+
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
 
@@ -76,14 +78,94 @@
   }
 </script>
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<script>
+$(document).ready(function() {
+    $('#devices').DataTable({
+        "pageLength": 30,
+        "lengthMenu": [10, 25, 50, 100],
+        "order": [[0, "desc"]]
+    });
+});
+</script>
 <body> 
-  <title>Rental Log - Dash</title>
+<title>Rental Log - Dash</title>
+ <!------------------------------------------------------------------------------------------------------->
+<script>
+ function filterTable() {
+  let datepicker = document.getElementById("datepicker");
+  let date = datepicker.value;
+  let [year, month, day] = date.split("-");
+  let formattedDate = `${day}-${month}`;
+
+  let url = `/rental-logs/${formattedDate}`;
+  window.location.href = url;
+}
+</script>
+<style>
+  .datepicker-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.datepicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#datepicker {
+  font-size: 18px;
+  padding: 5px;
+}
+
+#confirm-btn {
+  background-color: #008000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+#confirm-btn:hover {
+  background-color: #005000;
+}
+
+</style>
+
+
+
+
+<div class="datepicker-container">
+  <div class="datepicker">
+    <input type="date" id="datepicker">
+    <button id="confirm-btn" onclick="filterTable()">Confirm</button>
+  </div>
+</div>
+
+
+
+  
+
+
+
+
 </body>
-<h1>Example of rental logs table</h1>
+<h1>Rental Logs</h1><hr>
+<br>
 <table id="devices" class="devices">
   <thead>
     <th>
       Date Borrowed
+    </th>
+    <th>
+      Submitted Under
+      
     </th>
     <th>
       Student Name
@@ -126,9 +208,10 @@
         <td>{{ row[7] }}</td>
         <td>{{ row[8] }}</td>
         <td>{{ row[9] }}</td>
+        <td>{{ row[10] }}</td>
     </tr>
     {% endfor %}
-
   </tbody>
 </table>
+<!--------------------------->
 </html>

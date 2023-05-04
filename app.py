@@ -107,10 +107,17 @@ def students():
 
 #Displays all rental logs in a table
 #
-@app.route('/rental-logs')
-def rental_logs():
+@app.route('/rental-logs/<string:date>')
+def rental_logs(date):
     with opendb('logs.db') as c:
-        #selects all data from device_logs, resulting in all rental data being displayed
+        c.execute("SELECT * FROM device_logs WHERE date_borrowed LIKE ?", (f"%{date}%",))
+        rows = c.fetchall()
+        return render_template('rental_logs.html', rows=rows)
+
+@app.route('/rental-logs/')
+def date_logs():
+    with opendb('logs.db') as c:
+    #selects all data from device_logs, resulting in all rental data being displayed
         c.execute("SELECT * from device_logs")
         logs = c.fetchall()
         return render_template('rental_logs.html', rows=logs)
@@ -121,7 +128,7 @@ def rental_logs():
 def new_log():
     with opendb('logs.db') as c:
         if request.method == "POST": #If user clicks submit button
-            date_borrowed = datetime.datetime.now().strftime("%Y-%m-%d %H:%M") #Automatically logs the date and time a device was rented
+            date_borrowed = datetime.datetime.now().strftime("%d-%m %H:%M") #Automatically logs the date and time a device was rented
             student_name = request.form.get('student_name') 
             homeroom = request.form.get('homeroom') 
             device_type = request.form.get('device_type')
@@ -149,7 +156,7 @@ def new_item():
             #used for creating a new device
             device_id = request.form['device_id'] #may be replaced by a unique qr code instead of an id 
             device_type = request.form['device_type']
-            date_submitted = datetime.datetime.now().strftime("%Y-%m-%d %H:%M") #records date and time device was created
+            date_submitted = datetime.datetime.now().strftime("%d-%m %H:%M") #records date and time device was created
             #^ re-evaluate the data format
             submitted_by = session['user_id']
             notes_device = request.form['notes']
@@ -204,7 +211,7 @@ def login_page_post():
         if user_validation:
             session['logged_in'] = True
             session['user_id'] = teacher_name
-            last_login = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            last_login = datetime.datetime.now().strftime("%d-%m %H:%M")
 
             login_success(teacher_name, last_login)
 
@@ -226,7 +233,7 @@ def signup_page_post():
         cursor = c.execute('SELECT teacher_name FROM users WHERE teacher_name=?', (teacher_name,))
         user_check = cursor.fetchall()
         now = datetime.datetime.now()
-        date_created = now.strftime("%d/%m/%Y %H:%M")
+        date_created = now.strftime("%d-%m %H:%M")
         if user_check != 0: #checks if user exists
             email = request.form['email']
             passkey = request.form['password']

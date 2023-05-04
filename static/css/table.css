@@ -26,3 +26,4 @@
 .devices tr:nth-child(even,odd){background-color: #f2f2f2;}
 .devices tr:hover {background-color: #ddd;}
 .devices tr:hover TD:nth-child(1){font-weight: bold}
+
