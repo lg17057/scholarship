@@ -71,63 +71,76 @@
 <title>New Log</title>
 <body>
 	<h1 class="main_title">Device Submission Form</h1>
-	<form method="POST" action="/new-log">
-		<label for="student_name">Student Name:</label>
-		<input type="text" id="student_name" name="student_name" pattern="[A-Za-z ]+" required><br><hr>
+  <div class="newlog-container">
+	  <form method="POST" action="/new-log">
+	  	<label for="student_name">Student Name:</label>
+	  	<input type="text" id="student_name" name="student_name" pattern="[A-Za-z ]+" required><br><hr>
 
-		<label for="homeroom">Homeroom:</label>
-    <!-- Regaular expression added to restrict homeroom input-->
-		<input type="text" id="homeroom" name="homeroom" pattern="^[7-9]|1[0-3][A-Z]{3}$" required><br><hr>
+	  	<label for="homeroom">Homeroom:</label>
+      <!-- Regaular expression added to restrict homeroom input-->
+	  	<input type="text" id="homeroom" name="homeroom" pattern="^[7-9]|1[0-3][A-Z]{3}$" required><br><hr>
 
-		<label for="device_id">Device ID:</label>
-		<input min="0" type="number" id="device_id" name="device_id"><br><hr>
+	  	<label for="device_id">Device ID:</label>
+	  	<input min="0" type="number" id="device_id" name="device_id"><br><hr>
 
-		<label for="reason_borrowed">Reason Borrowed:</label>
-		<input type="text" id="reason_borrowed" name="reason_borrowed" max="60"><br><hr>
+	  	<label for="reason_borrowed">Reason Borrowed:</label>
+	  	<input type="text" id="reason_borrowed" name="reason_borrowed" max="60"><br><hr>
 
-		<label for="period_borrowed">Period Borrowed:</label>
-		<select id="period_borrowed" name="period_borrowed">
-      <option selected value="Homeroom">Homeroom</option>
-			<option value="1">1</option>
-			<option value="2">2</option>
-			<option value="3">3</option>
-			<option value="4">4</option>
-			<option value="5">5</option>
-      <option value="6">6</option>
-		</select><br><hr>
+	  	<label for="period_borrowed">Period Borrowed:</label>
+	  	<select id="period_borrowed" name="period_borrowed">
+        <option selected value="Homeroom">Homeroom</option>
+	  		<option value="1">1</option>
+	  		<option value="2">2</option>
+	  		<option value="3">3</option>
+	  		<option value="4">4</option>
+	  		<option value="5">5</option>
+        <option value="6">6</option>
+	  	</select><br><hr>
 
-		<label for="period_returned">Period Returned:</label>
-		<select id="period_returned" name="period_returned">
-			<option value="1">1</option>
-			<option value="2">2</option>
-			<option value="3">3</option>
-			<option value="4">4</option>
-			<option value="5">5</option>
-      <option value="6">6</option>
-			<option selected value="Not Returned">Not Returned</option>
-		</select><br><hr>
+	  	<label for="period_returned">Period Returned:</label>
+	  	<select id="period_returned" name="period_returned">
+	  		<option value="1">1</option>
+	  		<option value="2">2</option>
+	  		<option value="3">3</option>
+	  		<option value="4">4</option>
+	  		<option value="5">5</option>
+        <option value="6">6</option>
+	  		<option selected value="Not Returned">Not Returned</option>
+	  	</select><br><hr>
 
-		<label for="device_type">Device Type:</label>
-		<select required id="device_type" name="device_type">
-      <option value="">--Select--</option>
+	  	<label for="device_type">Device Type:</label>
+	  	<select required id="device_type" name="device_type">
+        <option value="">--Select--</option>
 
-			<option value="laptop">Laptop</option>
-			<option value="tablet">Chromebook</option>
-			<option value="phone">iPad</option>
-		</select><br><hr>
+	  		<option value="laptop">Laptop</option>
+	  		<option value="tablet">Chromebook</option>
+	  		<option value="phone">iPad</option>
+	  	</select><br><hr>
 
-        <label for="checkbox_id">Teacher Signoff:</label>
-        <select required id="teacher_signoff" name="teacher_signoff">
-          <option value="">--Select--</option>
+          <label for="checkbox_id">Teacher Signoff:</label>
+          <select required id="teacher_signoff" name="teacher_signoff">
+            <option value="">--Select--</option>
 
-            <option value="Confirmed">Confirmed</option>
-            <option selected value="Unconfirmed">Unconfirmed</option>
-        </select><br>
-        <hr>
+              <option value="Confirmed">Confirmed</option>
+              <option selected value="Unconfirmed">Unconfirmed</option>
+          </select><br>
+          <hr>
 
-    <label for="reason_borrowed">Notes:</label>
-    <input type="text" id="notes" name="notes"><br><hr>
+      <label for="reason_borrowed">Notes:</label>
+      <input type="text" id="notes" name="notes"><br><hr>
 
-		<input type="submit" value="Submit">
-	</form>
+	  	<input type="submit" value="Submit">
+	  </form>
+  </div>
 </body>
+
+<style>
+  .newlog-container {
+    position: relative;
+    top: -135px;
+  }
+  .main_title {
+    position: relative;
+    left:50px;
+  }
+</style>
