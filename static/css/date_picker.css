@@ -1,0 +1,31 @@
+.datepicker-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  .datepicker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  #datepicker {
+    font-size: 18px;
+    padding: 5px;
+  }
+  
+  #confirm-btn {
+    background-color: #008000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  #confirm-btn:hover {
+    background-color: #005000;
+  }
+  

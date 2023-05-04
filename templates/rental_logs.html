@@ -2,7 +2,6 @@
   <html lang="en-US">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <head>
-
         <meta charset="utf-8">
         <style type="text/css"></style>
         <meta name="author" content="LG17057">
@@ -13,8 +12,11 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-16x16.png') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/side_nav.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/datepicker.css') }}">
-
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/title.css') }}">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
 
@@ -29,29 +31,29 @@
         
         <div class="sidebar" id="mySidebar">
           <button class="closebtn" onclick="toggleNav()">×</button>
-          <h3c class="sidenavheader">Options</h3>
+          <h3c class="sidenavheader" onclick="togglePanel(this)">Options</h3>
           <hr>
-          <button class="accordion">Rental Logs</button>
+          <button class="accordion" onclick="togglePanel(this)">Rental Logs</button>
           <div class="panel">
             <a onclick="window.location.href='/new-log'">New Rental</a>
             <a onclick="window.location.href='/sign-off'">Sign Off Rental</a>
             <a onclick="window.location.href='/rental-logs'">View Rental Logs</a>
           </div>
           <hr>
-          <button class="accordion">Devices</button>
+          <button class="accordion" onclick="togglePanel(this)">Devices</button>
           <div class="panel">
             <a onclick="window.location.href='/circulations'">View Circulating Devices</a>
             <a onclick="window.location.href='/new-item'">Create New Device</a>
             <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
           </div>
           <hr>
-          <button class="accordion">Statistics</button>
+          <button class="accordion" onclick="togglePanel(this)">Statistics</button>
           <div class="panel">
             <a onclick="window.location.href='/statistics'">Statistics</a>
             <a onclick="window.location.href='/students'">Students</a>
           </div>
           <hr>
-          <button class="accordion">Admins</button>
+          <button class="accordion" onclick="togglePanel(this)">Admins</button>
           <div class="panel">
             <a onclick="window.location.href='/admin'">View Admin Options</a>
             <a onclick="window.location.href='/dev-admin'">Dev Admin Page</a>
@@ -62,36 +64,10 @@
             <a onclick="window.location.href='/help'">Help</a>
           </div>
         </div>
-        
-<script>
-  var accordions = document.getElementsByClassName("accordion");
-  for (var i = 0; i < accordions.length; i++) {
-    accordions[i].addEventListener("click", function() {
-      this.classList.toggle("active");
-      var panel = this.nextElementSibling;
-      if (panel.style.display === "block") {
-        panel.style.display = "none";
-      } else {
-        panel.style.display = "block";
-      }
-    });
-  }
-</script>
+ 
 </html>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
-<script>
-$(document).ready(function() {
-    $('#devices').DataTable({
-        "pageLength": 30,
-        "lengthMenu": [10, 25, 50, 100],
-        "order": [[0, "desc"]]
-    });
-});
-</script>
 <body> 
-<title>Rental Log - Dash</title>
+<title class="main_title" >Rental Log - Dash</title>
  <!------------------------------------------------------------------------------------------------------->
 <script>
  function filterTable() {
@@ -104,41 +80,15 @@ $(document).ready(function() {
   window.location.href = url;
 }
 </script>
-<style>
-  .datepicker-container {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-.datepicker {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-#datepicker {
-  font-size: 18px;
-  padding: 5px;
-}
-
-#confirm-btn {
-  background-color: #008000;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-#confirm-btn:hover {
-  background-color: #005000;
-}
-
-</style>
-
-
+<script>
+  $(document).ready(function() {
+      $('#devices').DataTable({
+          "pageLength": 30,
+          "lengthMenu": [10, 25, 50, 100],
+          "order": [[0, "desc"]]
+      });
+  });
+  </script>
 
 
 <div class="datepicker-container">
@@ -148,14 +98,6 @@ $(document).ready(function() {
   </div>
 </div>
 
-
-
-  
-
-
-
-
-</body>
 <h1>Rental Logs</h1><hr>
 <br>
 <table id="devices" class="devices">

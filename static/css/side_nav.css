@@ -151,3 +151,18 @@ color: #000000;
 hr {
 border-color: #ccc;
 }
+.openbtn {
+  position: relative;
+  top: -50px;
+}
+
+
+
+
+.main-container {
+  z-index: 2;
+}
+
+.devices {
+  z-index: -2;
+}
