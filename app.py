@@ -18,17 +18,12 @@ from flask import Flask, render_template, url_for, redirect, request, make_respo
 
 app = Flask(__name__, static_url_path='/static')
 #randomly generates secret key
-app.secret_key = 'keykeykeykeykeykeykey'
+app.secret_key = 'ajnasdN&aslpo0912nlasiqwenz'
 
 #Notes:
 #
 #
 #
-
-
-
-
-
 
 #This class is used to open a database connection and automatically close it
 #Use as such:
@@ -47,16 +42,18 @@ class opendb():
         self.obj.close()
 
 
-class login_verification():
-    def __enter__(self):
-        status = session['logged_in']
-        if status is True:
-            return 
-        else:
-            redirect('/message')
-
-    def __exit__(self, type, value, traceback):
-        return
+#class login_verification():
+#    def __enter__(self):
+#        loginstatus = session['logged_in']
+#        if loginstatus is True:
+#            return 
+#        elif loginstatus is False:
+#            return render_template('message.html', message="Please login to access this feature")
+#        else: 
+#            return render_template('message.html', message="An error occurred. Please try again")
+#
+#    def __exit__(self, type, value, traceback):
+#        return
 
 # Home page
 @app.route('/')
@@ -70,8 +67,9 @@ def device_logs():
         #fetches all devices and all associated data
         c.execute("SELECT * from devices")
         devices = c.fetchall()
+        loginstatus = session['logged_in']
 
-        return render_template('/device_logs.html', rows=devices)
+        return render_template('/device_logs.html', rows=devices, loginstatus=loginstatus)
 
 #
 @app.route('/sign-off')
@@ -80,7 +78,9 @@ def sign_off():
         #selects all data from rental logs where data is unconfirmed
         c.execute("SELECT * FROM device_logs WHERE teacher_signoff='Unconfirmed'")
         rows = c.fetchall()
-        return render_template('sign_off.html', rows=rows)
+        loginstatus = session['logged_in']
+
+        return render_template('sign_off.html', rows=rows, loginstatus=loginstatus)
 
 #
 @app.route('/modify-device')
@@ -104,17 +104,20 @@ def circulations():
         laptops_circulating = c.fetchone()[0]
         c.execute('SELECT device_logs.date_borrowed, devices.device_type, device_logs.device_id, device_logs.period_borrowed, device_logs.reason_borrowed FROM device_logs INNER JOIN devices ON device_logs.device_id = devices.device_id')
         circulating_data = c.fetchall()
-        return render_template('circulations.html', ipads_c=ipads_circulating, chromebooks_c=chromebooks_circulating, laptops_c=laptops_circulating, rows=circulating_data )
+        loginstatus = session['logged_in']
+        return render_template('circulations.html', ipads_c=ipads_circulating, chromebooks_c=chromebooks_circulating, laptops_c=laptops_circulating, rows=circulating_data, loginstatus=loginstatus )
 
 #Page created for displaying different device rental and creation statistics
 @app.route('/statistics')
 def statistics():
-    return render_template('statistics.html')
+    loginstatus = session['logged_in']
+    return render_template('statistics.html', loginstatus=loginstatus)
 
 #Page designed for data on students
 @app.route('/students')
 def students():
-    return render_template('students.html')
+    loginstatus = session['logged_in']
+    return render_template('students.html', loginstatus=loginstatus)
 
 #Displays all rental logs in a table
 #
@@ -123,7 +126,8 @@ def rental_logs(date):
     with opendb('logs.db') as c:
         c.execute("SELECT * FROM device_logs WHERE date_borrowed LIKE ?", (f"%{date}%",))
         rows = c.fetchall()
-        return render_template('rental_logs.html', rows=rows, message="Viewing rental logs for {}".format(date))
+        loginstatus = session['logged_in']
+        return render_template('rental_logs.html', rows=rows, message="Viewing rental logs for {}".format(date), loginstatus=loginstatus)
         
         
 @app.route('/rental-logs/')
@@ -134,14 +138,16 @@ def date_logs():
         formatted_date = today.strftime("%Y-%H-%m")
         c.execute("SELECT * from device_logs")
         logs = c.fetchall()
-        return render_template('rental_logs.html', rows=logs, message="Viewing all rental logs", formatted_date=formatted_date)
+        loginstatus = session['logged_in']
+        return render_template('rental_logs.html', rows=logs, message="Viewing all rental logs", formatted_date=formatted_date, loginstatus=loginstatus)
 
 #
 @app.route('/new-log')
 @app.route('/new-log', methods=['POST'])
 def new_log():
     with opendb('logs.db') as c:
-        with login_verification():    
+        loginstatus = session['logged_in']
+        if loginstatus is True:
             if request.method == "POST": #If user clicks submit button
                 date_borrowed = datetime.datetime.now().strftime("%d-%m %H:%M") #Automatically logs the date and time a device was rented
                 student_name = request.form.get('student_name') 
@@ -158,10 +164,15 @@ def new_log():
 
                #submits log data
                 c.execute("INSERT INTO device_logs (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
-                return render_template('message.html', message="successful device log")
+                loginstatus = session['logged_in']
+                return render_template('message.html', message="successful device log", loginstatus=loginstatus)
             else:
                 loginstatus = session['logged_in']
                 return render_template('new_log.html', loginstatus=loginstatus)
+        elif loginstatus is False:
+            return render_template('message.html', message="Please login to access this feature")
+        else: 
+            return render_template('message.html', message="Please login to access this feature")
 
 #
 @app.route('/new-item')
@@ -177,16 +188,17 @@ def new_item():
             submitted_by = session['user_id']
             notes_device = request.form['notes']
             in_circulation = "No"
+            loginstatus = session['logged_in']
             c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes) VALUES (?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device))
-            return render_template('message.html', message="new device logged")
+            return render_template('message.html', message="new device logged", loginstatus=loginstatus)
         else:
 
             return render_template('new_item.html')
 #
 @app.route('/dev-admin')
 def dev_admin():
-
-    return render_template('/dev_admin.html')
+    loginstatus = session['logged_in']
+    return render_template('/dev_admin.html', loginstatus=loginstatus)
 
 #
 @app.route('/admin')
@@ -199,16 +211,19 @@ def logout():
         #setting login status and user id to False and invalid, respectfully
         session['logged_in'] = False
         session['user_id'] = "Invalid"
-        return render_template('/message.html', message="You have been logged out")
+        loginstatus = session['logged_in']
+        return render_template('/message.html', message="You have been logged out", loginstatus=loginstatus)
     else:
         session['logged_in'] = False
         session['user_id'] = "Invalid"
-        return render_template('/message.html', message="You are already not logged in")
+        loginstatus = session['logged_in']
+        return render_template('/message.html', message="You are already not logged in", loginstatus=loginstatus)
 
 #
 @app.route('/login-page')
 def login_page():
-    return render_template('/login_page.html')
+    loginstatus = session['logged_in']
+    return render_template('/login_page.html', loginstatus=loginstatus)
 
 #
 def login_success(teacher_name, last_login):
@@ -233,12 +248,13 @@ def login_page_post():
             last_login = datetime.datetime.now().strftime("%d-%m %H:%M")
 
             login_success(teacher_name, last_login)
-
-            return render_template('message.html', message="Login Success")
+            loginstatus = session['logged_in']
+            return render_template('message.html', message="Login Success", loginstatus=loginstatus)
         else:
             session['logged_in'] = False
             session['user_id'] = "Invalid"
-            return render_template('message.html', message="Login Failure")
+            loginstatus = session['logged_in']
+            return render_template('message.html', message="Login Failure", loginstatus=loginstatus)
 
 #
 @app.route('/signup-page')
@@ -259,14 +275,17 @@ def signup_page_post():
             logins=0
             passkey_h = hashlib.sha256(passkey.encode('utf-8')).hexdigest()
             c.execute('INSERT INTO users (teacher_name, email, password, logins, date_created, last_login) VALUES (?, ?, ?, ?, ?, ?)', (teacher_name, email, passkey_h, logins, date_created, "N/A"))
-            return render_template('message.html', message="Sign Up success")
+            loginstatus = session['logged_in']
+            return render_template('message.html', message="Sign Up success", loginstatus=loginstatus)
         else:
-            return render_template('message.html', message='Sign Up failure.')
+            loginstatus = session['logged_in']
+            return render_template('message.html', message='Sign Up failure.', loginstatus=loginstatus)
 
 #
 @app.route('/message')
 def message():
-    return render_template('message.html')
+    loginstatus = session['logged_in']
+    return render_template('message.html', loginstatus=loginstatus)
 
 ############################################# End-user oriented
 # help page
