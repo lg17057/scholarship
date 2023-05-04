@@ -1,0 +1,40 @@
+body, p, h1, h2, h3, h4, h5, .devices, .datepicker, .datepicker-container, input, button, .th, .td {
+  color: black;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+}
+.main_title {
+  position: relative;
+  top: -125px;
+  right: -57px;
+  z-index: 2;
+}
+.main_hr {
+  position: relative;
+  top: -180px;
+  right: 0px;
+}
+
+#return-btn {
+  background-color: #ffffff;
+  color: #008000;
+  border: #008000 1px solid;
+  border-radius: 5px;
+  padding: 10px 20px;
+  position: relative;
+  left: 1325px;
+  z-index: 3;
+  top: -63px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+#return-btn:hover {
+  background-color: #008000;
+  border: #008000 1px solid;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
