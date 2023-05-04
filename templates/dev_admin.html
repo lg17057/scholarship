@@ -33,7 +33,7 @@
         
         <div class="sidebar" id="mySidebar">
           <button class="closebtn" onclick="toggleNav()">×</button>
-          <h3c class="sidenavheader" onclick="togglePanel(this)">Options</h3>
+          <h3c class="sidenavheader" >Options</h3>
           <hr>
           <button class="accordion" onclick="togglePanel(this)">Rental Logs</button>
           <div class="panel">
@@ -41,20 +41,20 @@
             <a onclick="window.location.href='/sign-off'">Sign Off Rental</a>
             <a onclick="window.location.href='/rental-logs'">View Rental Logs</a>
           </div>
-          <hr>
+          <hr class="div-hr">
           <button class="accordion" onclick="togglePanel(this)">Devices</button>
           <div class="panel">
             <a onclick="window.location.href='/circulations'">View Circulating Devices</a>
             <a onclick="window.location.href='/new-item'">Create New Device</a>
             <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
           </div>
-          <hr>
+          <hr class="div-hr">
           <button class="accordion" onclick="togglePanel(this)">Statistics</button>
           <div class="panel">
             <a onclick="window.location.href='/statistics'">Statistics</a>
             <a onclick="window.location.href='/students'">Students</a>
           </div>
-          <hr>
+          <hr class="div-hr">
           <button class="accordion" onclick="togglePanel(this)">Admins</button>
           <div class="panel">
             <a onclick="window.location.href='/admin'">View Admin Options</a>
@@ -98,4 +98,6 @@
     position: relative;
     left:50px;
   }
+  
 </style>
+
