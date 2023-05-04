@@ -27,7 +27,12 @@
         <div class="topheader">
           <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
           <br><br><br>
-          <a style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>   
+          <a style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>
+          {% if loginstatus %}
+            <span id="admin-span" onclick="window.location.href='/admin'" title="Admin Options" class="fa fa-user-circle-o" style="font-size:36px;cursor:pointer;float: right;"></span>
+          {% else %}
+            <a onclick="window.location.href='/login-page'"  class="button" id="login-btn">Sign In</a>
+          {% endif %}
         </div>
         <button class="openbtn" onclick="toggleNav()">☰ </button>
         
@@ -66,81 +71,303 @@
             <a onclick="window.location.href='/help'">Help</a>
           </div>
         </div>
- 
 </html>
 <title>New Log</title>
-<body>
-	<h1 class="main_title">Device Submission Form</h1>
-  <div class="newlog-container">
-	  <form method="POST" action="/new-log">
-	  	<label for="student_name">Student Name:</label>
-	  	<input type="text" id="student_name" name="student_name" pattern="[A-Za-z ]+" required><br><hr>
+<div class="primary-container">
+  <h1 class="main_title">Device Submission Form</h1>
+    <div class="button-container">
+      <button class="button" id="left-button">Rent Device</button>
+      <button class="button" id="right-button">Return Device</button>
+    </div>
+    <div class="modal-container" id="modal-container-left">
+      <div class="modal" id="modal-left">
+        <div class="modal-header">
+          <h3 id="modal-title-left"></h3>
+          <button class="modal-close" id="close-button-left">&times;</button>
+        </div>
+        <div class="modal-content">
+          <div class="newlog-container">
+  	        <form method="POST" action="/new-log">
+  	        	<label for="student_name">Student Name:</label>
+  	        	<input type="text" id="student_name" name="student_name" pattern="[A-Za-z ]+" required><br>
+            
+  	        	<label for="homeroom">Homeroom:</label>
+  	        	<input type="text" id="homeroom" name="homeroom" pattern="^[7-9]|1[0-3][A-Z]{3}$" required><br>
+            
+  	        	<label for="device_id">Device ID:</label>
+  	        	<input min="0" type="number" id="device_id" name="device_id"><br>
+            
+  	        	<label for="reason_borrowed">Reason Borrowed:</label>
+  	        	<input type="text" id="reason_borrowed" name="reason_borrowed" required max="60"><br>
+            
+  	        	<label for="period_borrowed">Period Borrowed:</label>
+  	        	<select id="period_borrowed" name="period_borrowed">
+                <option selected value="Homeroom">Homeroom</option>
+  	        		<option value="1">1</option>
+  	        		<option value="2">2</option>
+  	        		<option value="3">3</option>
+  	        		<option value="4">4</option>
+  	        		<option value="5">5</option>
+                <option value="6">6</option>
+  	        	</select><br>
+            
+  	        	<label for="period_returned">Period Returned:</label>
+  	        	<select id="period_returned" name="period_returned">
+  	        		<option value="1">1</option>
+  	        		<option value="2">2</option>
+  	        		<option value="3">3</option>
+  	        		<option value="4">4</option>
+  	        		<option value="5">5</option>
+                <option value="6">6</option>
+  	        		<option selected value="Not Returned">Not Returned</option>
+  	        	</select><br>
+            
+  	        	<label for="device_type">Device Type:</label>
+  	        	<select required id="device_type" name="device_type">
+                <option value="">--Select--</option>
+  	        		<option value="laptop">Laptop</option>
+  	        		<option value="tablet">Chromebook</option>
+  	        		<option value="phone">iPad</option>
+  	        	</select><br>
+            
+              <label for="checkbox_id">Teacher Signoff:</label>
+              <select required id="teacher_signoff" name="teacher_signoff">
+                  <option value="Confirmed">Confirmed</option>
+                  <option selected value="Unconfirmed">Unconfirmed</option>
+              </select><br>
 
-	  	<label for="homeroom">Homeroom:</label>
-      <!-- Regaular expression added to restrict homeroom input-->
-	  	<input type="text" id="homeroom" name="homeroom" pattern="^[7-9]|1[0-3][A-Z]{3}$" required><br><hr>
-
-	  	<label for="device_id">Device ID:</label>
-	  	<input min="0" type="number" id="device_id" name="device_id"><br><hr>
-
-	  	<label for="reason_borrowed">Reason Borrowed:</label>
-	  	<input type="text" id="reason_borrowed" name="reason_borrowed" max="60"><br><hr>
-
-	  	<label for="period_borrowed">Period Borrowed:</label>
-	  	<select id="period_borrowed" name="period_borrowed">
-        <option selected value="Homeroom">Homeroom</option>
-	  		<option value="1">1</option>
-	  		<option value="2">2</option>
-	  		<option value="3">3</option>
-	  		<option value="4">4</option>
-	  		<option value="5">5</option>
-        <option value="6">6</option>
-	  	</select><br><hr>
-
-	  	<label for="period_returned">Period Returned:</label>
-	  	<select id="period_returned" name="period_returned">
-	  		<option value="1">1</option>
-	  		<option value="2">2</option>
-	  		<option value="3">3</option>
-	  		<option value="4">4</option>
-	  		<option value="5">5</option>
-        <option value="6">6</option>
-	  		<option selected value="Not Returned">Not Returned</option>
-	  	</select><br><hr>
-
-	  	<label for="device_type">Device Type:</label>
-	  	<select required id="device_type" name="device_type">
-        <option value="">--Select--</option>
-
-	  		<option value="laptop">Laptop</option>
-	  		<option value="tablet">Chromebook</option>
-	  		<option value="phone">iPad</option>
-	  	</select><br><hr>
-
-          <label for="checkbox_id">Teacher Signoff:</label>
-          <select required id="teacher_signoff" name="teacher_signoff">
-            <option value="">--Select--</option>
-
-              <option value="Confirmed">Confirmed</option>
-              <option selected value="Unconfirmed">Unconfirmed</option>
-          </select><br>
-          <hr>
-
-      <label for="reason_borrowed">Notes:</label>
-      <input type="text" id="notes" name="notes"><br><hr>
-
-	  	<input type="submit" value="Submit">
-	  </form>
+              <label for="reason_borrowed">Notes:</label>
+              <input type="text" id="notes" name="notes"><br><hr>
+            
+  	        	<input type="submit" value="Submit">
+  	        </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-container" id="modal-container-right">
+      <div class="modal" id="modal-right">
+        <div class="modal-header">
+          <h3 id="modal-title-right"></h3>
+          <button class="modal-close" id="close-button-right">&times;</button>
+        </div>
+        <div class="modal-content">
+          <p>Return Device </p>
+        </div>
+      </div>
+    </div>
   </div>
-</body>
+  
+  <script>
+    /* Modal Script */ /*Uses event listeners instead of onclick*/
+    const leftButton = document.getElementById("left-button");
+    const rightButton = document.getElementById("right-button");
+    const modalContainerLeft = document.getElementById("modal-container-left");
+    const modalLeft = document.getElementById("modal-left");
+    const modalTitleLeft = document.getElementById("modal-title-left");
+    const closeButtonLeft = document.getElementById("close-button-left");
+    const modalContainerRight = document.getElementById("modal-container-right");
+    const modalRight = document.getElementById("modal-right");
+    const modalTitleRight = document.getElementById("modal-title-right");
+    const closeButtonRight = document.getElementById("close-button-right");
+  
+    leftButton.addEventListener("click", () => {
+      modalTitleLeft.textContent = "Rent a Device";
+      modalContainerLeft.style.display = "block";
+    });
+  
+    rightButton.addEventListener("click", () => {
+      modalTitleRight.textContent = "Return Device";
+      modalContainerRight.style.display = "block";
+    });
+  
+    closeButtonLeft.addEventListener("click", () => {
+      modalContainerLeft.style.display = "none";
+    });
+  
+    closeButtonRight.addEventListener("click", () => {
+      modalContainerRight.style.display = "none";
+    });
+  
+    window.addEventListener("click", (event) => {
+      if (event.target === modalContainerLeft) {
+        modalContainerLeft.style.display = "none";
+      }
+      if (event.target === modalContainerRight) {
+        modalContainerRight.style.display = "none";
+      }
+    });
+  
+  </script>
+  <style>
+    .button-container {
+      display: flex;
+    }
 
-<style>
-  .newlog-container {
-    position: relative;
-    top: -135px;
-  }
-  .main_title {
-    position: relative;
-    left:50px;
-  }
-</style>
+
+    #right-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 200px;
+      height: 50px;
+      border: 2px solid;
+      border-radius: 5px;
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.2s ease-out, color 0.2s ease-out;
+      border-color: #00a8e0; /* blue for right button, green for left button */
+      background-color: #fff;
+      color: #00a8e0; 
+    }
+
+    #right-button:hover {
+      
+      background-color: #00a8e0;
+      color: #fff;
+    }
+
+    #left-button{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 200px;
+      height: 50px;
+      border: 2px solid;
+      border-radius: 5px;
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.2s ease-out, color 0.2s ease-out;
+      border-color: #00e04b; /* blue for right button, green for left button */
+      background-color: #fff;
+      color: #00e04b; 
+    }
+
+    #left-button:hover {
+      background-color: #00e04b;
+      color: #fff;
+    }
+
+    
+    .button-container {
+      display: flex;
+      position: relative;
+      top: -100px;
+    }
+
+    
+    
+
+    #right-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 200px;
+      height: 50px;
+      border: 2px solid;
+      border-radius: 5px;
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.2s ease-out, color 0.2s ease-out;
+      border-color: #00a8e0;
+      background-color: #fff;
+      color: #00a8e0; 
+    }
+
+    #right-button:hover {
+      border-color: #00a8e0;
+      background-color: #00a8e0;
+      color: #fff;
+    }
+
+    #left-button{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 200px;
+      height: 50px;
+      border: 2px solid;
+      border-radius: 5px;
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.2s ease-out, color 0.2s ease-out;
+      border-color: #00e04b;
+      background-color: #fff;
+      color: #00e04b; 
+    }
+
+    #left-button:hover {
+      background-color: #00e04b;
+      color: #fff;
+    }
+
+    .modal-container {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .modal {
+     position: relative;
+     top: 140px;
+     margin: auto;
+     padding: 20px;
+     width: 400px;
+     height: 400px;
+     background-color: white;
+     border-radius: 10px;
+    }   
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+    }
+
+    .modal-content {
+      /* modal content is in here */
+      color: black;
+    }
+
+    #modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+      color: black;
+      cursor: pointer;
+    }
+
+    #modal-close:hover {
+      color: red;
+    }
+
+    #modal-close:before {
+      content: "×";
+    }
+      
+    .newlog-container {
+      position: relative;
+      top: 20px;
+    }
+  </style>
+  
+</div>

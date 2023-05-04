@@ -27,7 +27,12 @@
         <div class="topheader">
           <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
           <br><br><br>
-          <a style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>   
+          <a style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>
+          {% if loginstatus %}
+            <span id="admin-span" onclick="window.location.href='/admin'" title="Admin Options" class="fa fa-user-circle-o" style="font-size:36px;cursor:pointer;float: right;"></span>
+          {% else %}
+            <a onclick="window.location.href='/login-page'"  class="button" id="login-btn">Sign In</a>
+          {% endif %}
         </div>
         <button class="openbtn" onclick="toggleNav()">☰ </button>
         
@@ -66,9 +71,6 @@
             <a onclick="window.location.href='/help'">Help</a>
           </div>
         </div>
- 
-</html>
-
 </html>
 <title>Rental Statistics</title>
 <h1 class="main_title">Statistics</h1>

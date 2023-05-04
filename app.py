@@ -47,6 +47,17 @@ class opendb():
         self.obj.close()
 
 
+class login_verification():
+    def __enter__(self):
+        status = session['logged_in']
+        if status is True:
+            return 
+        else:
+            redirect('/message')
+
+    def __exit__(self, type, value, traceback):
+        return
+
 # Home page
 @app.route('/')
 def main():
@@ -130,25 +141,27 @@ def date_logs():
 @app.route('/new-log', methods=['POST'])
 def new_log():
     with opendb('logs.db') as c:
-        if request.method == "POST": #If user clicks submit button
-            date_borrowed = datetime.datetime.now().strftime("%d-%m %H:%M") #Automatically logs the date and time a device was rented
-            student_name = request.form.get('student_name') 
-            homeroom = request.form.get('homeroom') 
-            device_type = request.form.get('device_type')
-            device_id = request.form.get('device_id')
-            period_borrowed = request.form.get('period_borrowed')
-            reason_borrowed = request.form.get('reason_borrowed')
-            period_returned = request.form.get('period_returned')
-            submitted_under = session['user_id']
+        with login_verification():    
+            if request.method == "POST": #If user clicks submit button
+                date_borrowed = datetime.datetime.now().strftime("%d-%m %H:%M") #Automatically logs the date and time a device was rented
+                student_name = request.form.get('student_name') 
+                homeroom = request.form.get('homeroom') 
+                device_type = request.form.get('device_type')
+                device_id = request.form.get('device_id')
+                period_borrowed = request.form.get('period_borrowed')
+                reason_borrowed = request.form.get('reason_borrowed')
+                period_returned = request.form.get('period_returned')
+                submitted_under = session['user_id']
 
-            teacher_signoff = request.form.get('teacher_signoff')
-            notes = request.form.get('notes')
+                teacher_signoff = request.form.get('teacher_signoff')
+                notes = request.form.get('notes')
 
-           #submits log data
-            c.execute("INSERT INTO device_logs (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
-            return render_template('message.html', message="successful device log")
-        else:
-            return render_template('new_log.html')
+               #submits log data
+                c.execute("INSERT INTO device_logs (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
+                return render_template('message.html', message="successful device log")
+            else:
+                loginstatus = session['logged_in']
+                return render_template('new_log.html', loginstatus=loginstatus)
 
 #
 @app.route('/new-item')
@@ -167,6 +180,7 @@ def new_item():
             c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes) VALUES (?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device))
             return render_template('message.html', message="new device logged")
         else:
+
             return render_template('new_item.html')
 #
 @app.route('/dev-admin')
@@ -187,6 +201,8 @@ def logout():
         session['user_id'] = "Invalid"
         return render_template('/message.html', message="You have been logged out")
     else:
+        session['logged_in'] = False
+        session['user_id'] = "Invalid"
         return render_template('/message.html', message="You are already not logged in")
 
 #

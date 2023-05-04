@@ -13,6 +13,54 @@ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
   top: -180px;
   right: 0px;
 }
+#admin-span {
+  position: relative;
+  top: -50px;
+  color: white;
+  left: -10px;
+}
+
+#admin-span:hover {
+  color: #bab9b9;
+}
+
+.login-container {
+  position: relative;
+  top: -120px;
+}
+
+#login-btn {
+  cursor: pointer;
+  color: #ffffff;
+  position: relative;
+  top: -92px;
+  left: 1150px;
+  font-size: 14.5px;
+
+}
+
+
+
+
+
+#login-btn:hover {
+  text-decoration: underline;
+  z-index: 9;
+}
+
+#logout-btn {
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #114e91;
+  position: relative;
+  top: -260px;
+  left: 1450px;
+  border: 0px;
+}
+
+#logout-btn:hover {
+  text-decoration: underline;
+}
 
 #return-btn {
   background-color: #ffffff;
