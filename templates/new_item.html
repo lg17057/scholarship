@@ -69,8 +69,10 @@
  
 </html>
 <body>
+  <h1  class="main_title">New Device</h1><br>
+
+  <div class="new-device-container">
     <title>New Device</title>
-    <h1  class="main_title">New Device</h1><br>
     <form style="position: relative;top:20px" method="POST" action="/new-item">
 		<label for="device_id">Device ID:</label><hr>
 		<input required type="text" id="device_id" name="device_id"><br>
@@ -89,4 +91,16 @@
     <input  type="text" id="notes" name="notes" ><br>
 		<input type="submit" value="Submit">
 	</form>
+  </div>
 </body>
+
+<style>
+  .new-device-container {
+    position: relative;
+    top: -142px;
+  }
+  .main_title {
+    position: relative;
+    left:50px;
+  }
+</style>

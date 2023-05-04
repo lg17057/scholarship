@@ -121,7 +121,7 @@ border: none;
 border-radius: 5px;
 font-size: 30px;
 position:relative;
-top: 105px;
+top: -62.5px;
 cursor: pointer;
 left: -7px;
 }
@@ -164,4 +164,13 @@ border-color: #ccc;
 
 .devices {
   z-index: -2;
+}
+
+
+
+.main_title {
+  position: relative;
+  top: -170px;
+  right: -57px;
+  z-index: 2;
 }
