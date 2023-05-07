@@ -24,10 +24,7 @@ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
   color: #bab9b9;
 }
 
-.login-container {
-  position: relative;
-  top: -120px;
-}
+
 
 #login-btn {
   cursor: pointer;

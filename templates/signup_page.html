@@ -72,12 +72,9 @@
           </div>
         </div>
 </html>
-<h1  class="main_title">Sign up page</h1>
-
-
-    <title>Register Account</title>
-  
-    <h1>Register</h1>
+<h1  class="main_title">Register</h1>
+<title>Register Account</title>
+<div class="signup-container">
     <form action="/signup-page" method="POST">
       <label for="teacher_name">Username:</label>
       <input type="text" id="teacher_name" name="teacher_name"><br><br>
@@ -87,4 +84,10 @@
       <input type="password" id="password" name="password"><br><br>
       <input type="submit" value="Register">
     </form>
-    
+</div>
+<style>
+  .signup-container {
+    position: relative;
+    top: -120px;
+  }
+</style>

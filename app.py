@@ -90,22 +90,27 @@ def modify_device():
 @app.route('/circulations')
 def circulations():
     with opendb('logs.db') as c:
-        #The below section is proof of concept. The ipads,chromebooks and laptops_circulating variables will become dynamic
+        # The below section is proof of concept. The ipads, chromebooks, and laptops_circulating variables will become dynamic
         ipads_circulating = 'None circulating'
         chromebooks_circulating = 'None circulating'
         laptops_circulating = 'None circulating'
 
-        #Finding the number of each device type that is in circulation; key in_circulation Yes
+        # Finding the number of each device type that is in circulation; key in_circulation Yes
         c.execute("SELECT COUNT(*) FROM devices WHERE device_type='iPad' AND in_circulation='Yes'")
         ipads_circulating = c.fetchone()[0]
         c.execute("SELECT COUNT(*) FROM devices WHERE device_type='Chromebook' AND in_circulation='Yes'")
         chromebooks_circulating = c.fetchone()[0]
         c.execute("SELECT COUNT(*) FROM devices WHERE device_type='Laptop' AND in_circulation='Yes'")
         laptops_circulating = c.fetchone()[0]
-        c.execute('SELECT device_logs.date_borrowed, devices.device_type, device_logs.device_id, device_logs.period_borrowed, device_logs.reason_borrowed FROM device_logs INNER JOIN devices ON device_logs.device_id = devices.device_id')
+
+        # Selecting only devices that are currently in circulation
+        c.execute('SELECT device_logs.date_borrowed, devices.device_type, device_logs.device_id, device_logs.period_borrowed, device_logs.reason_borrowed '
+                  'FROM device_logs INNER JOIN devices ON device_logs.device_id = devices.device_id '
+                  'WHERE devices.in_circulation = "Yes"')
         circulating_data = c.fetchall()
-        loginstatus = session['logged_in']
-        return render_template('circulations.html', ipads_c=ipads_circulating, chromebooks_c=chromebooks_circulating, laptops_c=laptops_circulating, rows=circulating_data, loginstatus=loginstatus )
+
+        return render_template('circulations.html', ipads_c=ipads_circulating, chromebooks_c=chromebooks_circulating,
+                               laptops_c=laptops_circulating, rows=circulating_data)
 
 #Page created for displaying different device rental and creation statistics
 @app.route('/statistics')
@@ -219,6 +224,15 @@ def logout():
         loginstatus = session['logged_in']
         return render_template('/message.html', message="You are already not logged in", loginstatus=loginstatus)
 
+@app.route('/login-page/staff-login')
+def staff_login():
+    return render_template('/staff_login.html')
+
+@app.route('/login-page/student-login')
+def student_login():
+    return render_template('/student_login.html')
+
+
 #
 @app.route('/login-page')
 def login_page():
@@ -265,21 +279,27 @@ def signup_page():
 def signup_page_post():
     with opendb('main.db') as c:
         teacher_name = request.form['teacher_name']
-        cursor = c.execute('SELECT teacher_name FROM users WHERE teacher_name=?', (teacher_name,))
-        user_check = cursor.fetchall()
-        now = datetime.datetime.now()
-        date_created = now.strftime("%d-%m %H:%M")
-        if user_check != 0: #checks if user exists
-            email = request.form['email']
-            passkey = request.form['password']
-            logins=0
+        email = request.form['email']
+        passkey = request.form['password']
+        
+        # Check if user already exists
+        cursor = c.execute('SELECT teacher_name FROM users WHERE teacher_name=? OR email=?', (teacher_name, email,))
+        user_check = cursor.fetchone()
+        
+        if user_check: # if user already exists
+            loginstatus = session['logged_in']
+            return render_template('message.html', message='Sign Up failure. User with the same name or email already exists.', loginstatus=loginstatus)
+        
+        else: # if user does not exist
+            now = datetime.datetime.now()
+            date_created = now.strftime("%d-%m %H:%M")
             passkey_h = hashlib.sha256(passkey.encode('utf-8')).hexdigest()
-            c.execute('INSERT INTO users (teacher_name, email, password, logins, date_created, last_login) VALUES (?, ?, ?, ?, ?, ?)', (teacher_name, email, passkey_h, logins, date_created, "N/A"))
-            loginstatus = session['logged_in']
+            c.execute('INSERT INTO users (teacher_name, email, password, logins, date_created, last_login) VALUES (?, ?, ?, ?, ?, ?)', (teacher_name, email, passkey_h, 0, date_created, "N/A"))
+            loginstatus = session.get('logged_in', False)
             return render_template('message.html', message="Sign Up success", loginstatus=loginstatus)
-        else:
-            loginstatus = session['logged_in']
-            return render_template('message.html', message='Sign Up failure.', loginstatus=loginstatus)
+
+
+
 
 #
 @app.route('/message')

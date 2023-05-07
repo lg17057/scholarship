@@ -25,3 +25,11 @@ check added so that if the user is not logged in, they cannot access the pages
 
 created class login_verification
 not working yet
+
+working on login page that models login page on bridge
+
+custom changeable div now added so that i dont need to redirect a user to a new html/link/url
+
+--- for sunday
+start work on moving the items in the first div
+the back button for div 2 is now working having changed the js

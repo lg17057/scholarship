@@ -20,60 +20,272 @@
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
         <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
-
-
-
-      </head>
-        <div class="topheader">
-          <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
-          <br><br><br>
-          <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" title="Home Page" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>
-          {% if loginstatus %}
-            <span id="admin-span" onclick="window.location.href='/admin'"  title="Admin Options" class="fa fa-user-circle-o" style="font-size:36px;cursor:pointer;float: right;"></span>
-          {% else %}
-            <a onclick="window.location.href='/login-page'"  class="button" id="login-btn">Sign In</a>
-          {% endif %}
+<body>
+  <title>Login Page</title>
+    <div class="primary-container">
+      <div class="login-container">
+        <div class="login-div">
+          <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img class="login-logo-shc"  src="{{ url_for('static', filename='shc-log1.svg') }}"  width="325px" height="72px" alt="sacred heart logo"></a>
+          <p id="sign-in">SIGN IN</p>
+          <p id="account-type">Please choose your account type</p>
+          <button class="account-type-item1 button1">
+            <img class="student-tag-shc"   src="{{ url_for('static', filename='staff-tag.svg') }}" height="50px" width="50px" alt="sacred heart staff tag">
+            <p id="student-tag">Student</p>
+          </button>
+          <button class="account-type-item2 button2">
+            <img class="staff-tag-shc"  src="{{ url_for('static', filename='student-tag.svg') }}" height="50px" width="50px"  alt="sacred heart student tag">
+            <p id="school-tag">School Staff</p>
+          </button>
+          
         </div>
-        <button class="openbtn" title="Open Nav" onclick="toggleNav()">☰ </button>
-        
-        <div class="sidebar" id="mySidebar">
-          <button class="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
-          <h3c class="sidenavheader" onclick="togglePanel(this)">Options</h3>
-          <hr>
-          <button class="accordion" title="Rental Logs Options" onclick="togglePanel(this)">Rental Logs</button>
-          <div class="panel">
-            <a onclick="window.location.href='/new-log'">New Rental</a>
-            <a onclick="window.location.href='/sign-off'">Sign Off Rental</a>
-            <a onclick="window.location.href='/rental-logs'">View Rental Logs</a>
-          </div>
-          <hr>
-          <button class="accordion" title="Devices Options" onclick="togglePanel(this)">Devices</button>
-          <div class="panel">
-            <a onclick="window.location.href='/circulations'">View Circulating Devices</a>
-            <a onclick="window.location.href='/new-item'">Create New Device</a>
-            <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
-          </div>
-          <hr>
-          <button class="accordion"  title="Statistics Options" onclick="togglePanel(this)">Statistics</button>
-          <div class="panel">
-            <a onclick="window.location.href='/statistics'">Statistics</a>
-            <a onclick="window.location.href='/students'">Students</a>
-          </div>
-          <hr>
-          <button class="accordion" title="Admin Options" onclick="togglePanel(this)">Admins</button>
-          <div class="panel">
-            <a onclick="window.location.href='/admin'">View Admin Options</a>
-            <a onclick="window.location.href='/dev-admin'">Dev Admin Page</a>
-            <a onclick="window.location.href='/device-logs'">View Device Logs</a>
-
-          </div>
-          <div class="help">
-            <a onclick="window.location.href='/help'" title="help">Help</a>
-          </div>
+        <div class="student-login-div">
+          <h1>Placeholder Title 1</h1>
+          <p>This is the content of the first hidden div.</p>
+          <button class="button-back">Back</button>
         </div>
-</html>
- <h1 class="main_title">Login page</h1>
+        <div class="staff-login-div">
+          <h1>Placeholder Title 2</h1>
+          <img class="student-tag-shc"  src="{{ url_for('static', filename='staff-tag1.svg') }}" height="40px" width="50px" alt="sacred heart staff tag">
+          <p id="staff-sign-in">Staff Sign In</p>
+          <p id="sign-in-message">Please use your school-registered email to sign in.</p>
+          <div >
+            <div id="g_id_onload"
+                 data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                 data-login_uri="https://your.domain/your_login_endpoint"
+                 data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-size="large"
+                 data-theme="filled_blue"
+                 data-text="sign_in_with"
+                 data-shape="rectangular"
+                 data-logo_alignment="left"
+                 data-width="500"
+                 >
+      
+            </div>
+          </div>
+          <button class="button-back">Back</button>
+        </div>
+      </div>
+    </div>
+</body>
+<style>
+ .container {
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
+ .student-login-div, .staff-login-div {
+  width: 550px;
+  height: 470px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.student-login-div, .staff-login-div {
+  display: none;
+}
+
+
+.account-type-item1:hover, .account-type-item2:hover {
+    transition: ease-in 0.2s;
+    border: #114e91 solid 3px;
+    background-color: rgb(242, 229, 229);
+
+  }
+
+
+  .staff-tag-shc, .student-tag-shc { 
+    position: inherit;
+    top: 10px;
+  }
+
+
+  #school-tag, #student-tag {
+    font-size: 18px;
+    
+  }
+
+  #school-tag:hover, #student-tag:hover {
+    color: #1869c1;
+  }  
+
+  .account-type-item1, .account-type-item2 {
+    position: inherit;
+    display:inline;
+    top: 180px;
+    left: 100px;
+    height: 128px;
+    width: 160px;
+    margin: 8px 8px 8px 8px;
+    padding: 16px 16px 16px 16px;
+    border: #000000 3px solid;
+    border-radius: 16px;
+    text-align: center;
+    font-size: 16px;
+    background-color: #ffffff;
+    cursor: pointer;
+    box-shadow:  rgb(17, 78, 145) 0px 0px 0px ;
+    text-decoration: rgb(17, 78, 145);
+  }
+
+
+
+
+  #student-tag, #school-tag {
+    position: relative;
+    top: 6px;
+  }
+
+
+
+  .login-container {
+    background-color: white;
+    font-size: 16px;
+    word-spacing: 0px;
+    line-height: 24px;
+    height: 469.283px;
+    width: 550px;
+    display: block;
+    position: relative;
+    top: 40px;
+    border-radius: 5px;
+    right: -487px;
+  }
+
+  .login-logo-shc {
+    display: block;
+    position: absolute;
+    top: 48px;
+    right: 112px;
+  }
+  
+  body {
+    background-color: #114e91;
+    overflow: hidden;
+  }
+
+  #sign-in{
+    text-align: center;
+    position: inherit;
+    top: -178px;
+    color: #212529;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  #account-type {
+    position: inherit;
+    top: 160px;
+    left: 160px
+  }
+
+
+</style>
+<script>
+const button1 = document.querySelector('.button1');
+const button2 = document.querySelector('.button2');
+const buttonBacks = document.querySelectorAll('.button-back');
+const contentDiv = document.querySelector('.login-div');
+const hiddenDiv1 = document.querySelector('.student-login-div');
+const hiddenDiv2 = document.querySelector('.staff-login-div');
+
+button1.addEventListener('click', () => {
+  contentDiv.style.display = 'none';
+  hiddenDiv1.style.display = 'flex';
+});
+
+button2.addEventListener('click', () => {
+  contentDiv.style.display = 'none';
+  hiddenDiv2.style.display = 'flex';
+});
+
+buttonBacks.forEach(buttonBack => {
+  buttonBack.addEventListener('click', () => {
+    hiddenDiv1.style.display = 'none';
+    hiddenDiv2.style.display = 'none';
+    contentDiv.style.display = 'flex';
+  });
+});
+
+</script>
+<!-- <style>
+ 
+#sign-in-message {
+  position: inherit;
+  top: 15px;
+  left: 100px;
+  font-weight:200;
+}
+
+.student-tag-shc {
+  position: inherit;
+  top: 30px;
+  left: 240px
+}
+
+#staff-sign-in {
+  font-size: 28px;
+  font-weight: 700;
+  position: inherit;
+  left: 190px;
+  top: 18px;
+}
+
+.login-container {
+  background-color: white;
+  font-size: 16px;
+  word-spacing: 0px;
+  line-height: 24px;
+  height: 401px;
+  width: 550px;
+  display: block;
+  position: relative;
+  top: 40px;
+  border-radius: 5px;
+  right: -487px;
+}
+
+.login-logo-shc {
+  display: block;
+  position: absolute;
+  top: 48px;
+  right: 112px;
+}
+
+body {
+  background-color: #114e91;
+  overflow: hidden;
+}
+
+#sign-in{
+  text-align: center;
+  position: inherit;
+  top: 178px;
+  color: #212529;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+#account-type {
+  position: inherit;
+  top: 160px;
+  left: 160px
+}
+</style>-->
+
+
+ <!--
 <div class="login-container">
   <form action="/login-page" method="POST">
       <label for="teacher_name">Username:</label>
@@ -83,3 +295,12 @@
       <input type="submit" value="Login">
     </form>
 </div>
+-->
+
+<!--
+  .login-container {
+  position: relative;
+  top: -120px;
+}
+-->
+
