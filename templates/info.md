@@ -33,3 +33,8 @@ custom changeable div now added so that i dont need to redirect a user to a new 
 --- for sunday
 start work on moving the items in the first div
 the back button for div 2 is now working having changed the js
+
+login page div changer no longer working
+
+login page div changer now working
+This was a result of the login-div encompassing the other student and staff login divs, which means that when the back button was pressed, no content would be shown

@@ -28,43 +28,41 @@
           <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img class="login-logo-shc"  src="{{ url_for('static', filename='shc-log1.svg') }}"  width="325px" height="72px" alt="sacred heart logo"></a>
           <p id="sign-in">SIGN IN</p>
           <p id="account-type">Please choose your account type</p>
-          <button class="account-type-item1 button1">
-            <img class="student-tag-shc"   src="{{ url_for('static', filename='staff-tag.svg') }}" height="50px" width="50px" alt="sacred heart staff tag">
-            <p id="student-tag">Student</p>
-          </button>
-          <button class="account-type-item2 button2">
-            <img class="staff-tag-shc"  src="{{ url_for('static', filename='student-tag.svg') }}" height="50px" width="50px"  alt="sacred heart student tag">
-            <p id="school-tag">School Staff</p>
-          </button>
-          
+            <button class="account-type-item1 button1">
+              <img class="student-tag-shc"   src="{{ url_for('static', filename='staff-tag.svg') }}" height="50px" width="50px" alt="sacred heart staff tag">
+              <p id="student-tag">Student</p>
+            </button>
+            <button class="account-type-item2 button2">
+              <img class="staff-tag-shc"  src="{{ url_for('static', filename='student-tag.svg') }}" height="50px" width="50px"  alt="sacred heart student tag">
+              <p id="school-tag">School Staff</p>
+            </button>   
         </div>
-        <div class="student-login-div">
-          <h1>Placeholder Title 1</h1>
-          <p>This is the content of the first hidden div.</p>
-          <button class="button-back">Back</button>
-        </div>
-        <div class="staff-login-div">
-          <h1>Placeholder Title 2</h1>
-          <img class="student-tag-shc"  src="{{ url_for('static', filename='staff-tag1.svg') }}" height="40px" width="50px" alt="sacred heart staff tag">
-          <p id="staff-sign-in">Staff Sign In</p>
-          <p id="sign-in-message">Please use your school-registered email to sign in.</p>
-          <div >
-            <div id="g_id_onload"
-                 data-client_id="YOUR_GOOGLE_CLIENT_ID"
-                 data-login_uri="https://your.domain/your_login_endpoint"
-                 data-auto_prompt="false">
-            </div>
-            <div class="g_id_signin"
-                 data-type="standard"
-                 data-size="large"
-                 data-theme="filled_blue"
-                 data-text="sign_in_with"
-                 data-shape="rectangular"
-                 data-logo_alignment="left"
-                 data-width="500"
-                 >
-      
-            </div>
+      <div class="student-login-div">
+        <h1>Placeholder Title 1</h1>
+        <p>This is the content of the first hidden div.</p>
+        <button class="button-back">Back</button>
+      </div>
+      <div class="staff-login-div">
+        <h1>Placeholder Title 2</h1>
+        <img class="student-tag-shc"  src="{{ url_for('static', filename='staff-tag1.svg') }}" height="40px" width="50px" alt="sacred heart staff tag">
+        <p id="staff-sign-in">Staff Sign In</p>
+        <p id="sign-in-message">Please use your school-registered email to sign in.</p>
+        <div >
+          <div id="g_id_onload"
+               data-client_id="YOUR_GOOGLE_CLIENT_ID"
+               data-login_uri="https://your.domain/your_login_endpoint"
+               data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin"
+               data-type="standard"
+               data-size="large"
+               data-theme="filled_blue"
+               data-text="sign_in_with"
+               data-shape="rectangular"
+               data-logo_alignment="left"
+               data-width="500"
+               >
+    
           </div>
           <button class="button-back">Back</button>
         </div>
@@ -72,6 +70,25 @@
     </div>
 </body>
 <style>
+  .account-type-item1 {
+    position: relative;
+    top:280px;
+    left: 85px;
+  }
+
+  .account-type-item2 {
+    position: relative;
+    top: 280px;
+    left: 75px;
+  }
+
+
+  .student-btn {
+    position: fixed;
+    top: -200px;
+  }
+
+
  .container {
   justify-content: center;
   align-items: center;
@@ -119,10 +136,7 @@
   }  
 
   .account-type-item1, .account-type-item2 {
-    position: inherit;
-    display:inline;
-    top: 180px;
-    left: 100px;
+    
     height: 128px;
     width: 160px;
     margin: 8px 8px 8px 8px;
@@ -175,8 +189,9 @@
 
   #sign-in{
     text-align: center;
-    position: inherit;
-    top: -178px;
+    position:fixed;
+    top: 178px;
+    left: 690px;
     color: #212529;
     font-size: 28px;
     font-style: normal;
@@ -184,39 +199,54 @@
   }
 
   #account-type {
-    position: inherit;
-    top: 160px;
-    left: 160px
+    position: fixed;
+    top: 230px;
+    left: 630px
   }
 
 
 </style>
-<script>
-const button1 = document.querySelector('.button1');
-const button2 = document.querySelector('.button2');
-const buttonBacks = document.querySelectorAll('.button-back');
-const contentDiv = document.querySelector('.login-div');
-const hiddenDiv1 = document.querySelector('.student-login-div');
-const hiddenDiv2 = document.querySelector('.staff-login-div');
-
-button1.addEventListener('click', () => {
-  contentDiv.style.display = 'none';
-  hiddenDiv1.style.display = 'flex';
-});
-
-button2.addEventListener('click', () => {
-  contentDiv.style.display = 'none';
-  hiddenDiv2.style.display = 'flex';
-});
-
-buttonBacks.forEach(buttonBack => {
-  buttonBack.addEventListener('click', () => {
-    hiddenDiv1.style.display = 'none';
-    hiddenDiv2.style.display = 'none';
-    contentDiv.style.display = 'flex';
+<script>// Get the login buttons
+  var loginDiv = document.querySelector('.login-div')
+  var studentBtn = document.querySelector('.account-type-item1');
+  var staffBtn = document.querySelector('.account-type-item2');
+  
+  // Get the student and staff login divs
+  var studentLoginDiv = document.querySelector('.student-login-div');
+  var staffLoginDiv = document.querySelector('.staff-login-div');
+  
+  // Get the "Back" buttons
+  var studentBackBtn = document.querySelector('.student-login-div .button-back');
+  var staffBackBtn = document.querySelector('.staff-login-div .button-back');
+  
+  // Show the student login div when the student button is clicked
+  studentBtn.addEventListener('click', function() {
+    studentLoginDiv.style.display = 'flex';
+    loginDiv.style.display = 'none';
+    staffLoginDiv.style.display = 'none';
   });
-});
+  
+  // Show the staff login div when the staff button is clicked
+  staffBtn.addEventListener('click', function() {
+    staffLoginDiv.style.display = 'flex';
+    loginDiv.style.display = 'none';
+    studentLoginDiv.style.display = 'none';
 
+  });
+  
+  // Hide the student login div when the "Back" button is clicked
+  studentBackBtn.addEventListener('click', function() {
+    studentLoginDiv.style.display = 'none';
+    loginDiv.style.display = 'flex';
+  });
+  
+  // Hide the staff login div when the "Back" button is clicked
+  staffBackBtn.addEventListener('click', function() {
+    staffLoginDiv.style.display = 'none';
+    loginDiv.style.display = 'flex';
+
+  });
+  
 </script>
 <!-- <style>
  

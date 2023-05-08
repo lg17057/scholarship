@@ -224,15 +224,6 @@ def logout():
         loginstatus = session['logged_in']
         return render_template('/message.html', message="You are already not logged in", loginstatus=loginstatus)
 
-@app.route('/login-page/staff-login')
-def staff_login():
-    return render_template('/staff_login.html')
-
-@app.route('/login-page/student-login')
-def student_login():
-    return render_template('/student_login.html')
-
-
 #
 @app.route('/login-page')
 def login_page():
