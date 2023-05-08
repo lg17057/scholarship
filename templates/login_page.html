@@ -1,6 +1,8 @@
 <!DOCTYPE html> 
   <html lang="en-US">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
       <head>
         <meta charset="utf-8">
         <style type="text/css" ></style>
@@ -29,11 +31,11 @@
           <p id="sign-in">SIGN IN</p>
           <p id="account-type">Please choose your account type</p>
             <button class="account-type-item1 button1">
-              <img class="student-tag-shc"   src="{{ url_for('static', filename='staff-tag.svg') }}" height="50px" width="50px" alt="sacred heart staff tag">
+              <img class="student-tag-shc"   src="{{ url_for('static', filename='student-tag.svg') }}" height="50px" width="50px" alt="sacred heart staff tag">
               <p id="student-tag">Student</p>
             </button>
             <button class="account-type-item2 button2">
-              <img class="staff-tag-shc"  src="{{ url_for('static', filename='student-tag.svg') }}" height="50px" width="50px"  alt="sacred heart student tag">
+              <img class="staff-tag-shc"  src="{{ url_for('static', filename='staff-tag.svg') }}" height="50px" width="50px"  alt="sacred heart student tag">
               <p id="school-tag">School Staff</p>
             </button>   
         </div>
@@ -43,72 +45,204 @@
         <button class="button-back">Back</button>
       </div>
       <div class="staff-login-div">
-        <h1>Placeholder Title 2</h1>
-        <img class="student-tag-shc"  src="{{ url_for('static', filename='staff-tag1.svg') }}" height="40px" width="50px" alt="sacred heart staff tag">
-        <p id="staff-sign-in">Staff Sign In</p>
-        <p id="sign-in-message">Please use your school-registered email to sign in.</p>
-        <div >
-          <div id="g_id_onload"
-               data-client_id="YOUR_GOOGLE_CLIENT_ID"
-               data-login_uri="https://your.domain/your_login_endpoint"
-               data-auto_prompt="false">
-          </div>
-          <div class="g_id_signin"
-               data-type="standard"
-               data-size="large"
-               data-theme="filled_blue"
-               data-text="sign_in_with"
-               data-shape="rectangular"
-               data-logo_alignment="left"
-               data-width="500"
-               >
-    
-          </div>
-          <button class="button-back">Back</button>
+        <img class="staff-tag-secondary"  src="{{ url_for('static', filename='staff-tag1.svg') }}" height="40px" width="50px" alt="sacred heart staff tag">
+        <div>
+          <p id="staff-sign-in">SIGN IN</p>
+          <p id="sign-in-message">Please use your school-registered email to sign in.</p>
+          <form action="/login-page" method="POST">
+            <br>
+            <label id="username-label" for="teacher_name">Username:</label>
+            <input type="text" id="teacher_name" name="teacher_name"><br><br>
+            <label id="password-label" for="password">Password:</label>
+            <input type="password" id="password" name="password"><br><br>
+            <input type="submit" value="Login">
+            <div class="g-signin2" data-width="175" data-height="41" border-radius="5" data-longtitle="true"> 
+          </form>
+          <button class="button-back">Change Account Type</button>
         </div>
       </div>
     </div>
 </body>
 <style>
-  .account-type-item1 {
-    position: relative;
-    top:280px;
-    left: 85px;
-  }
+.g-signin2 {
+  
+  width: 170px;
+  height: 41px;
+  position: fixed;
+  top: 395px;
+  left: 770px;
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  
+  cursor: pointer;
 
-  .account-type-item2 {
-    position: relative;
-    top: 280px;
-    left: 75px;
-  }
-
-
-  .student-btn {
-    position: fixed;
-    top: -200px;
-  }
-
-
- .container {
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
 }
 
- .student-login-div, .staff-login-div {
+
+#username-label {
+  position: fixed;
+  top: 245px;
+  font-weight: 700;
+  font-style: italic;
+  left: 600px;
+}
+
+#password-label {
+  position: fixed;
+  top: 325px;
+  font-weight: 700;
+  font-style: italic;
+  left: 600px;
+}
+
+ .student-login-div, .staff-login-div, .login-container {
   width: 550px;
   height: 470px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #f0f0f0;
+  
+  background-color: #ffffff;
   border-radius: 5px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+
+#staff-sign-in {
+    position: fixed;
+    top: 150px;
+    left: 725px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size:24px ;
+    
+  }
+  #sign-in-message {
+    position: fixed;
+    top: 200px;
+    left: 610px;
+    text-decoration: none;
+    font-weight: 200;
+    font-size: 16px;
+  }
+
+
+  .staff-login-div {
+  
+  display: block;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.staff-login-div form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+}
+
+.staff-login-div label {
+  font-size: 16px;
+  color: #888;
+  margin-bottom: 10px;
+  
+}
+
+.staff-login-div input[type="text"],
+.staff-login-div input[type="password"] {
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #333;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  
+  transition: border-color 0.2s ease-in-out;
+}
+
+
+
+.staff-login-div input[type="text"] {
+  position: fixed;
+  width: 22%;
+  top: 270px;
+  left: 599px;
+}
+
+.staff-login-div input[type="password"] {
+  position: fixed;
+  width: 22%;
+  top: 350px;
+  Left: 599px;
+}
+
+.staff-login-div input[type="text"]:focus,
+.staff-login-div input[type="password"]:focus {
+  border-color: #114e91;
+  background-color: #f1f1f1;
+}
+
+
 .student-login-div, .staff-login-div {
   display: none;
+}
+.staff-login-div input[type="submit"] {
+  width: 170px;
+  position: fixed;
+  top: 405px;
+  left: 600px;
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #114e91;
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+}
+
+.staff-login-div input[type="submit"]:hover {
+  background-color: #0e345e;
+  border-color: #393434 2px solid;
+}
+
+
+.staff-login-div  {
+  margin-bottom: 20px;
+  width: 550px;
+  height: 470px;
+  font-size: 16px;
+  color: #333;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+
+
+  .account-type-item1 {
+    position: relative;
+    top:280px;
+    left: 95px;
+  }
+  .account-type-item2 {
+    position: relative;
+    top: 280px;
+    left: 85px;
+  }
+  .student-btn {
+    position: fixed;
+    top: -200px;
+  }
+ .container {
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 
@@ -118,25 +252,23 @@
     background-color: rgb(242, 229, 229);
 
   }
-
-
-  .staff-tag-shc, .student-tag-shc { 
-    position: inherit;
-    top: 10px;
+  .staff-tag-secondary { 
+    position: fixed;
+    top: 110px;
+    left: 750px;
   }
 
+  .student-tag-shc {
+    position: inherit;
+  }
 
   #school-tag, #student-tag {
     font-size: 18px;
-    
   }
-
   #school-tag:hover, #student-tag:hover {
     color: #1869c1;
   }  
-
   .account-type-item1, .account-type-item2 {
-    
     height: 128px;
     width: 160px;
     margin: 8px 8px 8px 8px;
@@ -150,59 +282,76 @@
     box-shadow:  rgb(17, 78, 145) 0px 0px 0px ;
     text-decoration: rgb(17, 78, 145);
   }
-
-
-
-
   #student-tag, #school-tag {
     position: relative;
     top: 6px;
   }
-
-
-
   .login-container {
     background-color: white;
     font-size: 16px;
     word-spacing: 0px;
     line-height: 24px;
-    height: 469.283px;
-    width: 550px;
     display: block;
     position: relative;
     top: 40px;
     border-radius: 5px;
     right: -487px;
   }
-
   .login-logo-shc {
     display: block;
     position: absolute;
     top: 48px;
     right: 112px;
   }
-  
   body {
     background-color: #114e91;
     overflow: hidden;
   }
-
   #sign-in{
     text-align: center;
     position:fixed;
     top: 178px;
-    left: 690px;
+    left: 710px;
     color: #212529;
     font-size: 28px;
     font-style: normal;
     font-weight: 700;
   }
-
   #account-type {
     position: fixed;
     top: 230px;
-    left: 630px
+    left: 650px
   }
+
+  .button-back {
+  position: fixed;
+  top: 500px;
+  left: 490px;
+  font-size: 14px;
+  height: 29px;
+  width: 200px;
+  padding: 4px 8px 4px 8px;
+  color: #6c757D;
+  transition: color 0.15s ease-in-out 0s;
+  background-color: transparent;
+  border: none;
+  vertical-align: middle;
+  min-height: auto;
+  min-width: auto;
+  text-decoration: none;
+  text-align: center;
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+}
+
+.button-back:hover {
+  color: #6c757D;
+  background-color: transparent;
+  border-bottom: 1px solid transparent;
+  text-decoration: underline;
+} 
+
+
 
 
 </style>
@@ -248,89 +397,24 @@
   });
   
 </script>
-<!-- <style>
- 
-#sign-in-message {
-  position: inherit;
-  top: 15px;
-  left: 100px;
-  font-weight:200;
-}
+<script>
+  function onSuccess(googleUser) {
+    console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+  }
+  function onFailure(error) {
+    console.log(error);
+  }
+  function renderButton() {
+    gapi.signin2.render('my-signin2', {
+      'scope': 'profile email',
+      'width': 240,
+      'height': 50,
+      'longtitle': true,
+      'theme': 'dark',
+      'onsuccess': onSuccess,
+      'onfailure': onFailure
+    });
+  }
+</script>
 
-.student-tag-shc {
-  position: inherit;
-  top: 30px;
-  left: 240px
-}
-
-#staff-sign-in {
-  font-size: 28px;
-  font-weight: 700;
-  position: inherit;
-  left: 190px;
-  top: 18px;
-}
-
-.login-container {
-  background-color: white;
-  font-size: 16px;
-  word-spacing: 0px;
-  line-height: 24px;
-  height: 401px;
-  width: 550px;
-  display: block;
-  position: relative;
-  top: 40px;
-  border-radius: 5px;
-  right: -487px;
-}
-
-.login-logo-shc {
-  display: block;
-  position: absolute;
-  top: 48px;
-  right: 112px;
-}
-
-body {
-  background-color: #114e91;
-  overflow: hidden;
-}
-
-#sign-in{
-  text-align: center;
-  position: inherit;
-  top: 178px;
-  color: #212529;
-  font-size: 28px;
-  font-style: normal;
-  font-weight: 700;
-}
-
-#account-type {
-  position: inherit;
-  top: 160px;
-  left: 160px
-}
-</style>-->
-
-
- <!--
-<div class="login-container">
-  <form action="/login-page" method="POST">
-      <label for="teacher_name">Username:</label>
-      <input type="text" id="teacher_name" name="teacher_name"><br><br>
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password"><br><br>
-      <input type="submit" value="Login">
-    </form>
-</div>
--->
-
-<!--
-  .login-container {
-  position: relative;
-  top: -120px;
-}
--->
 
