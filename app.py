@@ -14,9 +14,19 @@ import datetime
 import time
 from time import sleep
 #general imports for flask
-from flask import Flask, render_template, url_for, redirect, request, make_response, jsonify, session
+from flask import Flask, render_template, url_for, redirect, request, make_response, jsonify, session, Response
+from barcode import EAN13
+from barcode.writer import ImageWriter
+from PIL import Image, ImageDraw, ImageFont
+import io
+from io import BytesIO
+import random
+import qrcode
+import base64
+import barcode
+from barcode.writer import ImageWriter
 
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__, static_url_path='/static')   
 #randomly generates secret key
 app.secret_key = 'ajnasdN&aslpo0912nlasiqwenz'
 
@@ -61,16 +71,22 @@ def main():
     return render_template('/index.html')
 
 #device log page
+
 @app.route('/device-logs')
 def device_logs():
     with opendb('logs.db') as c:
-        #fetches all devices and all associated data
-        c.execute("SELECT * from devices")
-        devices = c.fetchall()
+        c.execute('SELECT * FROM devices')
+
+        rows = c.fetchall()
         loginstatus = session['logged_in']
+        return render_template('/device_logs.html', rows=rows, loginstatus=loginstatus, device_id=rows)
 
-        return render_template('/device_logs.html', rows=devices, loginstatus=loginstatus)
-
+@app.route('/barcode/<int:device_id>')
+def get_barcode(device_id):
+    with opendb('logs.db') as c:
+        c.execute('SELECT barcode FROM devices WHERE device_id = ?', (device_id,))
+        barcode_data = c.fetchone()[0]
+        return Response(barcode_data, mimetype='image/png')
 #
 @app.route('/sign-off')
 def sign_off():
@@ -115,8 +131,9 @@ def circulations():
 #Page created for displaying different device rental and creation statistics
 @app.route('/statistics')
 def statistics():
-    loginstatus = session['logged_in']
-    return render_template('statistics.html', loginstatus=loginstatus)
+    return render_template('statistics.html')
+
+
 
 #Page designed for data on students
 @app.route('/students')
@@ -172,12 +189,15 @@ def new_log():
                 loginstatus = session['logged_in']
                 return render_template('message.html', message="successful device log", loginstatus=loginstatus)
             else:
+                                
                 loginstatus = session['logged_in']
                 return render_template('new_log.html', loginstatus=loginstatus)
         elif loginstatus is False:
             return render_template('message.html', message="Please login to access this feature")
         else: 
             return render_template('message.html', message="Please login to access this feature")
+
+
 
 #
 @app.route('/new-item')
@@ -189,15 +209,23 @@ def new_item():
             device_id = request.form['device_id'] #may be replaced by a unique qr code instead of an id 
             device_type = request.form['device_type']
             date_submitted = datetime.datetime.now().strftime("%d-%m %H:%M") #records date and time device was created
-            #^ re-evaluate the data format
             submitted_by = session['user_id']
             notes_device = request.form['notes']
             in_circulation = "No"
             loginstatus = session['logged_in']
-            c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes) VALUES (?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device))
+
+            # generate barcode image for device
+            code128 = barcode.get_barcode_class('code128')
+            barcode_image = code128(str(device_type) + " " + str(device_id), writer=ImageWriter())
+            barcode_buffer = BytesIO()
+            barcode_image.write(barcode_buffer)
+            barcode_data = barcode_buffer.getvalue()
+
+            # insert device data into database
+            c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes, barcode) VALUES (?, ?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device, barcode_data))
+
             return render_template('message.html', message="new device logged", loginstatus=loginstatus)
         else:
-
             return render_template('new_item.html')
 #
 @app.route('/dev-admin')
