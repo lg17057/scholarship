@@ -271,6 +271,7 @@ def login_success(teacher_name, last_login):
 def login_page_post():
     with opendb('main.db') as c:
         teacher_name = request.form['teacher_name'] #fetches teacher name
+        email = request.form['email']
         passkey = request.form['password'] #fetches password
         passkey_h = hashlib.sha256(passkey.encode('utf-8')).hexdigest() #hashes password
         c.execute('SELECT * FROM users WHERE teacher_name=? AND password=?', (teacher_name, passkey_h)) #selects username and hashed pword from database
