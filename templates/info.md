@@ -41,3 +41,37 @@ This was a result of the login-div encompassing the other student and staff logi
 
 sign in with google page button now working
 signing in with google does not work yet but the button is there
+fixed a couple of other issues
+---
+9/05
+created QR Code Return branch
+Started work on trying to scan a device qr code to rent a device and to return it
+css for new modal moved to external file
+
+ask mrs gamil if she wants a qr code or a barcode,,,, and if she wants a scanner or a device camera
+used pip install python-barcode
+
+Made barcodes have a 12 digit number underneath, in format 'device_id''random_8-character-string'
+
+-----
+Client meeting with mrs gamil
+Chromebooks, ipads and laptops can be rented but laptops less often
+Want barcodes not qr codes
+Make the bottom of the barcode say 'Device Type' : 'Device_id
+----
+
+Researching the scanner;
+
+-How to get data from scanner into excel
+-How to get data from scanner into python
+-How to get data from scanner into database
+-Can it extrapolate data from a student id; can a database of student IDs be foud or made, which then provides student data from scanning
+----
+Should it be recorded how many times a device has been rented/last time rented/last student to rent
+Create a students table in database that records all students who have rented a device, and the number of times, and the last time they rented??
+----
+new page for each barcode created based off of the device id that the barcode is associated with
+barcodes now have the deivce type and device id underneath the barcode itself
+----
+ask Mrs Gamil how many digits each device ID is 
+if so, limit the input for a new device creation field
