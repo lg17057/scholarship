@@ -71,49 +71,126 @@
           </div>
         </div>
 </html>
+
+
 <title>Sign off circulations</title>
 <h1 class="main_title">{{message}}</h1>
 <div class="signoff-container">
   <form id="signoff-form" action="/confirm-entries" method="POST">
-    <table class="signoff_table">
-      <thead>
-        <tr>
-          <th>Device ID</th>
-          <th>Date Borrowed</th>
-          <th>Borrowed Under</th>
-          <th>Student Name</th>
-          <th>Homeroom</th>
-          <th>Period Borrowed</th>
-          <th>Reason</th>
-          <th>Period Returned</th>
-          <th>Notes</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in rows %}
-        <tr>
-          <td>{{ row[0] }}</td>
-          <td>{{ row[1] }}</td>
-          <td>{{ row[2] }}</td>
-          <td>{{ row[3] }}</td>
-          <td>{{ row[4] }}</td>
-          <td>{{ row[5] }}</td>
-          <td>{{ row[6] }}</td>
-          <td>{{ row[7] }}</td>
-          <td>{{ row[8] }}</td>
-          <td><input type="checkbox" name="device_ids[]" value="{{ row[0] }}"></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+      <!-- Table content -->
+      <table class="signoff_table">
+        <thead>
+          <tr>
+            <th>Device ID</th>
+            <th>Date Borrowed</th>
+            <th>Borrowed Under</th>
+            <th>Student Name</th>
+            <th>Homeroom</th>
+            <th>Period Borrowed</th>
+            <th>Reason</th>
+            <th>Period Returned</th>
+            <th>Notes</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+          <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>{{ row[6] }}</td>
+            <td>{{ row[7] }}</td>
+            <td>{{ row[8] }}</td>
+            <td><input type="checkbox" name="device_ids[]" value="{{ row[0] }}"></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     <button type="submit" id="submit-button" style="display: none;">Submit</button>
   </form>
 </div>
 
+<div class="popup-overlay" id="popup-overlay"></div>
+<div class="popup" id="popup">
+  <h2 class="popup-title">Confirm Sign-Off</h2>
+  <h3 class="popup-title">Devices are as follows:</h3>
+  <ul class="popup-list" id="popup-list"></ul>
+  <div class="popup-buttons">
+    <button class="popup-button" id="undo-button">Cancel</button>
+    <button class="popup-button" id="confirm-button">Confirm</button>
+  </div>
+</div>
+<style>
+  /* Existing styles */
+  
+  .popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+    cursor: pointer;
+  }
+  
+  .popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    width: 300px;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+  }
+
+  .popup-title {
+    margin: 0 0 10px;
+  }
+
+  .popup-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px;
+  }
+
+  .popup-list li {
+    margin-bottom: 5px;
+  }
+
+  .popup-list li a {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .popup-buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .popup-button {
+    margin-left: 10px;
+  }
+</style>
 <script>
   const checkboxes = document.querySelectorAll('input[type="checkbox"]');
   const submitButton = document.getElementById('submit-button');
+  const popupOverlay = document.getElementById('popup-overlay');
+  const popup = document.getElementById('popup');
+  const popupList = document.getElementById('popup-list');
+  const undoButton = document.getElementById('undo-button');
+  const confirmButton = document.getElementById('confirm-button');
 
   checkboxes.forEach((checkbox) => {
     checkbox.addEventListener('change', () => {
@@ -121,6 +198,40 @@
       submitButton.style.display = checkedCheckboxes.length > 0 ? 'block' : 'none';
     });
   });
+
+  submitButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    popupList.innerHTML = '';
+    checkedCheckboxes.forEach((checkbox) => {
+      const deviceID = checkbox.value;
+      const listItem = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = `/rental-logs/${deviceID}`;
+      link.textContent = deviceID;
+      listItem.appendChild(link);
+      popupList.appendChild(listItem);
+    });
+    popupOverlay.style.display = 'block';
+    popup.style.display = 'block';
+  });
+
+  popupOverlay.addEventListener('click', () => {
+    closePopup();
+  });
+
+  undoButton.addEventListener('click', () => {
+    closePopup();
+  });
+
+  confirmButton.addEventListener('click', () => {
+    document.getElementById('signoff-form').submit();
+  });
+
+  function closePopup() {
+    popupOverlay.style.display = 'none';
+    popup.style.display = 'none';
+  }
 </script>
 
 <style>

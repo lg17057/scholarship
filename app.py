@@ -187,7 +187,8 @@ def sign_off_deviceid(device_id):
 
 @app.route('/confirm-entries', methods=['POST'])
 def confirm_entries():
-    with opendb('logs.db') as c:
+    with sql.connect('logs.db') as conn:
+        c = conn.cursor()
         device_ids = request.form.getlist('device_ids[]')
 
         if device_ids:
@@ -195,9 +196,10 @@ def confirm_entries():
                 c.execute('UPDATE device_logs SET teacher_signoff = "Confirmed" WHERE device_id IN ({})'.format(','.join('?' * len(device_ids))), device_ids)
                 message = 'Selected entries have been confirmed.'
                 message_type = 'success'
+                conn.commit()
             except sql.Error as e:
                 print('Error confirming entries:', e)
-                c.rollback()
+                conn.rollback()
                 message = 'An error occurred while confirming entries.'
                 message_type = 'error'
             finally:
@@ -206,6 +208,7 @@ def confirm_entries():
             message = 'No entries selected for confirmation.'
             message_type = 'info'
 
+        return render_template('sign_off.html', message=message, message_type=message_type)
         return render_template('sign_off.html', message=message, message_type=message_type)
 
 
