@@ -72,11 +72,13 @@
           </div>
         </div>
 </html>
+
+
 <title>Circulations</title>
 <h1 class="main_title">Circulations</h1>
 <div class="circulation-content">
   <h3>Ipads: {{ipads_c}}</h3> <h3>Laptops: {{laptops_c}}</h3><h3>Chromebooks {{chromebooks_c}}</h3>
-    <table class="devices">
+    <table class="devices devices-table" id="devices-table">
       <thead>
         <tr>
           <th>Date Borrowed</th>
@@ -112,3 +114,24 @@
   top: -130px;
 }
 </style>
+<script>
+  $(document).ready(function() {
+  $('#devices-table').DataTable({
+    paging: true,
+    pageLength: 10, // Number of rows per page
+    lengthMenu: [5, 10, 25, 50], // Options for rows per page dropdown
+    searching: true, // Enable search functionality
+    ordering: true, // Enable column sorting
+    info: true, // Show information about current page and total entries
+    language: {
+      paginate: {
+        first: 'First',
+        last: 'Last',
+        next: '&raquo;',
+        previous: '&laquo;'
+      },
+      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+    }
+  });
+});
+</script>

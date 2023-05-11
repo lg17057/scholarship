@@ -87,12 +87,24 @@
 </script>
 <script>
   $(document).ready(function() {
-      $('#devices').DataTable({
-          "pageLength": 30,
-          "lengthMenu": [10, 25, 50, 100],
-          "order": [[0, "desc"]]
-      });
+  $('#devices-table').DataTable({
+    paging: true,
+    pageLength: 10, // Number of rows per page
+    lengthMenu: [5, 10, 25, 50], // Options for rows per page dropdown
+    searching: true, // Enable search functionality
+    ordering: true, // Enable column sorting
+    info: true, // Show information about current page and total entries
+    language: {
+      paginate: {
+        first: 'First',
+        last: 'Last',
+        next: '&raquo;',
+        previous: '&laquo;'
+      },
+      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+    }
   });
+});
 </script>
 
 <button onclick="window.location.href='/rental-logs/'" id="return-btn" class="return-btn">View All Logs</button>
@@ -107,7 +119,7 @@
 <h1 class="main_title">{{message}}</h1><hr class="main_hr" >
 <br>
 <div class="table-container">
-  <table id="devices" class="devices">
+  <table id="devices-table" class="devices">
     <thead>
       <th>
         Date Borrowed

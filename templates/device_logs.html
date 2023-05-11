@@ -74,37 +74,65 @@
 </html>
 <h1 class="main_title">Current Devices</h1>
 <title>Device Logs</title>
-<table class="devices">
-  <thead>
-    <tr>
-      <th>Device ID</th>
-      <th>Device Type</th>
-      <th>Date Added</th>
-      <th>Added By</th>
-      <th>In Circulation</th>
-      <th>Notes</th>
-      <th>Barcode Link</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for row in rows %}
+<div class="table-container">
+  <table class="devices devices-table" id="devices-table">
+    <thead>
       <tr>
-
-        <td>{{ row[0] }}</td>
-        <td>{{ row[1] }}</td>
-        <td>{{ row[2] }}</td>
-        <td>{{ row[3] }}</td>
-        <td>{{ row[4] }}</td>
-        <td>{{ row[5] }}</td>
-        <td><a href="/barcode/{{ row[0] }}">View Barcode</a></td>
-
+        <th>Device ID</th>
+        <th>Device Type</th>
+        <th>Date Added</th>
+        <th>Added By</th>
+        <th>In Circulation</th>
+        <th>Notes</th>
+        <th>Barcode Link</th>
       </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+        <tr>
+
+          <td>{{ row[0] }}</td>
+          <td>{{ row[1] }}</td>
+          <td>{{ row[2] }}</td>
+          <td>{{ row[3] }}</td>
+          <td>{{ row[4] }}</td>
+          <td>{{ row[5] }}</td>
+          <td><a href="/barcode/{{ row[0] }}">View Barcode</a></td>
+
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div> 
 <style>
   #devices {
   top: -120px;
   z-index: 8;
 }
+</style>
+<script>
+  $(document).ready(function() {
+  $('#devices-table').DataTable({
+    paging: true,
+    pageLength: 10, // Number of rows per page
+    lengthMenu: [5, 10, 25, 50], // Options for rows per page dropdown
+    searching: true, // Enable search functionality
+    ordering: true, // Enable column sorting
+    info: true, // Show information about current page and total entries
+    language: {
+      paginate: {
+        first: 'First',
+        last: 'Last',
+        next: '&raquo;',
+        previous: '&laquo;'
+      },
+      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+    }
+  });
+});
+</script>
+<style>
+  .table-container {
+    top: -140px;
+  }
 </style>

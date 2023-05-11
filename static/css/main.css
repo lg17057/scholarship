@@ -3,9 +3,12 @@ body, p, h1, h2, h3, h4, h5, .devices, .datepicker, .datepicker-container, input
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
 }
 body {
-  overflow: hidden;
+  overflow-x: hidden;
 }
-
+.table-container {
+  position: relative;
+  top: -140px;
+}
 .main_title {
   position: relative;
   top: -125px;

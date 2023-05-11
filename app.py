@@ -208,8 +208,7 @@ def confirm_entries():
             message = 'No entries selected for confirmation.'
             message_type = 'info'
 
-        return render_template('sign_off.html', message=message, message_type=message_type)
-        return render_template('sign_off.html', message=message, message_type=message_type)
+        return render_template('index.html', message=message, message_type=message_type)
 
 
 #

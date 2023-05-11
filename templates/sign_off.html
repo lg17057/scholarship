@@ -13,15 +13,15 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/side_nav.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/popup-container.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
         <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
-
-
-
       </head>
         <div class="topheader">
           <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
@@ -71,25 +71,24 @@
           </div>
         </div>
 </html>
-
-
 <title>Sign off circulations</title>
 <h1 class="main_title">{{message}}</h1>
 <div class="signoff-container">
   <form id="signoff-form" action="/confirm-entries" method="POST">
-      <!-- Table content -->
-      <table class="signoff_table">
+    <!-- Table content -->
+    <div class="table-container">
+      <table class="devices" id="devices-table">
         <thead>
           <tr>
-            <th>Device ID</th>
-            <th>Date Borrowed</th>
-            <th>Borrowed Under</th>
-            <th>Student Name</th>
-            <th>Homeroom</th>
-            <th>Period Borrowed</th>
-            <th>Reason</th>
-            <th>Period Returned</th>
-            <th>Notes</th>
+            <th >Device ID</th>
+            <th >Date Borrowed</th>
+            <th >Borrowed Under</th>
+            <th >Student Name</th>
+            <th >Homeroom</th>
+            <th >Period Borrowed</th>
+            <th >Reason</th>
+            <th >Period Returned</th>
+            <th >Notes</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -110,10 +109,10 @@
           {% endfor %}
         </tbody>
       </table>
+    </div>
     <button type="submit" id="submit-button" style="display: none;">Submit</button>
   </form>
 </div>
-
 <div class="popup-overlay" id="popup-overlay"></div>
 <div class="popup" id="popup">
   <h2 class="popup-title">Confirm Sign-Off</h2>
@@ -124,65 +123,27 @@
     <button class="popup-button" id="confirm-button">Confirm</button>
   </div>
 </div>
-<style>
-  /* Existing styles */
-  
-  .popup-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: 9999;
-    cursor: pointer;
-  }
-  
-  .popup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    width: 300px;
-    padding: 20px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 10000;
-  }
-
-  .popup-title {
-    margin: 0 0 10px;
-  }
-
-  .popup-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 10px;
-  }
-
-  .popup-list li {
-    margin-bottom: 5px;
-  }
-
-  .popup-list li a {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  .popup-buttons {
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .popup-button {
-    margin-left: 10px;
-  }
-</style>
+<script>
+  $(document).ready(function() {
+  $('#devices-table').DataTable({
+    paging: true,
+    pageLength: 10, // Number of rows per page
+    lengthMenu: [5, 10, 25, 50], // Options for rows per page dropdown
+    searching: true, // Enable search functionality
+    ordering: true, // Enable column sorting
+    info: true, // Show information about current page and total entries
+    language: {
+      paginate: {
+        first: 'First',
+        last: 'Last',
+        next: '&raquo;',
+        previous: '&laquo;'
+      },
+      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+    }
+  });
+});
+</script>
 <script>
   const checkboxes = document.querySelectorAll('input[type="checkbox"]');
   const submitButton = document.getElementById('submit-button');
@@ -233,44 +194,54 @@
     popup.style.display = 'none';
   }
 </script>
-
 <style>
+  .main_title {
+    position: relative;
+    left: 50px;
+  }
+
   .signoff-container {
     position: relative;
     top: -140px;
   }
-  .main_title {
-    position: relative;
-    left:50px;
+
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 9999;
   }
-</style>
-<style>
-  .signoff_table {
-    border: 2px solid #000000;
+
+  .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    display: none;
+    z-index: 10000;
+    text-align: center;
   }
-  .signoff_table tr {
-    font-family: open-sans,sans-serif;
-    font-weight: 400;
-    font-style:normal;
+
+  .popup-title {
+    margin-bottom: 10px;
   }
-  
-  .signoff_table td {
-    border: 1px solid #000000;
-    border-style:solid;
+
+  .popup-list {
+    margin-bottom: 20px;
   }
-              
-  .signoff_table th {
-    padding-top: 6px;
-    padding-bottom: 6px;
-    text-align: left;
-    background-color: #04AA6D;
-    color: rgb(0, 0, 0);
-    font-family: open-sans, sans-serif;
-    font-weight: 300;
-    font-style: normal;
+
+  .popup-buttons {
+    display: flex;
+    justify-content: center;
   }
-  /* changes row colours */
-  .signoff_table tr:nth-child(even,odd){background-color: #f2f2f2;}
-  .signoff_table tr:hover {background-color: #ddd;}
-  .signoff_table tr:hover TD:nth-child(1){font-weight: bold}
+
+  .popup-button {
+    margin: 0 10px;
+  }
 </style>

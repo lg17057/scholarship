@@ -75,3 +75,5 @@ barcodes now have the deivce type and device id underneath the barcode itself
 ----
 ask Mrs Gamil how many digits each device ID is 
 if so, limit the input for a new device creation field
+
+fix circulations table issues
