@@ -11,7 +11,6 @@
         <meta name="apple-mobile-web-app-title" content="DeviceLog">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-16x16.png') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/side_nav.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -73,69 +72,56 @@
         </div>
 </html>
 <title>Sign off circulations</title>
-<h1  class="main_title">{{message}}</h1>
+<h1 class="main_title">{{message}}</h1>
 <div class="signoff-container">
-  <table class="signoff_table">
-    <thead>
-      <tr>
-        <th>
-          Date Borrowed
-        </th>
-        <th>
-          Submitted Under
-        </th>
-        <th>
-          Student Name
-        </th>
-        <th>
-          Homeroom
-        </th>
-        <th>
-          Device Type
-        </th>
-        <th>
-          Device ID
-        </th>
-        <th>
-          Period Borrowed
-        </th>
-        <th>
-          Reason
-        </th>
-        <th>
-          Period Returned
-        </th>
-        <th>
-          Sign-Off
-        </th>
-        <th>
-          Notes
-        </th>
-        <th>
-          Modify Device
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in rows %}
-      <tr>
-        <td>{{ row[0] }}</td>
-        <td>{{ row[1] }}</td>
-        <td>{{ row[2] }}</td>
-        <td>{{ row[3] }}</td>
-        <td>{{ row[4] }}</td>
-        <td>{{ row[5] }}</td>
-        <td>{{ row[6] }}</td>
-        <td>{{ row[7] }}</td>
-        <td>{{ row[8] }}</td>
-        <td>{{ row[9] }}</td>
-        <td>{{ row[10] }}</td>
-        <td><a href="/sign-off/{{ row[5] }}">Sign Off Device</a></td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <form id="signoff-form" action="/confirm-entries" method="POST">
+    <table class="signoff_table">
+      <thead>
+        <tr>
+          <th>Device ID</th>
+          <th>Date Borrowed</th>
+          <th>Borrowed Under</th>
+          <th>Student Name</th>
+          <th>Homeroom</th>
+          <th>Period Borrowed</th>
+          <th>Reason</th>
+          <th>Period Returned</th>
+          <th>Notes</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+          <td>{{ row[0] }}</td>
+          <td>{{ row[1] }}</td>
+          <td>{{ row[2] }}</td>
+          <td>{{ row[3] }}</td>
+          <td>{{ row[4] }}</td>
+          <td>{{ row[5] }}</td>
+          <td>{{ row[6] }}</td>
+          <td>{{ row[7] }}</td>
+          <td>{{ row[8] }}</td>
+          <td><input type="checkbox" name="device_ids[]" value="{{ row[0] }}"></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button type="submit" id="submit-button" style="display: none;">Submit</button>
+  </form>
 </div>
+
+<script>
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const submitButton = document.getElementById('submit-button');
+
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', () => {
+      const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+      submitButton.style.display = checkedCheckboxes.length > 0 ? 'block' : 'none';
+    });
+  });
+</script>
 
 <style>
   .signoff-container {

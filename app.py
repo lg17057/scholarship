@@ -24,6 +24,7 @@ import barcode
 import binascii
 from barcode.writer import ImageWriter
 import uuid
+import flash
 
 
 app = Flask(__name__, static_url_path='/static')   
@@ -166,7 +167,7 @@ def date_id_logs(device_id):
 def sign_off():
     with opendb('logs.db') as c:
         #selects all data from rental logs where data is unconfirmed
-        c.execute("SELECT * FROM device_logs WHERE teacher_signoff='Unconfirmed'")
+        c.execute("SELECT device_id, date_borrowed, submitted_under, student_name, homeroom, period_borrowed, reason_borrowed, period_returned, notes FROM device_logs WHERE teacher_signoff='Unconfirmed'")
         rows = c.fetchall()
         loginstatus = session['logged_in']
 
@@ -182,6 +183,29 @@ def sign_off_deviceid(device_id):
             loginstatus = session['logged_in']
             return render_template('/device_modifier.html', loginstatus=loginstatus, rows=rows, message="Sign Off Device ID {}".format(device_id))
 
+
+@app.route('/confirm-entries', methods=['POST'])
+def confirm_entries():
+    with opendb('logs.db') as c:
+        device_ids = request.form.getlist('device_ids[]')
+
+        if device_ids:
+            try:
+                c.execute('UPDATE device_logs SET teacher_signoff = "Confirmed" WHERE device_id IN ({})'.format(','.join('?' * len(device_ids))), device_ids)
+                message = 'Selected entries have been confirmed.'
+                message_type = 'success'
+            except sql.Error as e:
+                print('Error confirming entries:', e)
+                c.rollback()
+                message = 'An error occurred while confirming entries.'
+                message_type = 'error'
+            finally:
+                c.close()
+        else:
+            message = 'No entries selected for confirmation.'
+            message_type = 'info'
+
+        return render_template('sign_off.html', message=message, message_type=message_type)
 
 
 #
