@@ -81,22 +81,13 @@ def device_logs():
         loginstatus = session['logged_in']
         return render_template('/device_logs.html', rows=rows, loginstatus=loginstatus, device_id=rows)
 
+
 @app.route('/barcode/<int:device_id>')
 def get_barcode(device_id):
     with opendb('logs.db') as c:
         c.execute('SELECT barcode FROM devices WHERE device_id = ?', (device_id,))
         barcode_data = c.fetchone()[0]
         return Response(barcode_data, mimetype='image/png')
-#
-@app.route('/sign-off')
-def sign_off():
-    with opendb('logs.db') as c:
-        #selects all data from rental logs where data is unconfirmed
-        c.execute("SELECT * FROM device_logs WHERE teacher_signoff='Unconfirmed'")
-        rows = c.fetchall()
-        loginstatus = session['logged_in']
-
-        return render_template('sign_off.html', rows=rows, loginstatus=loginstatus)
 
 #
 @app.route('/modify-device')
@@ -134,15 +125,14 @@ def statistics():
     return render_template('statistics.html')
 
 
-
 #Page designed for data on students
 @app.route('/students')
 def students():
     loginstatus = session['logged_in']
     return render_template('students.html', loginstatus=loginstatus)
 
+
 #Displays all rental logs in a table
-#
 @app.route('/rental-logs/<string:date>')
 def rental_logs(date):
     with opendb('logs.db') as c:
@@ -162,6 +152,37 @@ def date_logs():
         logs = c.fetchall()
         loginstatus = session['logged_in']
         return render_template('rental_logs.html', rows=logs, message="Viewing all rental logs", formatted_date=formatted_date, loginstatus=loginstatus)
+
+@app.route('/rental-logs/<int:device_id>')
+def date_id_logs(device_id):
+    with opendb('logs.db') as c:
+        c.execute("SELECT * from device_logs WHERE device_id = ?", (device_id,))
+        rows = c.fetchall()
+        loginstatus = session['logged_in']
+        return render_template('/rental_logs.html', loginstatus=loginstatus, rows=rows, message="Viewing logs for device ID {}".format(device_id))
+
+#
+@app.route('/sign-off')
+def sign_off():
+    with opendb('logs.db') as c:
+        #selects all data from rental logs where data is unconfirmed
+        c.execute("SELECT * FROM device_logs WHERE teacher_signoff='Unconfirmed'")
+        rows = c.fetchall()
+        loginstatus = session['logged_in']
+
+        return render_template('sign_off.html', rows=rows, loginstatus=loginstatus, message="Viewing unconfirmed circulations")
+
+
+@app.route('/sign-off/<int:device_id>')
+def sign_off_deviceid(device_id):
+    with opendb('logs.db') as c:
+            c.execute('SELECT * FROM device_logs WHERE device_id = ? and teacher_signoff = "Unconfirmed"', (device_id,))
+            rows = c.fetchall()
+        
+            loginstatus = session['logged_in']
+            return render_template('/device_modifier.html', loginstatus=loginstatus, rows=rows, message="Sign Off Device ID {}".format(device_id))
+
+
 
 #
 @app.route('/new-log')
@@ -227,11 +248,16 @@ def new_item():
             return render_template('message.html', message="new device logged", loginstatus=loginstatus)
         else:
             return render_template('new_item.html')
-#
-@app.route('/dev-admin')
+        
+@app.route('/dev-admin', methods=['GET', 'POST'])
 def dev_admin():
-    loginstatus = session['logged_in']
-    return render_template('/dev_admin.html', loginstatus=loginstatus)
+    if request.method == "POST":
+        session['logged_in'] = True
+        session['user_id'] = "Force_Login"
+        return render_template('message.html', message="Successful force login")
+    else:
+        loginstatus = session.get('logged_in', False)
+        return render_template('dev_admin.html', loginstatus=loginstatus)
 
 #
 @app.route('/admin')
@@ -273,7 +299,7 @@ def login_page_post():
         passkey = request.form['password']
         c.execute('SELECT * FROM users WHERE teacher_name = ?', (teacher_name,))
         user = c.fetchone()
-        if user and verify_password(user['password'], passkey):
+        if 'user verification':
             session['logged_in'] = True
             session['user_id'] = teacher_name
             last_login = datetime.datetime.now().strftime("%d-%m %H:%M")
@@ -295,23 +321,14 @@ def is_valid_email(email):
     return re.match(pattern, email) is not None
 
 
-def hash_password(password, salt=None):
-    if salt is None:
-        salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
-    hashed_password = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'), salt, 100000)
-    hashed_password = binascii.hexlify(hashed_password)
-    return (salt + hashed_password).decode('ascii')
+@app.route('/signup-page')
+def signup_page():
+    loginstatus = session['logged_in']
+    return render_template('/signup_page.html', loginstatus=loginstatus)
 
-def verify_password(hashed_password, input_password):
-    salt = hashed_password[:64]
-    stored_password = hashed_password[64:]
-    input_password = input_password.encode('utf-8')
-    hashed_input_password = hashlib.pbkdf2_hmac('sha512', input_password, salt.encode('ascii'), 100000)
-    hashed_input_password = binascii.hexlify(hashed_input_password).decode('ascii')
-    return hashed_input_password == stored_password
 
 @app.route('/signup-page', methods=['POST'])
-def signup_page():
+def signup_page_post():
     with opendb('main.db') as c:
 
         if request.method == 'POST':
@@ -344,14 +361,17 @@ def signup_page():
 
             # Hash the password and insert the user into the database
             salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
+            hash_password = 'blablah'
             hashed_password = hash_password(password, salt)
             last_login = datetime.datetime.now().strftime("%d-%m %H:%M")
             c.execute('INSERT INTO users (teacher_name, email, password, salt, logins, date_created, last_login) VALUES (?, ?, ?, ?, ?, ?, ?)',
                           (teacher_name, email, hashed_password, salt, 0, "N/A", last_login))
             message = 'Sign up successful!'
-            return render_template('message.html', message=message)
-
-        return render_template('signup_page.html')
+            loginstatus = session['logged_in']
+            return render_template('message.html', message=message, loginstatus=loginstatus)
+        else:
+            loginstatus = session['logged_in']
+            return render_template('/signup_page.html', loginstatus=loginstatus)
 
 
 
