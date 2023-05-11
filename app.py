@@ -167,7 +167,7 @@ def date_id_logs(device_id):
 def sign_off():
     with opendb('logs.db') as c:
         #selects all data from rental logs where data is unconfirmed
-        c.execute("SELECT device_id, date_borrowed, submitted_under, student_name, homeroom, period_borrowed, reason_borrowed, period_returned, notes FROM device_logs WHERE teacher_signoff='Unconfirmed'")
+        c.execute("SELECT device_id, date_borrowed, submitted_under, student_name, homeroom, period_borrowed, reason_borrowed, period_returned, notes FROM device_logs WHERE teacher_signoff='Unconfirmed' AND period_returned IN (1, 2, 3, 4, 5, 6) AND period_returned != 'Not Returned'")
         rows = c.fetchall()
         loginstatus = session['logged_in']
 
@@ -177,7 +177,8 @@ def sign_off():
 @app.route('/sign-off/<int:device_id>')
 def sign_off_deviceid(device_id):
     with opendb('logs.db') as c:
-            c.execute('SELECT * FROM device_logs WHERE device_id = ? and teacher_signoff = "Unconfirmed"', (device_id,))
+            c.execute('SELECT * FROM device_logs WHERE device_id = ? AND teacher_signoff = "Unconfirmed" AND period_returned NOT IN ("Not Returned")', (device_id,))
+
             rows = c.fetchall()
         
             loginstatus = session['logged_in']
