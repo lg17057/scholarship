@@ -270,7 +270,7 @@ def new_item():
             barcode_data = barcode_buffer.getvalue()
 
             # insert device data into database
-            c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes, barcode) VALUES (?, ?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device, barcode_data))
+            c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes, barcode, num_rentals) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device, barcode_data, 0))
 
             return render_template('message.html', message="new device logged", loginstatus=loginstatus)
         else:

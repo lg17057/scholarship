@@ -77,3 +77,21 @@ ask Mrs Gamil how many digits each device ID is
 if so, limit the input for a new device creation field
 
 fix circulations table issues
+^
+fixed
+
+make it so that when the user presses the enter button when submit button is not visible, the popup will not appear
+
+table css changed
+
+Ask Mrs Gamil if a device 'ipad' and device 'chromebook' can have the same ID. And are the device ID's generated a certain way? is there a certain format.
+
+-----
+12/05 
+
+student_data table in logs.db made
+new issues for research and development created
+----
+
+format in excel
+or as pdf 
