@@ -97,7 +97,7 @@
           <td>{{ row[3] }}</td>
           <td>{{ row[4] }}</td>
           <td>{{ row[5] }}</td>
-          <td><a href="/barcode/{{ row[0] }}">View Barcode</a></td>
+          <td><a href="/barcode/{{ row[1] }}/{{ row[0] }}">View Barcode</a></td>
 
         </tr>
       {% endfor %}
@@ -114,8 +114,8 @@
   $(document).ready(function() {
   $('#devices-table').DataTable({
     paging: true,
-    pageLength: 10, // Number of rows per page
-    lengthMenu: [5, 10, 25, 50], // Options for rows per page dropdown
+    pageLength: 20, // Number of rows per page
+    lengthMenu: [10, 20, 40, 80], // Options for rows per page dropdown
     searching: true, // Enable search functionality
     ordering: true, // Enable column sorting
     info: true, // Show information about current page and total entries

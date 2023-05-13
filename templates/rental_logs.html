@@ -74,39 +74,6 @@
 </html>
 <body> 
 <title>Rental Log - Dash</title>
-<script>
- function filterTable() {
-  let datepicker = document.getElementById("datepicker");
-  let date = datepicker.value;
-  let [year, month, day] = date.split("-");
-  let formattedDate = `${day}-${month}`;
-
-  let url = `/rental-logs/${formattedDate}`;
-  window.location.href = url;
-}
-</script>
-<script>
-  $(document).ready(function() {
-  $('#devices-table').DataTable({
-    paging: true,
-    pageLength: 10, // Number of rows per page
-    lengthMenu: [5, 10, 25, 50], // Options for rows per page dropdown
-    searching: true, // Enable search functionality
-    ordering: true, // Enable column sorting
-    info: true, // Show information about current page and total entries
-    language: {
-      paginate: {
-        first: 'First',
-        last: 'Last',
-        next: '&raquo;',
-        previous: '&laquo;'
-      },
-      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
-    }
-  });
-});
-</script>
-
 <button onclick="window.location.href='/rental-logs/'" id="return-btn" class="return-btn">View All Logs</button>
 <div class="datepicker-container">
   <div class="datepicker">
@@ -199,3 +166,40 @@ left: -7px;
 }
 
 </style>
+
+<script>
+  function filterTable() {
+   let datepicker = document.getElementById("datepicker");
+   let date = datepicker.value;
+   let [year, month, day] = date.split("-");
+   let formattedDate = `${day}-${month}`;
+ 
+   let url = `/rental-logs/${formattedDate}`;
+   window.location.href = url;
+ }
+ </script>
+ <script>
+   $(document).ready(function() {
+   $('#devices-table').DataTable({
+     paging: true,
+     pageLength: 20, // Number of rows per page
+     lengthMenu: [10, 20, 50, 100], // Options for rows per page dropdown
+     searching: true, // Enable search functionality
+     ordering: true, // Enable column sorting
+     info: true, // Show information about current page and total entries
+     language: {
+       paginate: {
+         first: 'First',
+         last: 'Last',
+         next: '&raquo;',
+         previous: '&laquo;'
+       },
+       info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+     }
+   });
+ });
+ </script>
+
+<div class="download-container">
+  <a href="/rental-logs/download-csv" class="download-btn">Download CSV</a>
+</div>

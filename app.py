@@ -14,7 +14,7 @@ import datetime
 import time
 from time import sleep
 #general imports for flask
-from flask import Flask, render_template, url_for, redirect, request, make_response, jsonify, session, Response
+from flask import Flask, render_template, url_for, redirect, request, make_response, jsonify, session, Response, send_file
 from barcode import EAN13
 from barcode.writer import ImageWriter
 from PIL import Image, ImageDraw, ImageFont
@@ -25,6 +25,7 @@ import binascii
 from barcode.writer import ImageWriter
 import uuid
 import flash
+import csv
 
 
 app = Flask(__name__, static_url_path='/static')   
@@ -83,10 +84,10 @@ def device_logs():
         return render_template('/device_logs.html', rows=rows, loginstatus=loginstatus, device_id=rows)
 
 
-@app.route('/barcode/<int:device_id>')
-def get_barcode(device_id):
+@app.route('/barcode/<string:device_type>/<int:device_id>')
+def get_barcode(device_type, device_id):
     with opendb('logs.db') as c:
-        c.execute('SELECT barcode FROM devices WHERE device_id = ?', (device_id,))
+        c.execute('SELECT barcode FROM devices WHERE device_id = ? and device_type = ?', (device_id,device_type,))
         barcode_data = c.fetchone()[0]
         return Response(barcode_data, mimetype='image/png')
 
@@ -133,7 +134,8 @@ def students():
     return render_template('students.html', loginstatus=loginstatus)
 
 
-#Displays all rental logs in a table
+
+#Displays all rental logs in a table 
 @app.route('/rental-logs/<string:date>')
 def rental_logs(date):
     with opendb('logs.db') as c:
