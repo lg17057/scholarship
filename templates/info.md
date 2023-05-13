@@ -104,5 +104,12 @@ make it so the admin has to re-enter password before acessing admin page?
 
 style circulations page
 
-change device retal logs device id based links
-do the same for the sign off device id system
+change device retal logs device id based links - done
+do the same for the sign off device id system -  done
+
+create device id input that allows user to type in a device id to see that devices confirmations on 
+^ for sign off page
+^ for rental logs too
+^ could be a popup to select device ID and device type and then go to the link
+
+change custom main title sign off message so that it displays the device type AND ID

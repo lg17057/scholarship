@@ -171,10 +171,10 @@ def date_logs():
 #page for user to view device specific rental logs 
 #example of route;  /rental-logs/2231
 
-@app.route('/rental-logs/<int:device_id>')
-def date_id_logs(device_id):
+@app.route('/rental-logs/<string:device_type>/<int:device_id>')
+def date_id_logs(device_type, device_id):
     with opendb('logs.db') as c:
-        c.execute("SELECT * from device_logs WHERE device_id = ?", (device_id,))
+        c.execute("SELECT * from device_logs WHERE device_type = ? AND device_id = ?", (device_type, device_id,))
         rows = c.fetchall()
         loginstatus = session['logged_in']
         return render_template('/rental_logs.html', loginstatus=loginstatus, rows=rows, message="Viewing logs for device ID {}".format(device_id))
@@ -192,10 +192,10 @@ def sign_off():
 
 #Used to sign off a device based off of id; 
 #can be used to rectify an issue where a device is trying to be rented and has not been confirmed as returned
-@app.route('/sign-off/<int:device_id>')
-def sign_off_deviceid(device_id):
+@app.route('/sign-off/<string:device_type>/<int:device_id>')
+def sign_off_deviceid(device_type,device_id):
     with opendb('logs.db') as c:
-            c.execute('SELECT * FROM device_logs WHERE device_id = ? AND teacher_signoff = "Unconfirmed" AND period_returned NOT IN ("Not Returned")', (device_id,))
+            c.execute('SELECT * FROM device_logs WHERE device_type = ? AND device_id = ? AND teacher_signoff = "Unconfirmed" AND period_returned NOT IN ("Not Returned")', (device_type, device_id,))
 
             rows = c.fetchall()
         
