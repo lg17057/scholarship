@@ -227,16 +227,16 @@ def confirm_entries():
 
         return render_template('index.html', message=message, message_type=message_type)
 
-
-#Used for renting a device
 @app.route('/new-log')
 @app.route('/new-log', methods=['POST'])
 def new_log():
     with opendb('logs.db') as c:
         loginstatus = session['logged_in']
-        if loginstatus is True:
-            if request.method == "POST": #If user clicks submit button
-                date_borrowed = datetime.datetime.now().strftime("%d-%m %H:%M") #Automatically logs the date and time a device was rented
+
+        if loginstatus:
+            if request.method == "POST":
+                # Retrieve form data
+                date_borrowed = datetime.datetime.now().strftime("%d-%m %H:%M")
                 student_name = request.form.get('student_name') 
                 homeroom = request.form.get('homeroom') 
                 device_type = request.form.get('device_type')
@@ -247,26 +247,33 @@ def new_log():
                 submitted_under = session['user_id']
                 teacher_signoff = request.form.get('teacher_signoff')
                 notes = request.form.get('notes')
-                c.execute("SELECT * FROM device_logs where device_id = ? AND device_type = ? and period_returned = ?", (device_id, device_type, period_returned))
+
+                # Check if the device exists
+                c.execute("SELECT * FROM devices WHERE device_id = ? AND device_type = ?",
+                          (device_id,device_type))
+                device_exists = c.fetchall()
+                print(device_exists)
+                # Check if the rental log exists
+                c.execute("SELECT * FROM device_logs WHERE device_id = ? and device_type = ?",
+                          (device_id,device_type))
                 rental_log_exists = c.fetchall()
-                if rental_log_exists is None:
-                    c.execute("INSERT INTO device_logs (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
-                    loginstatus = session['logged_in']
-                    return render_template('message.html', message="Successful Rental", loginstatus=loginstatus)
-                elif rental_log_exists is not None:
-                    #submits log data
+                print("Break")
+                print(rental_log_exists)
+                if rental_log_exists:
                     return render_template('message.html', message="Device already being rented. Please choose another device", loginstatus=loginstatus)
+                elif device_exists:
+                    c.execute("INSERT INTO device_logs (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                              (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
+                    return render_template('message.html', message="Successful Rental", loginstatus=loginstatus)
+                elif device_exists is None:
+                    return render_template('message.html', message="Device doesn't exist. Please select a device that exists.", loginstatus=loginstatus)
                 else:
-                    return render_template('message.html', message="An issue occured with renting a device", loginstatus=loginstatus)
-            else:                
-                loginstatus = session['logged_in']
+                    return render_template('message.html', message="Issue with renting a device. Please try again", loginstatus=loginstatus)
+
+            else:
                 return render_template('new_log.html', loginstatus=loginstatus)
-        elif loginstatus is False:
+        else:
             return render_template('message.html', message="Please login to access this feature")
-        else: 
-            return render_template('message.html', message="Please login to access this feature")
-
-
 
 #Used for creating a new device
 @app.route('/new-item')
