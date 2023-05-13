@@ -13,7 +13,7 @@
     position: inherit;
     top: -10px;
     left: -2px;
-    width: 80px;
+    width: 90px;
     height: 40px;
     background-color: #007bff;
     cursor: pointer;
@@ -112,22 +112,12 @@
       border-radius: 12px;
       z-index: 10000;
     }
-    .popup-title {
+    .newdevice-title {
       margin-bottom: 10px;
     }
   
-    .popup-list {
-      margin-bottom: 20px;
-    }
+    
   
-    .popup-buttons {
-      display: flex;
-      justify-content: center;
-    }
-  
-    .popup-button {
-      margin: 0 10px;
-    }
   
     .main_title {
       position: relative;

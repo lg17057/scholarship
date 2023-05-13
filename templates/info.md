@@ -95,3 +95,14 @@ new issues for research and development created
 
 format in excel
 or as pdf 
+-----
+should create a custom message page button based off of what the issue encountered was
+
+also figure out how device modifier will work and what it will do
+
+make it so the admin has to re-enter password before acessing admin page?
+
+style circulations page
+
+change device retal logs device id based links
+do the same for the sign off device id system

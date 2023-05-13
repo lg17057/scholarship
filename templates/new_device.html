@@ -75,10 +75,10 @@
 <body>
   <title>New Device</title>
   <div class="new-device-container">
-    <h1 class="popup-title">Create New Device</h1>
+    <h1 class="newdevice-title">Create New Device</h1>
     <form style="position: relative;top:20px" method="POST" action="/new-item">
 		  <label for="device_id">Device ID:</label>
-		  <input  required type="text" pattern="\d{4}" maxlength="4" id="device_id" name="device_id">
+		  <input  required type="number" pattern="\d{4}" maxlength="4" id="device_id" name="device_id">
       <br>
       <div class="select-container">
 		    <select id="device_type" name="device_type" required>

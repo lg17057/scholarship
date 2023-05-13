@@ -71,3 +71,44 @@
 </html>
 <title>Admin Page</title>
 <h1 class="main_title">Admin page</h1>
+<div class="primary-container">
+  <form action='/logout' method="GET">
+    <input type="submit" name="logout" value="Logout" id="logoutBtn">
+  </form>
+
+  <input type="submit" value="Delete Account" id="delete-accountbtn" class="delete-account-btn">
+</div>
+
+<style>
+  
+  .delete-account-btn {
+        font-weight: 300;
+        font-style: normal;
+        padding: 14px 28px;
+        border: 2px solid #000000;
+        border-radius: 3px;
+        text-decoration: none;
+        font-size: 16px;
+        color: #000000;
+        cursor: pointer;
+        background-color: #ffffff;
+        display: block;
+        transition: 0.3s;
+    }
+    
+    .delete-account-btn:hover {
+        font-weight: 300;
+        font-style: normal;
+        padding: 14px 28px;
+        border-radius: 5px;
+        border: 2px solid #aa0404;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 16px;
+        color: #aa0404;
+        cursor: pointer;
+        background-color: #ffffff;
+        display: block;
+        transition: 0.1s;
+    }    
+</style>

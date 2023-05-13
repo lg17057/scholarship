@@ -19,17 +19,17 @@ from barcode import EAN13
 from barcode.writer import ImageWriter
 from PIL import Image, ImageDraw, ImageFont
 import io
+#used for multiple purposes
 from io import BytesIO
+#used for generating barcode
 import barcode
 import binascii
 from barcode.writer import ImageWriter
-import uuid
-import flash
 import csv
 
-
+#defines static file path
 app = Flask(__name__, static_url_path='/static')   
-#randomly generates secret key
+#randomly generates secret key for sessions
 app.secret_key = 'ajnasdN&aslpo0912nlasiqwenz'
 
 #Notes:
@@ -53,7 +53,7 @@ class opendb():
         self.obj.commit()
         self.obj.close()
 
-
+#used as a way to determine whether or not a user is logged in before accessing the website's features
 class login_verification():
     def __enter__(self):
         loginstatus = session['logged_in']
@@ -77,12 +77,16 @@ def main():
 @app.route('/device-logs')
 def device_logs():
     with opendb('logs.db') as c:
+        #selects all device logs data
         c.execute('SELECT * FROM devices')
 
         rows = c.fetchall()
         loginstatus = session['logged_in']
         return render_template('/device_logs.html', rows=rows, loginstatus=loginstatus, device_id=rows)
 
+#used to provide link for the device barcode;
+
+#format example; /barcode/Chromebook/2231
 
 @app.route('/barcode/<string:device_type>/<int:device_id>')
 def get_barcode(device_type, device_id):
@@ -91,11 +95,13 @@ def get_barcode(device_type, device_id):
         barcode_data = c.fetchone()[0]
         return Response(barcode_data, mimetype='image/png')
 
-#
+#Page dedicated for the ability to modify devices and relevant data
 @app.route('/modify-device')
 def modify_device():
     return render_template('modify_devices.html')
 
+
+#page used to view current circulating devices that have NOT been returned
 @app.route('/circulations')
 def circulations():
     with opendb('logs.db') as c:
@@ -136,6 +142,11 @@ def students():
 
 
 #Displays all rental logs in a table 
+#user can select what data of rental logs to see;
+
+#example of date specific viewing; /rental-logs/11-04 
+
+
 @app.route('/rental-logs/<string:date>')
 def rental_logs(date):
     with opendb('logs.db') as c:
@@ -144,7 +155,7 @@ def rental_logs(date):
         loginstatus = session['logged_in']
         return render_template('rental_logs.html', rows=rows, message="Viewing rental logs for {}".format(date), loginstatus=loginstatus)
         
-        
+#page for user to view all rental logs 
 @app.route('/rental-logs/')
 def date_logs():
     with opendb('logs.db') as c:
@@ -156,6 +167,10 @@ def date_logs():
         loginstatus = session['logged_in']
         return render_template('rental_logs.html', rows=logs, message="Viewing all rental logs", formatted_date=formatted_date, loginstatus=loginstatus)
 
+
+#page for user to view device specific rental logs 
+#example of route;  /rental-logs/2231
+
 @app.route('/rental-logs/<int:device_id>')
 def date_id_logs(device_id):
     with opendb('logs.db') as c:
@@ -164,7 +179,7 @@ def date_id_logs(device_id):
         loginstatus = session['logged_in']
         return render_template('/rental_logs.html', loginstatus=loginstatus, rows=rows, message="Viewing logs for device ID {}".format(device_id))
 
-#
+#page used to sign off circulations that have been returned
 @app.route('/sign-off')
 def sign_off():
     with opendb('logs.db') as c:
@@ -175,7 +190,8 @@ def sign_off():
 
         return render_template('sign_off.html', rows=rows, loginstatus=loginstatus, message="Viewing unconfirmed circulations")
 
-
+#Used to sign off a device based off of id; 
+#can be used to rectify an issue where a device is trying to be rented and has not been confirmed as returned
 @app.route('/sign-off/<int:device_id>')
 def sign_off_deviceid(device_id):
     with opendb('logs.db') as c:
@@ -186,11 +202,10 @@ def sign_off_deviceid(device_id):
             loginstatus = session['logged_in']
             return render_template('/device_modifier.html', loginstatus=loginstatus, rows=rows, message="Sign Off Device ID {}".format(device_id))
 
-
+#Link that confirms entries after devices have been selected to sign off
 @app.route('/confirm-entries', methods=['POST'])
 def confirm_entries():
-    with sql.connect('logs.db') as conn:
-        c = conn.cursor()
+    with sql.connect('logs.db') as c:
         device_ids = request.form.getlist('device_ids[]')
 
         if device_ids:
@@ -198,10 +213,10 @@ def confirm_entries():
                 c.execute('UPDATE device_logs SET teacher_signoff = "Confirmed" WHERE device_id IN ({})'.format(','.join('?' * len(device_ids))), device_ids)
                 message = 'Selected entries have been confirmed.'
                 message_type = 'success'
-                conn.commit()
+                c.commit()
             except sql.Error as e:
                 print('Error confirming entries:', e)
-                conn.rollback()
+                c.rollback()
                 message = 'An error occurred while confirming entries.'
                 message_type = 'error'
             finally:
@@ -213,7 +228,7 @@ def confirm_entries():
         return render_template('index.html', message=message, message_type=message_type)
 
 
-#
+#Used for renting a device
 @app.route('/new-log')
 @app.route('/new-log', methods=['POST'])
 def new_log():
@@ -249,35 +264,46 @@ def new_log():
 
 
 
-#
+#Used for creating a new device
 @app.route('/new-item')
 @app.route('/new-item', methods=['POST'])
 def new_item():
     with opendb('logs.db') as c:
         if request.method == "POST": #when user clicks submit button
+            loginstatus = session['logged_in']
+
             #used for creating a new device
             device_id = request.form['device_id'] #may be replaced by a unique qr code instead of an id 
             device_type = request.form['device_type']
-            date_submitted = datetime.datetime.now().strftime("%d-%m %H:%M") #records date and time device was created
-            submitted_by = session['user_id']
-            notes_device = request.form['notes']
-            in_circulation = "No"
-            loginstatus = session['logged_in']
+            # checks whether or not the device already exists
+            c.execute('SELECT * from devices where device_type = ? and device_id = ?',(device_type, device_id))
+            device_exists_check = c.fetchone()
+            if device_exists_check is None:
+                #get relevant data for writing to database
+                date_submitted = datetime.datetime.now().strftime("%d-%m %H:%M") #records date and time device was created
+                submitted_by = session['user_id']
+                notes_device = request.form['notes']
+                in_circulation = "No"
 
-            # generate barcode image for device
-            code128 = barcode.get_barcode_class('code128')
-            barcode_image = code128(str(device_type) + " " + str(device_id), writer=ImageWriter())
-            barcode_buffer = BytesIO()
-            barcode_image.write(barcode_buffer)
-            barcode_data = barcode_buffer.getvalue()
+                # generate barcode image for device
+                code128 = barcode.get_barcode_class('code128')
+                barcode_image = code128(str(device_type) + " " + str(device_id), writer=ImageWriter())
+                barcode_buffer = BytesIO()
+                barcode_image.write(barcode_buffer)
+                barcode_data = barcode_buffer.getvalue()
 
-            # insert device data into database
-            c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes, barcode, num_rentals) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device, barcode_data, 0))
+                # insert device data into database
+                c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes, barcode, num_rentals) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device, barcode_data, 0))
 
-            return render_template('message.html', message="new device logged", loginstatus=loginstatus)
+                return render_template('message.html', message="New device logged", loginstatus=loginstatus)
+            elif device_exists_check:
+                return render_template('message.html', message="Device already exists", loginstatus=loginstatus)   
+            else:
+                return render_template('message.html', message="An unknown error occured. Please try again", loginstatus=loginstatus) 
         else:
-            return render_template('new_item.html')
+            return render_template('new_device.html')
         
+#Temporary dev admin page used to display all possible links
 @app.route('/dev-admin', methods=['GET', 'POST'])
 def dev_admin():
     if request.method == "POST":
@@ -288,11 +314,13 @@ def dev_admin():
         loginstatus = session.get('logged_in', False)
         return render_template('dev_admin.html', loginstatus=loginstatus)
 
-#
+#Admin page
 @app.route('/admin')
 def admin():
     return render_template('/admin.html')
 
+
+#Used to log the user out
 @app.route('/logout', methods=["GET", "POST"])
 def logout():
     if 'logged_in' in session and session['logged_in']:
@@ -307,12 +335,13 @@ def logout():
         loginstatus = session['logged_in']
         return render_template('/message.html', message="You are already not logged in", loginstatus=loginstatus)
 
-#
+#Used for loggin the user in
 @app.route('/login-page')
 def login_page():
     loginstatus = session['logged_in']
     return render_template('/login_page.html', loginstatus=loginstatus)
 
+#used in conjunction with login page to update login related variables
 def login_success(teacher_name, last_login):
     with opendb('main.db') as c:
         c.execute("SELECT logins FROM users WHERE teacher_name = ?", (teacher_name,))
@@ -321,14 +350,17 @@ def login_success(teacher_name, last_login):
         c.execute("UPDATE users SET last_login = ? WHERE teacher_name = ?", (last_login, teacher_name))
         #sets last_login value to current date and time 
 
+#login page post that confirms user details and then logs them in
 @app.route('/login-page', methods=['POST'])
 def login_page_post():
     with opendb('main.db') as c:
         teacher_name = request.form['teacher_name']
         passkey = request.form['password']
-        c.execute('SELECT * FROM users WHERE teacher_name = ?', (teacher_name,))
+        c.execute('SELECT teacher_name,password FROM users WHERE teacher_name = ?', (teacher_name,))
         user = c.fetchone()
-        if 'user verification':
+        #passkey = decoded password with hash and salt
+        #checks if the user data is correct
+        if user[0] == teacher_name and user[1] == passkey:
             session['logged_in'] = True
             session['user_id'] = teacher_name
             last_login = datetime.datetime.now().strftime("%d-%m %H:%M")
@@ -355,7 +387,7 @@ def signup_page():
     loginstatus = session['logged_in']
     return render_template('/signup_page.html', loginstatus=loginstatus)
 
-
+#used to create a new account
 @app.route('/signup-page', methods=['POST'])
 def signup_page_post():
     with opendb('main.db') as c:
@@ -406,11 +438,12 @@ def signup_page_post():
 
 
 
-#
+#Custom message page
 @app.route('/message')
 def message():
     loginstatus = session['logged_in']
     return render_template('message.html', loginstatus=loginstatus)
+
 
 ############################################# End-user oriented
 # help page
