@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/new_device.css') }}">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
@@ -50,9 +50,10 @@
           <hr>
           <button class="accordion" title="Devices Options" onclick="togglePanel(this)">Devices</button>
           <div class="panel">
-            <a onclick="window.location.href='/circulations'">View Circulating Devices</a>
-            <a onclick="window.location.href='/new-item'">Create New Device</a>
+            <a onclick="window.location.href='/circulations'">Circulating Devices</a>
+            <a onclick="window.location.href='/new-item'">New Device</a>
             <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
+            <a onclick="window.location.href='/device-logs'">View Current Devices</a>
           </div>
           <hr>
           <button class="accordion"  title="Statistics Options" onclick="togglePanel(this)">Statistics</button>
@@ -63,10 +64,8 @@
           <hr>
           <button class="accordion" title="Admin Options" onclick="togglePanel(this)">Admins</button>
           <div class="panel">
-            <a onclick="window.location.href='/admin'">View Admin Options</a>
+            <a onclick="window.location.href='/admin'">Admin Page</a>
             <a onclick="window.location.href='/dev-admin'">Dev Admin Page</a>
-            <a onclick="window.location.href='/device-logs'">View Device Logs</a>
-
           </div>
           <div class="help">
             <a onclick="window.location.href='/help'" title="help">Help</a>
@@ -78,177 +77,27 @@
   <div class="new-device-container">
     <h1 class="popup-title">Create New Device</h1>
     <form style="position: relative;top:20px" method="POST" action="/new-item">
-		<label for="device_id">Device ID:</label>
-		<input required type="text" id="device_id" name="device_id">
-    <br>
-    <div class="select-container">
-		  <select id="device_type" name="device_type" required>
-        <option selected value="">Device Type:</option>
-        <option value="iPad">iPad</option>
-        <option value="Laptop">Laptop</option>
-        <option value="Chromebook">Chromebook</option>
-      </select>
-    </div>
-    <br>
-    <br>
-    <label for="notes">Notes:</label>
-    <input  type="text" id="notes" name="notes" >
-    <br>
-		<input id="newdevice-submit" type="submit" value="Submit">
-	</form>
+		  <label for="device_id">Device ID:</label>
+		  <input  required type="text" pattern="\d{4}" maxlength="4" id="device_id" name="device_id">
+      <br>
+      <div class="select-container">
+		    <select id="device_type" name="device_type" required>
+          <option selected value="">Device Type:</option>
+          <option value="iPad">iPad</option>
+          <option value="Laptop">Laptop</option>
+          <option value="Chromebook">Chromebook</option>
+        </select>
+      </div>
+      <br>
+      <br>
+      <label for="notes">Notes:</label>
+      <input  type="text" id="notes" name="notes" >
+      <br>
+		  <input id="newdevice-submit" type="submit" value="Submit">
+	  </form>
   </div>
 </body>
-<style>
 
-
-#newdevice-submit {
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  border: none;
-  border-radius: 4px;
-  color: #fff;
-  position: inherit;
-  top: -10px;
-  left: -2px;
-  width: 80px;
-  height: 40px;
-  background-color: #007bff;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-}
-
-#newdevice-submit:hover {
-  background-color: #0056b3;
-}
-
-#newdevice-submit:active {
-  background-color: #003d80;
-}
-
-#newdevice-submit:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-  
-  .select-container {
-  position: relative;
-  display: inline-block;
-}
-
-/* Styling the select element */
-.select-container select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 200px;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-}
-
-/* Styling the arrow icon */
-.select-container::after {
-  content: '\25BC';
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-/* Styling when select element is open */
-.select-container.select-open select {
-  border-color: #888;
-}
-
-/* Styling the dropdown options */
-.select-container select option {
-  font-size: 16px;
-}
-
-/* Styling when an option is selected */
-.select-container.select-open select option:checked {
-  background-color: #f0f0f0;
-}
-
-  #device_id,
-  #notes {
-    width: 90%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  display: block;
-  margin: 0 auto;
-  border: none;
-  left: -5px;
-  position: inherit;
-  background: #f1f1f1;
-  }
-
-  #device_id:focus,
-  #notes:focus {
-    background-color: #ddd;
-    outline: none;
-  }
-
-  body {
-    background-color: #ccc;
-  }
-
-  .new-device-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    height: 370px;
-    width: 400px;
-    transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    z-index: 10000;
-  }
-  .popup-title {
-    margin-bottom: 10px;
-  }
-
-  .popup-list {
-    margin-bottom: 20px;
-  }
-
-  .popup-buttons {
-    display: flex;
-    justify-content: center;
-  }
-
-  .popup-button {
-    margin: 0 10px;
-  }
-
-  .main_title {
-    position: relative;
-    left:50px;
-  }
-
-  .openbtn {
-background-color: #ccc;
-color: black;
-cursor: pointer;
-padding: 10px 15px;
-border: none;
-border-radius: 5px;
-font-size: 30px;
-position:relative;
-top: -60px;
-cursor: pointer;
-left: -7px;
-}
-</style>
 
 
 
