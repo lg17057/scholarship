@@ -245,16 +245,20 @@ def new_log():
                 reason_borrowed = request.form.get('reason_borrowed')
                 period_returned = request.form.get('period_returned')
                 submitted_under = session['user_id']
-
                 teacher_signoff = request.form.get('teacher_signoff')
                 notes = request.form.get('notes')
-
-               #submits log data
-                c.execute("INSERT INTO device_logs (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
-                loginstatus = session['logged_in']
-                return render_template('message.html', message="successful device log", loginstatus=loginstatus)
-            else:
-                                
+                c.execute("SELECT * FROM device_logs where device_id = ? AND device_type = ? and period_returned = ?", (device_id, device_type, period_returned))
+                rental_log_exists = c.fetchall()
+                if rental_log_exists is None:
+                    c.execute("INSERT INTO device_logs (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
+                    loginstatus = session['logged_in']
+                    return render_template('message.html', message="Successful Rental", loginstatus=loginstatus)
+                elif rental_log_exists is not None:
+                    #submits log data
+                    return render_template('message.html', message="Device already being rented. Please choose another device", loginstatus=loginstatus)
+                else:
+                    return render_template('message.html', message="An issue occured with renting a device", loginstatus=loginstatus)
+            else:                
                 loginstatus = session['logged_in']
                 return render_template('new_log.html', loginstatus=loginstatus)
         elif loginstatus is False:

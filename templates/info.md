@@ -107,6 +107,8 @@ style circulations page
 change device retal logs device id based links - done
 do the same for the sign off device id system -  done
 
+"now accomodates for devices of different types having the same id"
+
 create device id input that allows user to type in a device id to see that devices confirmations on 
 ^ for sign off page
 ^ for rental logs too
