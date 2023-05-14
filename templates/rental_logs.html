@@ -72,79 +72,97 @@
 <body> 
 <title>Rental Log - Dash</title>
 <button onclick="window.location.href='/rental-logs/'" id="return-btn" class="return-btn">View All Logs</button>
-<div class="datepicker-container">
-  <div class="datepicker">
-    <div id="chevron-arrow-left" onclick="goToPreviousDay()"></div>
-    <input type="date" min="2023-01-01" max="2023-25-12"  id="datepicker">
-    <div id="chevron-arrow-right" onclick="goToNextDay()"></div>
-    <button id="confirm-btn" onclick="filterTable()">Confirm</button>
+<div class="primary-container">
+  <hr>
+  <div class="idpicker-container">
+    <form action="/rental-logs/" method="POST">
+      <div class="select-container">  
+        <select id="devicepicker" name="devicepicker" placeholder="Device Type.." value="devicepicker">
+          <option value="">-- Select --</option>
+          <option value="Chromebook">Chromebook</option>
+          <option value="iPad">iPad</option>
+          <option value="Laptop">Laptop</option>
+        </select>
+      </div>
+      <input type=number class="idpicker"  name="idpicker" placeholder="Enter Device ID.." value="idpicker"></input>
+      <input type="submit" class="submit-btn" id="submit-btn" value="Select" >
+    </form>
+    
   </div>
-</div>
-<h1 class="main_title">{{message}}</h1><hr class="main_hr" >
-<br>
-<div class="table-container">
-  <table id="devices-table" class="devices">
-    <thead>
-      <th>
-        Date Borrowed
-      </th>
-      <th>
-        Submitted Under
+  <div class="datepicker-container">
+    <div class="datepicker">
+      <div id="chevron-arrow-left" onclick="goToPreviousDay()"></div>
+      <input type="date" min="2023-01-01" max="2023-25-12"  id="datepicker">
+      <div id="chevron-arrow-right" onclick="goToNextDay()"></div>
+      <button id="confirm-btn" onclick="filterTable()">Confirm</button>
+    </div>
+  </div>
+  <h1 class="main_title">{{message}}</h1>
+  <br>
+  <div class="table-container">
+    <table id="devices-table" class="devices">
+      <thead>
+        <th>
+          Date Borrowed
+        </th>
+        <th>
+          Submitted Under
 
-      </th>
-      <th>
-        Student Name
-      </th>
-      <th>
-        Homeroom
-      </th>
-      <th>
-        Device Type
-      </th>
-      <th>
-        Device ID
-      </th>
-      <th>
-        Period Borrowed
-      </th>
-      <th>
-        Reason
-      </th>
-      <th>
-        Period Returned
-      </th>
-      <th>
-        Sign-Off
-      </th>
-      <th>
-        Notes
-      </th>
-    </thead>
-    <tbody>
-      {% for row in rows %}
-      <tr>
-          <td>{{ row[0] }}</td>
-          <td>{{ row[1] }}</td>
-          <td>{{ row[2] }}</td>
-          <td>{{ row[3] }}</td>
-          <td>{{ row[4] }}</td>
-          <td>{{ row[5] }}</td>
-          <td>{{ row[6] }}</td>
-          <td>{{ row[7] }}</td>
-          <td>{{ row[8] }}</td>
-          <td>{{ row[9] }}</td>
-          <td>{{ row[10] }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+        </th>
+        <th>
+          Student Name
+        </th>
+        <th>
+          Homeroom
+        </th>
+        <th>
+          Device Type
+        </th>
+        <th>
+          Device ID
+        </th>
+        <th>
+          Period Borrowed
+        </th>
+        <th>
+          Reason
+        </th>
+        <th>
+          Period Returned
+        </th>
+        <th>
+          Sign-Off
+        </th>
+        <th>
+          Notes
+        </th>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>{{ row[6] }}</td>
+            <td>{{ row[7] }}</td>
+            <td>{{ row[8] }}</td>
+            <td>{{ row[9] }}</td>
+            <td>{{ row[10] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 </html>
 <style>
   .main_title {
   position: relative;
-  top: -170px;
-  right: -57px;
+  top: -190px;
+  right: -50px;
   z-index: 2;
 }
 

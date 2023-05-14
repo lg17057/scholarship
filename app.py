@@ -174,10 +174,16 @@ def date_logs():
 @app.route('/rental-logs/<string:device_type>/<int:device_id>')
 def date_id_logs(device_type, device_id):
     with opendb('logs.db') as c:
-        c.execute("SELECT * from device_logs WHERE device_type = ? AND device_id = ?", (device_type, device_id,))
-        rows = c.fetchall()
-        loginstatus = session['logged_in']
-        return render_template('/rental_logs.html', loginstatus=loginstatus, rows=rows, message="Viewing logs for device ID {}".format(device_id))
+        if request.method == "POST":
+            c.execute("SELECT * from device_logs WHERE device_type = ? AND device_id = ?", (device_type, device_id,))
+            rows = c.fetchall()
+            loginstatus = session['logged_in']
+            return render_template('/rental_logs.html', loginstatus=loginstatus, rows=rows, message="Viewing logs for {} ID {}".format(device_type,device_id))
+        else:
+            c.execute("SELECT * from device_logs WHERE device_type = ? AND device_id = ?", (device_type, device_id,))
+            rows = c.fetchall()
+            loginstatus = session['logged_in']
+            return render_template('/rental_logs.html', loginstatus=loginstatus, rows=rows, message="Viewing rental logs for {} ID {}".format(device_type,device_id))
 
 #page used to sign off circulations that have been returned
 @app.route('/sign-off')
@@ -252,13 +258,10 @@ def new_log():
                 c.execute("SELECT * FROM devices WHERE device_id = ? AND device_type = ?",
                           (device_id,device_type))
                 device_exists = c.fetchall()
-                print(device_exists)
                 # Check if the rental log exists
                 c.execute("SELECT * FROM device_logs WHERE device_id = ? and device_type = ?",
                           (device_id,device_type))
                 rental_log_exists = c.fetchall()
-                print("Break")
-                print(rental_log_exists)
                 if rental_log_exists:
                     return render_template('message.html', message="Device already being rented. Please choose another device", loginstatus=loginstatus)
                 elif device_exists:

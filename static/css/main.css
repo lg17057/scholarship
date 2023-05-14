@@ -75,7 +75,7 @@ body {
   position: relative;
   left: 1325px;
   z-index: 3;
-  top: -63px;
+  top: -9px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
