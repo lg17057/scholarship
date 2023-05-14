@@ -148,7 +148,7 @@
   
   /* Styling the dropdown options */
   .select-container select option {
-    font-size: 16px;
+    font-size: 14px;
   }
   
   /* Styling when an option is selected */
@@ -186,4 +186,10 @@
 
   }
 
-  
+  .download-btn {
+    text-decoration: none;
+  }
+
+  .download-btn:hover {
+    text-decoration: underline;
+  }

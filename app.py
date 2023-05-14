@@ -127,19 +127,24 @@ def circulations():
         return render_template('circulations.html', ipads_c=ipads_circulating, chromebooks_c=chromebooks_circulating,
                                laptops_c=laptops_circulating, rows=circulating_data)
 
+
 #Page created for displaying different device rental and creation statistics
-@app.route('/statistics')
-def statistics():
+@app.route('/general-data')
+def general_data():
     return render_template('statistics.html')
 
 
 #Page designed for data on students
-@app.route('/students')
-def students():
+@app.route('/student-data')
+def student_data():
     loginstatus = session['logged_in']
     return render_template('students.html', loginstatus=loginstatus)
 
-
+#page for homeroom data
+@app.route('/homeroom-data')
+def homeroom_data():
+    loginstatus = session['logged_in']
+    return render_template('homeroom_data.html', loginstatus=loginstatus)
 
 #Displays all rental logs in a table 
 #user can select what data of rental logs to see;

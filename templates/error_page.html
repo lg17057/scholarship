@@ -47,23 +47,24 @@
         </div>
         <hr>
         <button class="accordion" title="Devices Options" onclick="togglePanel(this)">Devices</button>
-        <div class="panel">
-          <a onclick="window.location.href='/circulations'">Circulating Devices</a>
+        <div class="panel">          
           <a onclick="window.location.href='/new-item'">New Device</a>
+          <a onclick="window.location.href='/circulations'">Circulating Devices</a>
           <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
           <a onclick="window.location.href='/device-logs'">View Current Devices</a>
         </div>
         <hr>
-        <button class="accordion"  title="Statistics Options" onclick="togglePanel(this)">Statistics</button>
+        <button class="accordion"  title="Statistics Options" onclick="togglePanel(this)">Data</button>
         <div class="panel">
-          <a onclick="window.location.href='/statistics'">Statistics</a>
-          <a onclick="window.location.href='/students'">Students</a>
+          <a onclick="window.location.href='/general-data'">Statistics</a>
+          <a onclick="window.location.href='/student-data'">Student Data</a>
+          <a onclick="window.location.href='/homeroom-data'">Homeroom Data</a>
         </div>
         <hr>
         <button class="accordion" title="Admin Options" onclick="togglePanel(this)">Admins</button>
         <div class="panel">
           <a onclick="window.location.href='/admin'">Admin Page</a>
-          <a onclick="window.location.href='/dev-admin'">Dev Admin Page</a>
+          <a onclick="window.location.href='/dev-admin'">Dev Page</a>
         </div>
         <div class="help">
           <a onclick="window.location.href='/help'" title="help">Help</a>
