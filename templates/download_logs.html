@@ -14,12 +14,14 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/download_logs.css') }}">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
         <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
+
       </head>
       <div class="topheader">
         <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
@@ -68,40 +70,101 @@
         </div>
       </div>
 </html>
-<title>Development Admin Page</title>
-<h1 class="main_title">Welcome to the admin development page</h1>
+<title>Rental Log - Dash</title>
+<div class="primary-container">
+    <h1 class="main_title">{{message}}</h1>
+    <div class="middle-container">
+        <div class="download-content">
+            <div class="select-container">  
+                <label for="formatpicker" id="formatpickerlabel">Select Format: </label>
+                <select id="formatpicker" name="formatpicker" placeholder="Choose Format.." value="formatpicker">
+                  <option select value="CSV">CSV</option>
+                  <option value="PDF">PDF</option>
+                </select>
+            </div>
+            <br>
+            
+            <h1 class="middle-title">Download Options:</h1>
+            <hr class="middle-hr">
+            <br><br><br><br>
+            <label for="idpicker">Device ID:</label><br>
+            <input type=number id="idpicker"  oninput="validateInput(this)"  name="idpicker" placeholder="Device ID.." value="idpicker"></input>
+            <br><br>
+            <div class="datepicker-container-download">
+                <label for="datepicker">Date:</label>
+                <div class="datepicker-download">
+                  <input type="date" min="2023-01-01" max="2023-25-12"  id="datepicker">
+                  <br>
+                </div>
+            </div>
+            <!--
+        <h3>Download logs from _date_ to _date_</h3>
+        <h3>Download all logs</h3>
+            -->
+        <button id="confirm-btn-download">Confirm</button>
 
-<!-- -->
-<div class="main-content">
-  <button onclick="window.location.href='/'">Index</button>
-  <button onclick="window.location.href='/device-logs'">Device Logs</button>
-  <button onclick="window.location.href='/sign-off'">Sign Off Devices</button>
-  <button onclick="window.location.href='/modify-device'">Modify Device</button>
-  <button onclick="window.location.href='/students'">Student Data</button>
-  <button onclick="window.location.href='/date-stats'">Date Stats</button>
-  <button onclick="window.location.href='/rental_logs'">Rental Logs</button>
-  <button onclick="window.location.href='/new-log'">New Rental Log</button>
-  <button onclick="window.location.href='/new-item'">New Device</button>
-  <button onclick="window.location.href='/dev-admin'">Admin Dev Page</button>
-  <button onclick="window.location.href='/admin'">Admin Page</button>
-  <button onclick="window.location.href='/login-page'">Login Page</button>
-  <button onclick="window.location.href='/signup-page'">Sign Up Page</button>
-  <button onclick="window.location.href='/message'">Message Page</button>
-  <button onclick="window.location.href='/help'">Help Page</button>
-  <button onclick="window.location.href='/download-logs/'">Download Page</button>
-  <form action="/dev-admin" method="POST">
-    <input type="submit" id="force-login" value="force-login">
-</form>
-</div>
+        </div>
+    </div>
 <style>
-.main-content {
-    position: relative;
-    top: -135px;
-  }
-  .main_title {
-    position: relative;
-    left:50px;
-  }
-  
+ .main_title {
+ position: relative;
+ top: -132px;
+ right: -50px;
+ z-index: 2;
+ }
+.openbtn {
+background-color: #f1f1f1;
+color: black;
+cursor: pointer;
+padding: 10px 15px;
+border: none;
+border-radius: 5px;
+font-size: 30px;
+position:relative;
+top: -60px;
+cursor: pointer;
+left: -7px;
+}
 </style>
+<script>
+    function validateInput(input) {
+      input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
+      input.value = input.value.slice(0, 4); // Limit to 4 digits
+      if (input.value < 0) {
+        input.value = ''; // Clear negative values
+      }
+    }
+  </script>
+<script>
+ function filterTable() {
+  let datepicker = document.getElementById("datepicker");
+  let date = datepicker.value;
+  let [year, month, day] = date.split("-");
+  let formattedDate = `${day}-${month}`;
 
+  let url = `/rental-logs/${formattedDate}`;
+  window.location.href = url;
+}
+</script>
+<script>
+  $(document).ready(function() {
+  $('#devices-table').DataTable({
+    paging: true,
+    pageLength: 20, // Number of rows per page
+    lengthMenu: [10, 20, 50, 100], // Options for rows per page dropdown
+    searching: true, // Enable search functionality
+    ordering: true, // Enable column sorting
+    info: true, // Show information about current page and total entries
+    language: {
+      paginate: {
+        first: 'First',
+        last: 'Last',
+        next: '&raquo;',
+        previous: '&laquo;'
+      },
+      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+    }
+  });
+});
+</script>.
+    

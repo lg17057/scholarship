@@ -185,6 +185,14 @@ def date_id_logs(device_type, device_id):
             loginstatus = session['logged_in']
             return render_template('/rental_logs.html', loginstatus=loginstatus, rows=rows, message="Viewing rental logs for {} ID {}".format(device_type,device_id))
 
+@app.route('/download-logs/')
+def download_logs():
+    with opendb('logs.db') as c:
+        blah = 'blah'
+        loginstatus = session['logged_in']
+        return render_template('/download_logs.html', loginstatus=loginstatus, message="Download Data" )
+
+
 #page used to sign off circulations that have been returned
 @app.route('/sign-off')
 def sign_off():

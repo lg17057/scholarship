@@ -1,0 +1,167 @@
+.datepicker-container-download {
+    position: relative;
+    top: 10px;
+    left: 0%;
+  }
+  
+  .datepicker-download {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  #datepicker {
+    font-size: 15px;
+    padding: 5px;
+    background-color: #f1f1f1;
+    border-radius:5px;
+    border: none;
+    height: 30px;
+
+  }
+  
+
+  #confirm-btn-download {
+    background-color: #ffffff;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 4px;
+    padding: 8px 16px;
+    position: relative;
+    left: 0px;
+    top: 90px;
+    height: 39px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  #confirm-btn-download:hover {
+    background-color: #008000;
+    border: #008000 1px solid;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  
+  #idpicker {
+    width: 20.5%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: block;
+  margin: 0 auto;
+  border: none;
+  position: fixed;
+    height: 10px;
+    border-radius: 5px;
+    z-index: 3;
+  background: #f1f1f1;
+  }
+
+
+  #idpicker:focus {
+    background-color: #ddd;
+    outline: none;
+  }
+
+
+  .select-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Styling the select element */
+  .select-container select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 120px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+  }
+  
+  /* Styling the arrow icon */
+  .select-container::after {
+    content: '\25BC';
+    position: absolute;
+    top: 70%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  /* Styling when select element is open */
+  .select-container.select-open select {
+    border-color: #888;
+  }
+  
+  /* Styling the dropdown options */
+  .select-container select option {
+    font-size: 16px;
+  }
+  
+  /* Styling when an option is selected */
+  .select-container.select-open select option:checked {
+    background-color: #f0f0f0;
+  }
+
+
+  .select-container {
+    position: fixed;
+    top: 70px;
+    left:20px;
+    width: 120px;
+    z-index: 3;
+    font-size: 16px;
+
+  }
+
+
+  #formatpicker {
+    width: 120px;
+    background: #f1f1f1;
+    font-size: 13px;
+
+
+  }
+
+  #formatpicker:select {
+    background-color: #ddd;
+
+  }
+
+  .middle-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    height: 370px;
+    width: 400px;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    z-index: 10000;
+  }
+
+  body { 
+    background-color: #f1f1f1;
+  }
+
+  .middle-title {
+    position: fixed;
+    top: -17px;
+  }
+
+  .middle-hr {
+    position: inherit;
+  }
+
+
+  
+  

@@ -78,7 +78,7 @@
     <h1 class="newdevice-title">Create New Device</h1>
     <form style="position: relative;top:20px" method="POST" action="/new-item">
 		  <label for="device_id">Device ID:</label>
-		  <input  required type="number" pattern="\d{4}" maxlength="4" id="device_id" name="device_id">
+		  <input  required type="number"  oninput="validateInput(this)"   id="device_id" name="device_id">
       <br>
       <div class="select-container">
 		    <select id="device_type" name="device_type" required>
@@ -98,6 +98,15 @@
   </div>
 </body>
 
+<script>
+  function validateInput(input) {
+    input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
+    input.value = input.value.slice(0, 4); // Limit to 4 digits
+    if (input.value < 0) {
+      input.value = ''; // Clear negative values
+    }
+  }
+</script>
 
 
 

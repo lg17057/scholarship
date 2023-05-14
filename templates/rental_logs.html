@@ -84,7 +84,7 @@
           <option value="Laptop">Laptop</option>
         </select>
       </div>
-      <input type=number class="idpicker"  name="idpicker" placeholder="Enter Device ID.." value="idpicker"></input>
+      <input type=number class="idpicker"  oninput="validateInput(this)"   name="idpicker" placeholder="Enter Device ID.." value="idpicker"></input>
       <input type="submit" class="submit-btn" id="submit-btn" value="Select" >
     </form>
     
@@ -214,7 +214,15 @@ left: -7px;
    });
  });
  </script>
-
+<script>
+  function validateInput(input) {
+    input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
+    input.value = input.value.slice(0, 4); // Limit to 4 digits
+    if (input.value < 0) {
+      input.value = ''; // Clear negative values
+    }
+  }
+</script>
 <div class="download-container">
   <a href="/rental-logs/download-csv" class="download-btn">Download CSV</a>
 </div>
