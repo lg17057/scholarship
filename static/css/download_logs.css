@@ -1,4 +1,62 @@
-.datepicker-container-download {
+#back-btn-div2 {  
+    position: fixed;
+    top: 10px;
+    left: 350px;
+  }
+  #back-btn-div3 {  
+    position: fixed;
+    top: 10px;
+    left: 350px;
+  }
+  #back-btn-div4 {  
+    position: fixed;
+    top: 10px;
+    left: 350px;
+  }
+
+.originaldivtitle {
+  position: fixed;
+  top:-15px;
+}
+
+#firstdivtitle {
+  position: fixed;
+  top:-15px;
+}
+
+#seconddivtitle {
+  position: fixed;
+  top:-15px;
+}
+
+#thirddivtitle { 
+  position:fixed;
+  top: -15px;
+}
+
+#fourthdivtitle {
+  position: fixed;
+  top:-15px;
+}
+
+  #back-btn-div1 {  
+    position: fixed;
+    top: 10px;
+    left: 350px;
+  }
+
+  #back-btn-div1:hover {
+    background-color: #008000;
+  border: #008000 1px solid;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  }
+
+  .datepicker-container-download {
     position: relative;
     top: 10px;
     left: 0%;
@@ -111,7 +169,6 @@
     background-color: #f0f0f0;
   }
 
-
   .select-container {
     position: fixed;
     top: 70px;
@@ -119,24 +176,19 @@
     width: 120px;
     z-index: 3;
     font-size: 16px;
-
   }
-
 
   #formatpicker {
     width: 120px;
     background: #f1f1f1;
     font-size: 13px;
-
-
   }
 
   #formatpicker:select {
     background-color: #ddd;
 
   }
-
-  .middle-container {
+  .download-content0 {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -149,19 +201,64 @@
     z-index: 10000;
   }
 
-  body { 
-    background-color: #f1f1f1;
+  .download-content1, .download-content2, .download-content3, .download-content4 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    height: 370px;
+    width: 400px;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    z-index: 10000;
+    display: none;
   }
 
-  .middle-title {
-    position: fixed;
-    top: -17px;
+  body { 
+    background-color: #f1f1f1;
   }
 
   .middle-hr {
     position: inherit;
   }
 
+.download-content-btn1 ,
+.download-content-btn2,
+.download-content-btn3,
+.download-content-btn4 {
+  display: block;
+  width: 130px;
+  height: 50px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  color: #333;
+  font-size: 16px;
+  cursor: pointer;
+}
 
+.back-btn {
+  z-index: 1000000;
+  background-color: #ffffff;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+
+.back-btn:hover {
+  background-color: #008000;
+  border: #008000 1px solid;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 10px 20px;
   
-  
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}

@@ -124,3 +124,42 @@ Fix issue where num_rentals is null and unable to be changed
 
 create cascading device dropdown menus that work based off of suffix and prefix? or wait until scanning system works
 or maybe in case scanning system never works do it anyways
+
+
+
+for download logs page
+have first div that has buttons to choose what type of data to download - eg choose between device data, student data, homeroom data, logs data or user data
+User Data;
+- Download the following?;
+- - List of admin usernames, accompanied by the identifier number - randomly generate this when user created maybe?
+
+Student Data;
+- Download the following?;
+- - Student Name
+- - Student ID?
+- - Homeroom
+- - Number of Rentals
+- - Date of last rental
+- - Device_id
+- - Device Type
+- - Outstanding/Current Rental 
+- - Notes
+
+
+Homeroom Data;
+- Download the following?;
+- - Homeroom
+- - Teacher
+- - Year Level
+
+
+Rental Logs Data;
+
+- Choose by device type
+- Choose by device ID
+- Choose by device type and ID
+- Choose by date
+- Choose from date 1 to date 2
+- Download all data?
+-----------
+wokring on the 4 different divs for these data types and the back buttons

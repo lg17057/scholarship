@@ -75,7 +75,20 @@
 <div class="primary-container">
     <h1 class="main_title">{{message}}</h1>
     <div class="middle-container">
-        <div class="download-content">
+        <div class="download-content0">
+          <h1 class="originaldivtitle">Select data type:</h1>
+          <br><br><hr>
+            <button id="download-content-btn1" class="download-content-btn1">Rental Data</button>
+            <br>
+            <button id="download-content-btn2" class="download-content-btn2">Device Data</button>
+            <br>
+            <button id="download-content-btn3" class="download-content-btn3">Student Data</button>
+            <br>
+            <button id="download-content-btn4" class="download-content-btn4">User Data</button>
+            <hr>
+        </div>
+        <div class="download-content1">
+          <button class="back-btn" id="back-btn-div1">Back</button>
             <div class="select-container">  
                 <label for="formatpicker" id="formatpickerlabel">Select Format: </label>
                 <select id="formatpicker" name="formatpicker" placeholder="Choose Format.." value="formatpicker">
@@ -85,10 +98,11 @@
             </div>
             <br>
             
-            <h1 class="middle-title">Download Options:</h1>
+            <h1 class="middle-title" id="firstdivtitle">Rental Logs:</h1>
             <hr class="middle-hr">
-            <br><br><br><br>
+            <br><br><br><br><br>
             <label for="idpicker">Device ID:</label><br>
+            
             <input type=number id="idpicker"  oninput="validateInput(this)"  name="idpicker" placeholder="Device ID.." value="idpicker"></input>
             <br><br>
             <div class="datepicker-container-download">
@@ -105,67 +119,154 @@
         <button id="confirm-btn-download">Confirm</button>
 
         </div>
-    </div>
-<style>
- .main_title {
- position: relative;
- top: -132px;
- right: -50px;
- z-index: 2;
- }
-.openbtn {
-background-color: #f1f1f1;
-color: black;
-cursor: pointer;
-padding: 10px 15px;
-border: none;
-border-radius: 5px;
-font-size: 30px;
-position:relative;
-top: -60px;
-cursor: pointer;
-left: -7px;
-}
-</style>
-<script>
-    function validateInput(input) {
-      input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
-      input.value = input.value.slice(0, 4); // Limit to 4 digits
-      if (input.value < 0) {
-        input.value = ''; // Clear negative values
-      }
-    }
-  </script>
-<script>
- function filterTable() {
-  let datepicker = document.getElementById("datepicker");
-  let date = datepicker.value;
-  let [year, month, day] = date.split("-");
-  let formattedDate = `${day}-${month}`;
+        <div class="download-content2">
+          <h1 id="seconddivtitle">Device Logs</h1>
+          <button class="back-btn" id="back-btn-div2">Back</button>
+        </div>
+        <div class="download-content3">
+          <h1 id="seconddivtitle">Student Data</h1>
 
-  let url = `/rental-logs/${formattedDate}`;
-  window.location.href = url;
-}
-</script>
+          <button class="back-btn" id="back-btn-div3" >Back</button>
+        </div>
+        <div class="download-content4">
+          <h1 id="fourthdivtitle">User Data</h1>
+
+          <button class="back-btn " id="back-btn-div4">Back</button>
+        </div>
+    </div>
+  </div>
 <script>
-  $(document).ready(function() {
-  $('#devices-table').DataTable({
-    paging: true,
-    pageLength: 20, // Number of rows per page
-    lengthMenu: [10, 20, 50, 100], // Options for rows per page dropdown
-    searching: true, // Enable search functionality
-    ordering: true, // Enable column sorting
-    info: true, // Show information about current page and total entries
-    language: {
-      paginate: {
-        first: 'First',
-        last: 'Last',
-        next: '&raquo;',
-        previous: '&laquo;'
-      },
-      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
-    }
-  });
+// Get the login buttons
+var primarydiv = document.querySelector('.download-content0');
+var button1 = document.querySelector('.download-content-btn1');
+var button2 = document.querySelector('.download-content-btn2');
+var button3 = document.querySelector('.download-content-btn3');
+var button4 = document.querySelector('.download-content-btn4');
+
+// Get the student and staff login divs
+var div1 = document.querySelector('.download-content1');
+var div2 = document.querySelector('.download-content2');
+var div3 = document.querySelector('.download-content3');
+var div4 = document.querySelector('.download-content4');
+
+// Get the "Back" buttons
+var back_btn1 = document.querySelector('.download-content1 .back-btn');
+var back_btn2 = document.querySelector('.download-content2 .back-btn');
+var back_btn3 = document.querySelector('.download-content3 .back-btn');
+var back_btn4 = document.querySelector('.download-content4 .back-btn');
+
+button1.addEventListener('click', function() {
+  div1.style.display = 'block';
+  primarydiv.style.display = 'none';
+  div2.style.display = 'none';
+  div3.style.display = 'none';
+  div4.style.display = 'none';
 });
-</script>.
-    
+
+button2.addEventListener('click', function() {
+  div2.style.display = 'block';
+  primarydiv.style.display = 'none';
+  div1.style.display = 'none';
+  div3.style.display = 'none';
+  div4.style.display = 'none';
+});
+
+button3.addEventListener('click', function() {
+  div3.style.display = 'block';
+  primarydiv.style.display = 'none';
+  div1.style.display = 'none';
+  div2.style.display = 'none';
+  div4.style.display = 'none';
+});
+
+button4.addEventListener('click', function() {
+  div4.style.display = 'block';
+  primarydiv.style.display = 'none';
+  div1.style.display = 'none';
+  div2.style.display = 'none';
+  div3.style.display = 'none';
+});
+
+// Hide the student login div when the "Back" button is clicked
+back_btn1.addEventListener('click', function() {
+  div1.style.display = 'none';
+  primarydiv.style.display = 'block';
+});
+
+back_btn2.addEventListener('click', function() {
+  div2.style.display = 'none';
+  primarydiv.style.display = 'block';
+});
+
+back_btn3.addEventListener('click', function() {
+  div3.style.display = 'none';
+  primarydiv.style.display = 'block';
+});
+
+back_btn4.addEventListener('click', function() {
+  div4.style.display = 'none';
+  primarydiv.style.display = 'block';
+});
+</script>
+<style>
+  .main_title {
+  position: relative;
+  top: -132px;
+  right: -50px;
+  z-index: 2;
+  }
+ .openbtn {
+ background-color: #f1f1f1;
+ color: black;
+ cursor: pointer;
+ padding: 10px 15px;
+ border: none;
+ border-radius: 5px;
+ font-size: 30px;
+ position:relative;
+ top: -60px;
+ cursor: pointer;
+ left: -7px;
+ }
+ </style>
+ <script>
+     function validateInput(input) {
+       input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
+       input.value = input.value.slice(0, 4); // Limit to 4 digits
+       if (input.value < 0) {
+         input.value = ''; // Clear negative values
+       }
+     }
+   </script>
+ <script>
+  function filterTable() {
+   let datepicker = document.getElementById("datepicker");
+   let date = datepicker.value;
+   let [year, month, day] = date.split("-");
+   let formattedDate = `${day}-${month}`;
+ 
+   let url = `/rental-logs/${formattedDate}`;
+   window.location.href = url;
+ }
+ </script>
+ <script>
+   $(document).ready(function() {
+   $('#devices-table').DataTable({
+     paging: true,
+     pageLength: 20, // Number of rows per page
+     lengthMenu: [10, 20, 50, 100], // Options for rows per page dropdown
+     searching: true, // Enable search functionality
+     ordering: true, // Enable column sorting
+     info: true, // Show information about current page and total entries
+     language: {
+       paginate: {
+         first: 'First',
+         last: 'Last',
+         next: '&raquo;',
+         previous: '&laquo;'
+       },
+       info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+     }
+   });
+ });
+ </script>

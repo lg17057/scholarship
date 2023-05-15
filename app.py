@@ -190,7 +190,7 @@ def download_logs():
     with opendb('logs.db') as c:
         blah = 'blah'
         loginstatus = session['logged_in']
-        return render_template('/download_logs.html', loginstatus=loginstatus, message="Download Data" )
+        return render_template('/download_logs.html', loginstatus=loginstatus, message="Download All Rental Data" )
 
 
 #page used to sign off circulations that have been returned
