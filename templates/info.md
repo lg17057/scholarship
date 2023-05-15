@@ -115,3 +115,12 @@ create device id input that allows user to type in a device id to see that devic
 ^ could be a popup to select device ID and device type and then go to the link
 
 change custom main title sign off message so that it displays the device type AND ID
+-------------
+
+program now upadtes devices, device_logs and student_data.
+Fix issue where num_rentals is null and unable to be changed
+--this issue has been fixed by setting the number of rentals to 0 when the student data is created 
+
+
+create cascading device dropdown menus that work based off of suffix and prefix? or wait until scanning system works
+or maybe in case scanning system never works do it anyways

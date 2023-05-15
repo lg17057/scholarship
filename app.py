@@ -60,9 +60,9 @@ class login_verification():
         if loginstatus is True:
             return 
         elif loginstatus is False:
-            return render_template('message.html', message="Please login to access this feature")
+            return render_template('message.html', message="Please login to access this feature", message_btn="Login",message_link="login-page")
         else: 
-            return render_template('message.html', message="An error occurred. Please try again")
+            return render_template('message.html', message="An error occurred. Please try again", message_btn="Login",message_link="login-page")
 
     def __exit__(self, type, value, traceback):
         return
@@ -221,7 +221,7 @@ def sign_off_deviceid(device_type,device_id):
 def confirm_entries():
     with sql.connect('logs.db') as c:
         device_ids = request.form.getlist('device_ids[]')
-
+        loginstatus = session['logged_in']
         if device_ids:
             try:
                 c.execute('UPDATE device_logs SET teacher_signoff = "Confirmed" WHERE device_id IN ({})'.format(','.join('?' * len(device_ids))), device_ids)
@@ -239,11 +239,7 @@ def confirm_entries():
             message = 'No entries selected for confirmation.'
             message_type = 'info'
 
-        return render_template('index.html', message=message, message_type=message_type)
-
-def log_student_data():
-    with opendb('logs.db') as c:
-        blah='bla'
+        return render_template('message.html', message=message, loginstatus=loginstatus, message_btn="View_Circulations",message_link="circulations")
 
 
 
@@ -278,7 +274,7 @@ def new_log():
                           (device_id,device_type))
                 rental_log_exists = c.fetchall()
                 if rental_log_exists:
-                    return render_template('message.html', message="Device already being rented. Please choose another device", loginstatus=loginstatus)
+                    return render_template('message.html', message="Device already being rented. Please choose another device", loginstatus=loginstatus, message_btn="Try_Again",message_link="new-item")
                 elif device_exists:
                     
                     #update student_data table
@@ -303,16 +299,16 @@ def new_log():
                               (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
 
 
-                    return render_template('message.html', message="Successful Rental", loginstatus=loginstatus)
+                    return render_template('message.html', message="Successful Rental", loginstatus=loginstatus, message_btn="View_Rental_Logs",message_link="rental-logs")
                 elif device_exists is None:
-                    return render_template('message.html', message="Device doesn't exist. Please select a device that exists.", loginstatus=loginstatus)
+                    return render_template('message.html', message="Device doesn't exist. Please select a device that exists.", loginstatus=loginstatus, message_btn="Try_Again",message_link="new-log")
                 else:
-                    return render_template('message.html', message="Issue with renting a device. Please try again", loginstatus=loginstatus)
+                    return render_template('message.html', message="Issue with renting a device. Please try again", loginstatus=loginstatus, message_btn="Try_Again",message_link="new-log")
 
             else:
                 return render_template('new_log.html', loginstatus=loginstatus)
         else:
-            return render_template('message.html', message="Please login to access this feature")
+            return render_template('message.html', message="Please login to access this feature", message_btn="Login",message_link="login-page")
 
 #Used for creating a new device
 @app.route('/new-item')
@@ -345,11 +341,11 @@ def new_item():
                 # insert device data into database
                 c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes, barcode, num_rentals) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device, barcode_data, 0))
 
-                return render_template('message.html', message="New device logged", loginstatus=loginstatus)
+                return render_template('message.html', message="New device logged", loginstatus=loginstatus, message_btn="View_Devices",message_link="device-logs")
             elif device_exists_check:
-                return render_template('message.html', message="Device already exists", loginstatus=loginstatus)   
+                return render_template('message.html', message="Device already exists", loginstatus=loginstatus, message_btn="Try_Again",message_link="new-item")   
             else:
-                return render_template('message.html', message="An unknown error occured. Please try again", loginstatus=loginstatus) 
+                return render_template('message.html', message="An unknown error occured. Please try again", loginstatus=loginstatus, message_btn="Try_Again",message_link="new-item") 
         else:
             return render_template('new_device.html')
         
@@ -359,7 +355,7 @@ def dev_admin():
     if request.method == "POST":
         session['logged_in'] = True
         session['user_id'] = "Force_Login"
-        return render_template('message.html', message="Successful force login")
+        return render_template('message.html', message="Successful force login", message_btn="Real_Login",message_link="login-page")
     else:
         loginstatus = session.get('logged_in', False)
         return render_template('dev_admin.html', loginstatus=loginstatus)
@@ -378,12 +374,12 @@ def logout():
         session['logged_in'] = False
         session['user_id'] = "Invalid"
         loginstatus = session['logged_in']
-        return render_template('/message.html', message="You have been logged out", loginstatus=loginstatus)
+        return render_template('/message.html', message="You have been logged out", loginstatus=loginstatus, message_btn="Login",message_link="login-page")
     else:
         session['logged_in'] = False
         session['user_id'] = "Invalid"
         loginstatus = session['logged_in']
-        return render_template('/message.html', message="You are already not logged in", loginstatus=loginstatus)
+        return render_template('/message.html', message="You are already not logged in", loginstatus=loginstatus, message_btn="Login",message_link="login-page")
 
 #Used for loggin the user in
 @app.route('/login-page')
@@ -416,12 +412,12 @@ def login_page_post():
             last_login = datetime.datetime.now().strftime("%d-%m %H:%M")
             login_success(teacher_name, last_login)
             loginstatus = session.get('logged_in', False)
-            return render_template('message.html', message='Login Success', loginstatus=loginstatus)
+            return render_template('message.html', message='Login Success', loginstatus=loginstatus, message_btn="Admin_Page",message_link="admin")
         else:
             session['logged_in'] = False
             session['user_id'] = 'Invalid'
             loginstatus = session.get('logged_in', False)
-            return render_template('message.html', message='Login Failure', loginstatus=loginstatus)
+            return render_template('message.html', message='Login Failure', loginstatus=loginstatus, message_btn="Login",message_link="login-page")
         
 def is_valid_email(email):
     """
@@ -453,22 +449,22 @@ def signup_page_post():
             user = c.fetchone()
             if user:
                 message = 'Teacher name already exists!'
-                return render_template('message.html', message=message)
+                return render_template('message.html', message=message, message_btn="Sign_Up",message_link="signup-page")
 
             # Check if email is valid and not already in the database
             c.execute('SELECT * FROM users WHERE email = ?', (email,))
             user = c.fetchone()
             if not is_valid_email(email):
                 message = 'Invalid email address!'
-                return render_template('message.html', message=message)
+                return render_template('message.html', message=message, message_btn="Sign_Up",message_link="signup-page")
             elif user:
                 message = 'Email already exists!'
-                return render_template('message.html', message=message)
+                return render_template('message.html', message=message, message_btn="Sign_Up",message_link="signup-page")
 
             # Check if password and confirm_password match
             if password != confirm_password:
                 message = 'Passwords do not match!'
-                return render_template('message.html', message=message)
+                return render_template('message.html', message=message, message_btn="Sign_Up",message_link="signup-page")
 
             # Hash the password and insert the user into the database
             salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
@@ -479,7 +475,7 @@ def signup_page_post():
                           (teacher_name, email, hashed_password, salt, 0, "N/A", last_login))
             message = 'Sign up successful!'
             loginstatus = session['logged_in']
-            return render_template('message.html', message=message, loginstatus=loginstatus)
+            return render_template('message.html', message=message, loginstatus=loginstatus , message_btn="Login",message_link="login-page")
         else:
             loginstatus = session['logged_in']
             return render_template('/signup_page.html', loginstatus=loginstatus)
@@ -492,7 +488,7 @@ def signup_page_post():
 @app.route('/message')
 def message():
     loginstatus = session['logged_in']
-    return render_template('message.html', loginstatus=loginstatus)
+    return render_template('message.html', loginstatus=loginstatus, message_btn="View_Rental_Logs",message_link="rental-logs/", message="Message Page")
 
 
 ############################################# End-user oriented

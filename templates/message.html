@@ -76,7 +76,7 @@
   <div class="message-primary-container">
 		<h1 class="message-title">Message: {{message}}</h1>
         <input  onclick="window.location.href='/'" id="message-submit" type="submit" value="Home Page">
-        <input  onclick="window.location.href='/rental-logs'" id="message-rentals-submit" type="submit" value="View Rental Logs">
+        <input  onclick="window.location.href='/{{message_link}}'" id="message-rentals-submit" type="submit" value={{message_btn}}>
 
 
 	</div>
