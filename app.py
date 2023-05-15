@@ -287,13 +287,14 @@ def new_log():
                     if student_exists:
                         c.execute("UPDATE student_data SET last_rental = ?, device_type = ?, device_id = ? AND outstanding_rental = ? ", (date_borrowed, device_id, device_type, "YES"))
                     else: 
+                        #deprecated if check --> no longer necessary
                         #c.execute("SELECT num_rentals FROM student_data WHERE student_name = ?", (student_name,))
                         #is_null = c.fetchone()
 
                         #if is_null[0] is None:
                         #    c.execute("UPDATE student_data SET num_rentals = 0 WHERE student_name = ?", (student_name,))                        
-                        c.execute("INSERT INTO student_data(homeroom, student_name, last_rental, device_id, device_type, outstanding_rental) VALUES (?, ?, ?, ?, ?, ?)",
-                                  (homeroom, student_name, date_borrowed, device_id, device_type, "Yes"))
+                        c.execute("INSERT INTO student_data(homeroom, student_name,num_rentals, last_rental, device_id, device_type, outstanding_rental) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                                  (homeroom, student_name, 0, date_borrowed, device_id, device_type, "Yes"))
                     c.execute("UPDATE student_data SET num_rentals = num_rentals + 1 WHERE student_name = ?", (student_name,))
                     #update devices table
                     c.execute("UPDATE devices SET in_circulation = ? WHERE device_id = ? and device_type = ? ", ("Yes",device_id, device_type,))
