@@ -96,7 +96,7 @@
   	        	<input type="text" id="homeroom" name="homeroom" pattern="^[7-9]|1[0-3][A-Z]{3}$" required><br>
             
   	        	<label for="device_id">Device ID:</label>
-  	        	<input  type="number" id="device_id"  name="device_id"><br>
+  	        	<input  type="number" id="device_id" oninput="validateInput(this)" name="device_id"><br>
             
   	        	<label for="reason_borrowed">Reason Borrowed:</label>
   	        	<input type="text" id="reason_borrowed" name="reason_borrowed" required max="60"><br>
@@ -203,3 +203,16 @@
   
   </script>  
 </div>
+
+<script>
+  function validateInput(input) {
+    input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
+    input.value = input.value.slice(0, 4); // Limit to 4 digits
+    if (input.value < 0) {
+      input.value = ''; // Clear negative values
+    }
+  }
+</script>
+
+
+

@@ -241,6 +241,13 @@ def confirm_entries():
 
         return render_template('index.html', message=message, message_type=message_type)
 
+def log_student_data():
+    with opendb('logs.db') as c:
+        blah='bla'
+
+
+
+
 @app.route('/new-log')
 @app.route('/new-log', methods=['POST'])
 def new_log():
@@ -273,8 +280,28 @@ def new_log():
                 if rental_log_exists:
                     return render_template('message.html', message="Device already being rented. Please choose another device", loginstatus=loginstatus)
                 elif device_exists:
+                    
+                    #update student_data table
+                    c.execute("SELECT * FROM student_data WHERE student_name = ?", (student_name,))
+                    student_exists = c.fetchall()
+                    if student_exists:
+                        c.execute("UPDATE student_data SET last_rental = ?, device_type = ?, device_id = ? AND outstanding_rental = ? ", (date_borrowed, device_id, device_type, "YES"))
+                    else: 
+                        #c.execute("SELECT num_rentals FROM student_data WHERE student_name = ?", (student_name,))
+                        #is_null = c.fetchone()
+
+                        #if is_null[0] is None:
+                        #    c.execute("UPDATE student_data SET num_rentals = 0 WHERE student_name = ?", (student_name,))                        
+                        c.execute("INSERT INTO student_data(homeroom, student_name, last_rental, device_id, device_type, outstanding_rental) VALUES (?, ?, ?, ?, ?, ?)",
+                                  (homeroom, student_name, date_borrowed, device_id, device_type, "Yes"))
+                    c.execute("UPDATE student_data SET num_rentals = num_rentals + 1 WHERE student_name = ?", (student_name,))
+                    #update devices table
+                    c.execute("UPDATE devices SET in_circulation = ? WHERE device_id = ? and device_type = ? ", ("Yes",device_id, device_type,))
+                    #update device logs table
                     c.execute("INSERT INTO device_logs (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                               (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
+
+
                     return render_template('message.html', message="Successful Rental", loginstatus=loginstatus)
                 elif device_exists is None:
                     return render_template('message.html', message="Device doesn't exist. Please select a device that exists.", loginstatus=loginstatus)
