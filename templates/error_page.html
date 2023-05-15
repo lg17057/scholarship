@@ -76,29 +76,85 @@
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon-16x16.png') }}">
 
 	<title>Error</title>
-	<style>
-		
-		.container {
-			max-width: 800px;
-			padding: 20px;
-			background-color: #d1d0d0;
-			box-shadow: 0 2px 4px rgba(0,0,0,.1);
-		}
-		p {
-			font-size: 1.2em;
-		}
-	</style>
+	
 </head>
 <body>
-	<div class="container">
+	<div class="message-primary-container">
 		<h1>Oops! Something went wrong.</h1>
 		<p>An error occurred while processing your request. Here's something that might help:</p>
 		<ul>
 			<li><strong>Error code:</strong> {{ error_code }}</li>
 			<li><strong>Error message:</strong> {{ error_message }}</li>
 		</ul>
-        <button onclick="window.location.href='/'"style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 3px;">Home Page</button>
+    <br>
+        <button id="message-submit" onclick="window.location.href='/'">Home Page</button>
+<style>
+  .message-primary-container {
+      max-width: 600px;
+		padding: 20px;
+    position: relative;
+    top: -50px;
+		background-color: #d1d0d0;
+    border-radius: 10px;
+		box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    }
 
+
+    
+#message-submit {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    position: inherit;
+    top: -10px;
+    left: -2px;
+    width: 150px;
+    height: 40px;
+    background-color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    
+  }
+  #message-submit:hover {
+    border-radius: 6px;
+    
+  }
+
+  #message-rentals-submit {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    position: inherit;
+    top: -10px;
+    left: -2px;
+    width: 150px;
+    height: 40px;
+    background-color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+  }
+
+  #message-rentals-submit:hover {
+    border-radius: 6px;
+    
+  }
+</style>
 	</div>
 </body>
 </html>

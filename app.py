@@ -153,42 +153,37 @@ def homeroom_data():
 
 
 @app.route('/rental-logs/<string:date>')
-def rental_logs(date):
+def rental_logs_date(date):
     with opendb('logs.db') as c:
         c.execute("SELECT * FROM device_logs WHERE date_borrowed LIKE ?", (f"%{date}%",))
         rows = c.fetchall()
         loginstatus = session['logged_in']
         return render_template('rental_logs.html', rows=rows, message="Viewing rental logs for {}".format(date), loginstatus=loginstatus)
-        
-#page for user to view all rental logs 
-@app.route('/rental-logs/')
-def date_logs():
+ 
+@app.route('/rental-logs/', methods=['GET', 'POST'])
+def rental_logs():
     with opendb('logs.db') as c:
-    #selects all data from device_logs, resulting in all rental data being displayed
         today = date.today()
         formatted_date = today.strftime("%Y-%H-%m")
         c.execute("SELECT * from device_logs")
         logs = c.fetchall()
         loginstatus = session['logged_in']
+        if request.method == 'POST':
+            device_type = request.form.get('devicepicker')
+            device_id = request.form.get('idpicker')
+            return redirect('/rental-logs/{}/{}'.format(device_type, device_id))
         return render_template('rental_logs.html', rows=logs, message="Viewing all rental logs", formatted_date=formatted_date, loginstatus=loginstatus)
-
-
 #page for user to view device specific rental logs 
 #example of route;  /rental-logs/2231
 
 @app.route('/rental-logs/<string:device_type>/<int:device_id>')
 def date_id_logs(device_type, device_id):
     with opendb('logs.db') as c:
-        if request.method == "POST":
-            c.execute("SELECT * from device_logs WHERE device_type = ? AND device_id = ?", (device_type, device_id,))
-            rows = c.fetchall()
-            loginstatus = session['logged_in']
-            return render_template('/rental_logs.html', loginstatus=loginstatus, rows=rows, message="Viewing logs for {} ID {}".format(device_type,device_id))
-        else:
-            c.execute("SELECT * from device_logs WHERE device_type = ? AND device_id = ?", (device_type, device_id,))
-            rows = c.fetchall()
-            loginstatus = session['logged_in']
-            return render_template('/rental_logs.html', loginstatus=loginstatus, rows=rows, message="Viewing rental logs for {} ID {}".format(device_type,device_id))
+        c.execute("SELECT * from device_logs WHERE device_type = ? AND device_id = ?", (device_type, device_id,))
+        rows = c.fetchall()
+        loginstatus = session.get('logged_in', False)
+        message = "Viewing rental logs for {} ID {}".format(device_type, device_id)
+        return render_template('rental_logs.html', loginstatus=loginstatus, rows=rows, message=message)
 
 @app.route('/download-logs/')
 def download_logs():
