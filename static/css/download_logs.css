@@ -58,7 +58,7 @@
 
   .datepicker-container-download {
     position: relative;
-    top: 10px;
+    top: -10px;
     left: 0%;
   }
   
@@ -110,6 +110,7 @@
   padding: 15px;
   margin: 5px 0 22px 0;
   display: block;
+  top: 260px;
   margin: 0 auto;
   border: none;
   position: fixed;
@@ -124,6 +125,7 @@
     background-color: #ddd;
     outline: none;
   }
+
 
 
   .select-container {
@@ -220,7 +222,8 @@
   }
 
   .middle-hr {
-    position: inherit;
+    position: fixed;
+    top: 40px;
   }
 
 .download-content-btn1 ,
@@ -261,4 +264,67 @@
   
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+}
+
+.select-container1 {
+  position: relative;
+  display: inline-block;
+}
+
+/* Styling the select element */
+.select-container1 select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 120px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+/* Styling the arrow icon */
+.select-container1::after {
+  content: '\25BC';
+  position: absolute;
+  top: 70%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Styling when select element is open */
+.select-container1.select-open select {
+  border-color: #888;
+}
+
+/* Styling the dropdown options */
+.select-container1 select option {
+  font-size: 16px;
+}
+
+/* Styling when an option is selected */
+.select-container1.select-open select option:checked {
+  background-color: #f0f0f0;
+}
+
+.select-container1 {
+  position: fixed;
+  top: 150px;
+  left:20px;
+  width: 120px;
+  z-index: 3;
+  font-size: 16px;
+}
+
+#devicepicker {
+  width: 120px;
+  background: #f1f1f1;
+  font-size: 13px;
+}
+
+#devicepicker:select {
+  background-color: #ddd;
+
 }

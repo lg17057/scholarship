@@ -20,7 +20,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
+        <script src="{{ url_for('static', filename='js/date_picker.js') }}"></script>
 
       </head>
       <div class="topheader">
@@ -89,35 +89,40 @@
         </div>
         <div class="download-content1">
           <button class="back-btn" id="back-btn-div1">Back</button>
-            <div class="select-container">  
-                <label for="formatpicker" id="formatpickerlabel">Select Format: </label>
-                <select id="formatpicker" name="formatpicker" placeholder="Choose Format.." value="formatpicker">
-                  <option select value="CSV">CSV</option>
-                  <option value="PDF">PDF</option>
-                </select>
-            </div>
-            <br>
-            
+          <form action="/download-logs/" method="POST" value="download-content1">
             <h1 class="middle-title" id="firstdivtitle">Rental Logs:</h1>
-            <hr class="middle-hr">
-            <br><br><br><br><br>
-            <label for="idpicker">Device ID:</label><br>
-            
-            <input type=number id="idpicker"  oninput="validateInput(this)"  name="idpicker" placeholder="Device ID.." value="idpicker"></input>
-            <br><br>
-            <div class="datepicker-container-download">
-                <label for="datepicker">Date:</label>
-                <div class="datepicker-download">
-                  <input type="date" min="2023-01-01" max="2023-25-12"  id="datepicker">
-                  <br>
-                </div>
-            </div>
-            <!--
-        <h3>Download logs from _date_ to _date_</h3>
-        <h3>Download all logs</h3>
-            -->
-        <button id="confirm-btn-download">Confirm</button>
-
+              <hr class="middle-hr">
+              <div class="select-container">  
+                  <label for="formatpicker" id="formatpickerlabel">Select Format: </label>
+                  <select id="formatpicker" name="formatpicker" placeholder="Choose Format.." value="formatpicker">
+                    <option select value="CSV">CSV</option>
+                    <option value="PDF">PDF</option>
+                  </select>
+              </div>
+              <br><br><br><br><br>
+              <div class="select-container1">
+                <label for="devicepicker">Device Type:</label>
+                <select id="devicepicker" style="font-size: 14px;" name="devicepicker" placeholder="Device Type.." value="devicepicker">
+                  <option value="">Device Type: </option>
+                  <option value="Chromebook">Chromebook</option>
+                  <option value="iPad">iPad</option>
+                  <option value="Laptop">Laptop</option>
+                </select>
+              </div>
+              <br><br><br><br><br>
+              <label id="labelidpicker" for="idpicker">Device ID:</label><br>
+              <input type=number id="idpicker"  oninput="validateInput(this)"  name="idpicker" placeholder="Device ID.." value="idpicker"></input>
+              <br><br>
+              <p>Or</p>
+              <div class="datepicker-container-download">
+                  <label for="datepicker">Date:</label>
+                  <div class="datepicker-download">
+                    <input type="date" min="2023-01-01" max="2023-25-12"  id="datepicker">
+                    <br>
+                  </div>
+              </div>
+            <button id="confirm-btn-download" >Confirm</button>
+         </form>      
         </div>
         <div class="download-content2">
           <h1 id="seconddivtitle">Device Logs</h1>
@@ -125,12 +130,10 @@
         </div>
         <div class="download-content3">
           <h1 id="seconddivtitle">Student Data</h1>
-
           <button class="back-btn" id="back-btn-div3" >Back</button>
         </div>
         <div class="download-content4">
           <h1 id="fourthdivtitle">User Data</h1>
-
           <button class="back-btn " id="back-btn-div4">Back</button>
         </div>
     </div>

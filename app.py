@@ -185,12 +185,86 @@ def date_id_logs(device_type, device_id):
         message = "Viewing rental logs for {} ID {}".format(device_type, device_id)
         return render_template('rental_logs.html', loginstatus=loginstatus, rows=rows, message=message)
 
-@app.route('/download-logs/')
+
+
+############################################3
+@app.route('/download-logs/', methods=['GET','POST'])
 def download_logs():
     with opendb('logs.db') as c:
-        blah = 'blah'
         loginstatus = session['logged_in']
+
+        if request.method == 'POST':
+
+                    device_type = request.form.get('devicepicker')
+                    device_id = request.form.get('idpicker')
+                    date_picker = request.form.get('datepicker')
+
+                    rows = fetch_rows(device_type, device_id, date_picker)
+
+                    if rows:
+                        format_picker = request.form.get('formatpicker')
+                        if format_picker == 'CSV':
+                            csv_data = generate_csv(rows)
+                            response = make_response(csv_data)
+                            response.headers['Content-Disposition'] = 'attachment; filename=RentalLogs_{}_{}_{}.csv'.format(device_type, device_id, date_picker)
+                            response.headers['Content-Type'] = 'text/csv'
+                            return response
+                        elif format_picker == 'PDF':
+                            pdf_data = generate_pdf(rows)
+                            response = make_response(pdf_data)
+                            response.headers['Content-Disposition'] = 'attachment; filename=RentalLogs_{}_{}_{}.pdf'.format(device_type, device_id, date_picker)
+                            response.headers['Content-Type'] = 'application/pdf'
+                            return response
+                        else: 
+                            pass
+                    else:
+                        message = 'No data found for the specified criteria.'
+                        return render_template('download_logs.html', loginstatus=loginstatus, message=message)
+
+                
+        else:        
+            return render_template('/download_logs.html', loginstatus=loginstatus, message="Download All Rental Data" )
         return render_template('/download_logs.html', loginstatus=loginstatus, message="Download All Rental Data" )
+
+def fetch_rows(device_type, device_id, date_picker):
+    # Implement the logic to fetch rows from the device_logs table based on user specifications
+    # Replace this code with your own logic to fetch the rows from the database
+    with opendb('logs.db') as c:
+        # Example query to fetch rows based on device_type, device_id, and date_picker
+        print(device_type)
+        print(device_id)
+        print(date_picker)
+        query = "SELECT * FROM device_logs WHERE device_type=? AND device_id=?"
+        rows = c.execute(query, (device_type, device_id)).fetchall()
+        return rows
+
+
+def generate_csv(rows):
+    # Implement the logic to generate CSV data from the fetched rows
+    # Return the CSV content as a string
+    headers = ["Date Borrowed", "Submitted Under", "Student Name", "Homeroom", "Device Type",
+               "Device ID", "Period Borrowed", "Reason Borrowed", "Period Returned",
+               "Teacher Sign-Off", "Notes"]
+    csv_content = ','.join(headers) + '\n'
+    for row in rows:
+        csv_content += ','.join(str(value) for value in row) + '\n'
+    return csv_content
+
+
+def generate_pdf(rows):
+    # Implement the logic to generate PDF data from the fetched rows
+    # Return the PDF content as bytes
+    pdf_content = b''
+    # ... Your PDF generation logic here ...
+    return pdf_content
+
+
+
+
+
+
+
+
 
 
 #page used to sign off circulations that have been returned
@@ -270,8 +344,8 @@ def new_log():
                           (device_id,device_type))
                 device_exists = c.fetchall()
                 # Check if the rental log exists
-                c.execute("SELECT * FROM device_logs WHERE device_id = ? and device_type = ?",
-                          (device_id,device_type))
+                c.execute("SELECT * FROM device_logs WHERE device_id = ? and device_type = ? and teacher_signoff = ? and period_returned = ?",
+                          (device_id,device_type,"Unconfirmed","Not Returned"))
                 rental_log_exists = c.fetchall()
                 if rental_log_exists:
                     return render_template('message.html', message="Device already being rented. Please choose another device", loginstatus=loginstatus, message_btn="Try_Again",message_link="new-item")
