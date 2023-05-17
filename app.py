@@ -188,6 +188,12 @@ def date_id_logs(device_type, device_id):
 
 
 ############################################3
+
+
+#note for when device logs page is next developed
+#add device,student and admin download ability and buttons to html page
+#make it so that the date is actually properly sent to the python file instead of being saved as None in the file name
+#let user save data from _date_ to _date_
 @app.route('/download-logs/', methods=['GET','POST'])
 def download_logs():
     with opendb('logs.db') as c:

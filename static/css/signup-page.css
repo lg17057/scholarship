@@ -1,0 +1,182 @@
+
+body {
+    background-color: #114e91;
+    overflow-x: hidden;
+  }
+    .signup-container {
+      position: relative;
+      display:flex;
+      top: -40px;
+      right: -487px;
+      width: 550px;
+    height: 490px;
+    align-self: center;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    z-index: 10291309;
+    }
+    
+  
+  
+  .signup-container label {
+    font-size: 16px;
+    color: #888;
+    margin-bottom: 10px;
+  }
+  
+  .signup-container input[type="text"],
+  .signup-container input[type="email"],
+  .signup-container input[type="password"] {
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #000000;
+    border: 0px solid #ffffff;
+    border-radius: 5px;
+    background-color: #f1f1f1f1;
+  }
+  
+  
+  #username-label, #email-label {
+  position: fixed;
+  font-weight: 700;
+  font-style: italic;
+  }
+  
+  #password-label, #confirm-password-label {
+  position: fixed;
+  font-weight: 700;
+  font-style: italic;
+  }
+  
+  .signup-container input[type="submit"] {
+    width: 170px;
+    
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #114e91;
+    border: none;
+    border-radius: 0px;
+    cursor: pointer;
+  }
+  
+  .signup-container input[type="submit"]:hover {
+    background-color: #0e345e;
+  }
+  
+  .signup-container input[type="text"],
+  .signup-container input[type="email"],
+  .signup-container input[type="password"],
+  .signup-container input[type="submit"] {
+    width: 20%;
+    
+  }
+  
+  .signup-container input[type="text"]:focus,
+  .signup-container input[type="email"]:focus,
+  .signup-container input[type="password"]:focus {
+    background-color: #eee2e2;
+    border: 1px solid #ffffff;
+    outline: none;
+    border-radius: 5px;
+  }
+  
+  /* Additional styles */
+  #email:focus, 
+  #username:focus, 
+  #password:focus,
+  #confirm-password:focus {
+    border: none;
+    outline: none;
+
+  }
+
+
+
+  
+#sign-in {
+    text-align: center;
+    position: fixed;
+    top: 115px;
+    left: 670px;
+    color: #212529;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  
+.login-logo-shc {
+    display: block;
+    position: absolute;
+    top: 28px;
+    right: 112px;
+  }
+
+#teacher_name {
+    position: fixed;
+    top: 210px;
+    left: 607px;
+}
+
+#username-label {
+    position: fixed;
+    top: 190px;
+    left: 607px;
+}
+
+#email {
+    position: fixed;
+    top: 280px;
+    left: 607px;
+}
+
+#email-label {
+    position: fixed;
+    top: 260px;
+    left: 607px;
+}
+
+#password {
+    position: fixed;
+    top: 350px;
+    left: 607px;
+}
+
+#password-label {
+    position: fixed;
+    top: 330px;
+    left: 607px;
+}
+
+#confirm-password {
+    position: fixed;
+    top: 420px;
+    left: 607px;
+}
+
+#confirm-password-label {
+    position: fixed;
+    top: 400px;
+    left: 607px;
+}
+
+#registerbtn {
+    position: fixed;
+    top: 475px;
+    left: 620px;
+    width: 150px;
+    
+    border-radius: 5px;
+}
+
+#loginbtn {
+    position: fixed;
+    top: 475px;
+    left: 775px;
+    width: 150px;
+    
+    border-radius: 5px;
+}

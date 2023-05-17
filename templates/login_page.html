@@ -23,7 +23,7 @@
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
         <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
-        
+  </head>        
 <body>
   <title>Login Page</title>
     <div class="primary-container">
@@ -40,11 +40,23 @@
               <img class="staff-tag-shc"  src="{{ url_for('static', filename='staff-tag.svg') }}" height="50px" width="50px"  alt="sacred heart student tag">
               <p id="school-tag">School Staff</p>
             </button>   
+            <button id="create-account" onclick="window.location.href='/signup-page'">Create Account</button>
         </div>
       <div class="student-login-div">
-        <h1>Placeholder Title 1</h1>
-        <p>This is the content of the first hidden div.</p>
-        <button class="button-back">Back</button>
+        <img class="staff-tag-secondary"  src="{{ url_for('static', filename='staff-tag1.svg') }}" height="40px" width="50px" alt="sacred heart staff tag">
+
+        <h1 id="student-sign-in">SIGN IN</h1>
+        <p id="student-signin-message">Please use your school registered email to sign in</p>
+        <form action="/login-page/student" method="POST">
+          <br>
+            <label id="username-label" for="student_name">Name/Email:</label>
+            <input required type="text" id="student_name" autofocus spellcheck="false" pattern="^[a-zA-Z0-9._%+-]+@(sacredheart.school.nz)|([a-zA-Z0-9]+)$" name="teacher_name"><br><br>
+            <label id="password-label" for="student-password">Password:</label>
+            <input required  type="password" spellcheck="false" id="student-password" name="student-password"><br><br>
+            <input type="submit" value="Login" id="loginbtn">
+            <div class="g-signin2" data-width="175" data-height="41" border-radius="5" data-longtitle="true"></div>
+        </form>
+        <button class="button-back" id="student-button-back">Change Account Type</button>
       </div>
       <div class="staff-login-div">
         <img class="staff-tag-secondary"  src="{{ url_for('static', filename='staff-tag1.svg') }}" height="40px" width="50px" alt="sacred heart staff tag">
@@ -57,11 +69,12 @@
             <label id="password-label" for="password">Password:</label>
             <input required  type="password" spellcheck="false" id="password" name="password"><br><br>
             <input type="submit" value="Login">
-            <div class="g-signin2" data-width="175" data-height="41" border-radius="5" data-longtitle="true"> 
+            <div class="g-signin2" data-width="175" data-height="41" border-radius="5" data-longtitle="true"></div>
           </form>
-          <button class="button-back">Change Account Type</button>
-      </div>
-    </div>
+      <button  class="button-back" id="staff-button-back">Change Account Type</button>
+     </div>
+   </div>
+ </div>
 </body>
 <script>
 const loginForm = document.querySelector('#login-form');
