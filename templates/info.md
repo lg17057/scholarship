@@ -77,3 +77,89 @@ ask Mrs Gamil how many digits each device ID is
 if so, limit the input for a new device creation field
 
 fix circulations table issues
+^
+fixed
+
+make it so that when the user presses the enter button when submit button is not visible, the popup will not appear
+
+table css changed
+
+Ask Mrs Gamil if a device 'ipad' and device 'chromebook' can have the same ID. And are the device ID's generated a certain way? is there a certain format.
+
+-----
+12/05 
+
+student_data table in logs.db made
+new issues for research and development created
+----
+
+format in excel
+or as pdf 
+-----
+should create a custom message page button based off of what the issue encountered was
+
+also figure out how device modifier will work and what it will do
+
+make it so the admin has to re-enter password before acessing admin page?
+
+style circulations page
+
+change device retal logs device id based links - done
+do the same for the sign off device id system -  done
+
+"now accomodates for devices of different types having the same id"
+
+create device id input that allows user to type in a device id to see that devices confirmations on 
+^ for sign off page
+^ for rental logs too
+^ could be a popup to select device ID and device type and then go to the link
+
+change custom main title sign off message so that it displays the device type AND ID
+-------------
+
+program now upadtes devices, device_logs and student_data.
+Fix issue where num_rentals is null and unable to be changed
+--this issue has been fixed by setting the number of rentals to 0 when the student data is created 
+
+
+create cascading device dropdown menus that work based off of suffix and prefix? or wait until scanning system works
+or maybe in case scanning system never works do it anyways
+
+
+
+for download logs page
+have first div that has buttons to choose what type of data to download - eg choose between device data, student data, homeroom data, logs data or user data
+User Data;
+- Download the following?;
+- - List of admin usernames, accompanied by the identifier number - randomly generate this when user created maybe?
+
+Student Data;
+- Download the following?;
+- - Student Name
+- - Student ID?
+- - Homeroom
+- - Number of Rentals
+- - Date of last rental
+- - Device_id
+- - Device Type
+- - Outstanding/Current Rental 
+- - Notes
+
+
+Homeroom Data;
+- Download the following?;
+- - Homeroom
+- - Teacher
+- - Year Level
+
+
+Rental Logs Data;
+
+- Choose by device type
+- Choose by device ID
+- Choose by device type and ID
+- Choose by date
+- Choose from date 1 to date 2
+- Download all data?
+-----------
+wokring on the 4 different divs for these data types and the back buttons

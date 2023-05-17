@@ -22,84 +22,139 @@
         <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
 
 
-
       </head>
-        <div class="topheader">
-          <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
-          <br><br><br>
-          <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" title="Home Page" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>
-          {% if loginstatus %}
-            <span id="admin-span" onclick="window.location.href='/admin'"  title="Admin Options" class="fa fa-user-circle-o" style="font-size:36px;cursor:pointer;float: right;"></span>
-          {% else %}
-            <a onclick="window.location.href='/login-page'"  class="button" id="login-btn">Sign In</a>
-          {% endif %}
+      <div class="topheader">
+        <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
+        <br><br><br>
+        <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" title="Home Page" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>
+        {% if loginstatus %}
+          <span id="admin-span" onclick="window.location.href='/admin'"  title="Admin Options" class="fa fa-user-circle-o" style="font-size:36px;cursor:pointer;float: right;"></span>
+        {% else %}
+          <a onclick="window.location.href='/login-page'"  class="button" id="login-btn">Sign In</a>
+        {% endif %}
+      </div>
+      <button class="openbtn" title="Open Nav" onclick="toggleNav()">☰ </button>
+      
+      <div class="sidebar" id="mySidebar">
+        <button class="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
+        <h3c class="sidenavheader" onclick="togglePanel(this)">Options</h3>
+        <hr>
+        <button class="accordion" title="Rental Logs Options" onclick="togglePanel(this)">Rental Logs</button>
+        <div class="panel">
+          <a onclick="window.location.href='/new-log'">New Rental</a>
+          <a onclick="window.location.href='/sign-off'">Sign Off Rental</a>
+          <a onclick="window.location.href='/rental-logs'">View Rental Logs</a>
         </div>
-        <button class="openbtn" title="Open Nav" onclick="toggleNav()">☰ </button>
-        
-        <div class="sidebar" id="mySidebar">
-          <button class="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
-          <h3c class="sidenavheader" onclick="togglePanel(this)">Options</h3>
-          <hr>
-          <button class="accordion" title="Rental Logs Options" onclick="togglePanel(this)">Rental Logs</button>
-          <div class="panel">
-            <a onclick="window.location.href='/new-log'">New Rental</a>
-            <a onclick="window.location.href='/sign-off'">Sign Off Rental</a>
-            <a onclick="window.location.href='/rental-logs'">View Rental Logs</a>
-          </div>
-          <hr>
-          <button class="accordion" title="Devices Options" onclick="togglePanel(this)">Devices</button>
-          <div class="panel">
-            <a onclick="window.location.href='/circulations'">View Circulating Devices</a>
-            <a onclick="window.location.href='/new-item'">Create New Device</a>
-            <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
-          </div>
-          <hr>
-          <button class="accordion"  title="Statistics Options" onclick="togglePanel(this)">Statistics</button>
-          <div class="panel">
-            <a onclick="window.location.href='/statistics'">Statistics</a>
-            <a onclick="window.location.href='/students'">Students</a>
-          </div>
-          <hr>
-          <button class="accordion" title="Admin Options" onclick="togglePanel(this)">Admins</button>
-          <div class="panel">
-            <a onclick="window.location.href='/admin'">View Admin Options</a>
-            <a onclick="window.location.href='/dev-admin'">Dev Admin Page</a>
-            <a onclick="window.location.href='/device-logs'">View Device Logs</a>
-
-          </div>
-          <div class="help">
-            <a onclick="window.location.href='/help'" title="help">Help</a>
-          </div>
+        <hr>
+        <button class="accordion" title="Devices Options" onclick="togglePanel(this)">Devices</button>
+        <div class="panel">          
+          <a onclick="window.location.href='/new-item'">New Device</a>
+          <a onclick="window.location.href='/circulations'">Circulating Devices</a>
+          <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
+          <a onclick="window.location.href='/device-logs'">View Current Devices</a>
         </div>
+        <hr>
+        <button class="accordion"  title="Statistics Options" onclick="togglePanel(this)">Data</button>
+        <div class="panel">
+          <a onclick="window.location.href='/general-data'">Statistics</a>
+          <a onclick="window.location.href='/student-data'">Student Data</a>
+          <a onclick="window.location.href='/homeroom-data'">Homeroom Data</a>
+        </div>
+        <hr>
+        <button class="accordion" title="Admin Options" onclick="togglePanel(this)">Admins</button>
+        <div class="panel">
+          <a onclick="window.location.href='/admin'">Admin Page</a>
+          <a onclick="window.location.href='/dev-admin'">Dev Page</a>
+        </div>
+        <div class="help">
+          <a onclick="window.location.href='/help'" title="help">Help</a>
+        </div>
+      </div>
 </html>
 <html>
 <head>
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon-16x16.png') }}">
 
 	<title>Error</title>
-	<style>
-		
-		.container {
-			max-width: 800px;
-			padding: 20px;
-			background-color: #d1d0d0;
-			box-shadow: 0 2px 4px rgba(0,0,0,.1);
-		}
-		p {
-			font-size: 1.2em;
-		}
-	</style>
+	
 </head>
 <body>
-	<div class="container">
+	<div class="message-primary-container">
 		<h1>Oops! Something went wrong.</h1>
 		<p>An error occurred while processing your request. Here's something that might help:</p>
 		<ul>
 			<li><strong>Error code:</strong> {{ error_code }}</li>
 			<li><strong>Error message:</strong> {{ error_message }}</li>
 		</ul>
-        <button onclick="window.location.href='/'"style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 3px;">Home Page</button>
+    <br>
+        <button id="message-submit" onclick="window.location.href='/'">Home Page</button>
+<style>
+  .message-primary-container {
+      max-width: 600px;
+		padding: 20px;
+    position: relative;
+    top: -50px;
+		background-color: #d1d0d0;
+    border-radius: 10px;
+		box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    }
 
+
+    
+#message-submit {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    position: inherit;
+    top: -10px;
+    left: -2px;
+    width: 150px;
+    height: 40px;
+    background-color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    
+  }
+  #message-submit:hover {
+    border-radius: 6px;
+    
+  }
+
+  #message-rentals-submit {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    position: inherit;
+    top: -10px;
+    left: -2px;
+    width: 150px;
+    height: 40px;
+    background-color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+  }
+
+  #message-rentals-submit:hover {
+    border-radius: 6px;
+    
+  }
+</style>
 	</div>
 </body>
 </html>

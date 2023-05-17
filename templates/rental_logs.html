@@ -12,7 +12,7 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-16x16.png') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/side_nav.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/rental_logs.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
@@ -21,166 +21,153 @@
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
         <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
 
-
-
       </head>
-        <div class="topheader">
-          <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
-          <br><br><br>
-          <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" title="Home Page" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>
-          {% if loginstatus %}
-            <span id="admin-span" onclick="window.location.href='/admin'"  title="Admin Options" class="fa fa-user-circle-o" style="font-size:36px;cursor:pointer;float: right;"></span>
-          {% else %}
-            <a onclick="window.location.href='/login-page'"  class="button" id="login-btn">Sign In</a>
-          {% endif %}
+      <div class="topheader">
+        <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
+        <br><br><br>
+        <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" title="Home Page" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>
+        {% if loginstatus %}
+          <span id="admin-span" onclick="window.location.href='/admin'"  title="Admin Options" class="fa fa-user-circle-o" style="font-size:36px;cursor:pointer;float: right;"></span>
+        {% else %}
+          <a onclick="window.location.href='/login-page'"  class="button" id="login-btn">Sign In</a>
+        {% endif %}
+      </div>
+      <button class="openbtn" title="Open Nav" onclick="toggleNav()">☰ </button>
+      
+      <div class="sidebar" id="mySidebar">
+        <button class="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
+        <h3c class="sidenavheader" onclick="togglePanel(this)">Options</h3>
+        <hr>
+        <button class="accordion" title="Rental Logs Options" onclick="togglePanel(this)">Rental Logs</button>
+        <div class="panel">
+          <a onclick="window.location.href='/new-log'">New Rental</a>
+          <a onclick="window.location.href='/sign-off'">Sign Off Rental</a>
+          <a onclick="window.location.href='/rental-logs'">View Rental Logs</a>
         </div>
-        <button class="openbtn" title="Open Nav" onclick="toggleNav()">☰ </button>
-        
-        <div class="sidebar" id="mySidebar">
-          <button class="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
-          <h3c class="sidenavheader" onclick="togglePanel(this)">Options</h3>
-          <hr>
-          <button class="accordion" title="Rental Logs Options" onclick="togglePanel(this)">Rental Logs</button>
-          <div class="panel">
-            <a onclick="window.location.href='/new-log'">New Rental</a>
-            <a onclick="window.location.href='/sign-off'">Sign Off Rental</a>
-            <a onclick="window.location.href='/rental-logs'">View Rental Logs</a>
-          </div>
-          <hr>
-          <button class="accordion" title="Devices Options" onclick="togglePanel(this)">Devices</button>
-          <div class="panel">
-            <a onclick="window.location.href='/circulations'">View Circulating Devices</a>
-            <a onclick="window.location.href='/new-item'">Create New Device</a>
-            <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
-          </div>
-          <hr>
-          <button class="accordion"  title="Statistics Options" onclick="togglePanel(this)">Statistics</button>
-          <div class="panel">
-            <a onclick="window.location.href='/statistics'">Statistics</a>
-            <a onclick="window.location.href='/students'">Students</a>
-          </div>
-          <hr>
-          <button class="accordion" title="Admin Options" onclick="togglePanel(this)">Admins</button>
-          <div class="panel">
-            <a onclick="window.location.href='/admin'">View Admin Options</a>
-            <a onclick="window.location.href='/dev-admin'">Dev Admin Page</a>
-            <a onclick="window.location.href='/device-logs'">View Device Logs</a>
-
-          </div>
-          <div class="help">
-            <a onclick="window.location.href='/help'" title="help">Help</a>
-          </div>
+        <hr>
+        <button class="accordion" title="Devices Options" onclick="togglePanel(this)">Devices</button>
+        <div class="panel">          
+          <a onclick="window.location.href='/new-item'">New Device</a>
+          <a onclick="window.location.href='/circulations'">Circulating Devices</a>
+          <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
+          <a onclick="window.location.href='/device-logs'">View Current Devices</a>
         </div>
+        <hr>
+        <button class="accordion"  title="Statistics Options" onclick="togglePanel(this)">Data</button>
+        <div class="panel">
+          <a onclick="window.location.href='/general-data'">Statistics</a>
+          <a onclick="window.location.href='/student-data'">Student Data</a>
+          <a onclick="window.location.href='/homeroom-data'">Homeroom Data</a>
+        </div>
+        <hr>
+        <button class="accordion" title="Admin Options" onclick="togglePanel(this)">Admins</button>
+        <div class="panel">
+          <a onclick="window.location.href='/admin'">Admin Page</a>
+          <a onclick="window.location.href='/dev-admin'">Dev Page</a>
+        </div>
+        <div class="help">
+          <a onclick="window.location.href='/help'" title="help">Help</a>
+        </div>
+      </div>
 </html>
 <body> 
 <title>Rental Log - Dash</title>
-<script>
- function filterTable() {
-  let datepicker = document.getElementById("datepicker");
-  let date = datepicker.value;
-  let [year, month, day] = date.split("-");
-  let formattedDate = `${day}-${month}`;
-
-  let url = `/rental-logs/${formattedDate}`;
-  window.location.href = url;
-}
-</script>
-<script>
-  $(document).ready(function() {
-  $('#devices-table').DataTable({
-    paging: true,
-    pageLength: 10, // Number of rows per page
-    lengthMenu: [5, 10, 25, 50], // Options for rows per page dropdown
-    searching: true, // Enable search functionality
-    ordering: true, // Enable column sorting
-    info: true, // Show information about current page and total entries
-    language: {
-      paginate: {
-        first: 'First',
-        last: 'Last',
-        next: '&raquo;',
-        previous: '&laquo;'
-      },
-      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
-    }
-  });
-});
-</script>
-
 <button onclick="window.location.href='/rental-logs/'" id="return-btn" class="return-btn">View All Logs</button>
-<div class="datepicker-container">
-  <div class="datepicker">
-    <div id="chevron-arrow-left" onclick="goToPreviousDay()"></div>
-    <input type="date" min="2023-01-01" max="2023-25-12"  id="datepicker">
-    <div id="chevron-arrow-right" onclick="goToNextDay()"></div>
-    <button id="confirm-btn" onclick="filterTable()">Confirm</button>
+<div class="primary-container">
+  <hr>
+  <div class="idpicker-container">
+    <form action="/rental-logs/" method="POST">
+      <div class="select-container" style="font-size:14px;">  
+        <select id="devicepicker" style="font-size: 14px;" name="devicepicker" placeholder="Device Type.." value="devicepicker">
+          <option value="">Device Type: </option>
+          <option value="Chromebook">Chromebook</option>
+          <option value="iPad">iPad</option>
+          <option value="Laptop">Laptop</option>
+        </select>
+      </div>
+      <input type=number class="idpicker"  oninput="validateInput(this)"   name="idpicker" placeholder="Enter Device ID.." value="idpicker"></input>
+      <input type="submit" class="submit-btn" id="submit-btn" value="Select" >
+    </form>
+    
   </div>
-</div>
-<h1 class="main_title">{{message}}</h1><hr class="main_hr" >
-<br>
-<div class="table-container">
-  <table id="devices-table" class="devices">
-    <thead>
-      <th>
-        Date Borrowed
-      </th>
-      <th>
-        Submitted Under
+  <div class="datepicker-container">
+    <div class="datepicker">
+      <div id="chevron-arrow-left" onclick="goToPreviousDay()"></div>
+      <input type="date" min="2023-01-01" max="2023-25-12"  id="datepicker">
+      <div id="chevron-arrow-right" onclick="goToNextDay()"></div>
+      <button id="confirm-btn" onclick="filterTable()">Confirm</button>
+    </div>
+  </div>
+  
+  <h1 class="main_title">{{message}}</h1>
+  <div class="download-container" style="position: relative;top: -125px;">
+    <a href="/download-logs/" class="download-btn">Download Data</a>
+  </div>
+  <br>
+  <div class="table-container">
+    <table id="devices-table" class="devices">
+      <thead>
+        <th>
+          Date Borrowed
+        </th>
+        <th>
+          Submitted Under
 
-      </th>
-      <th>
-        Student Name
-      </th>
-      <th>
-        Homeroom
-      </th>
-      <th>
-        Device Type
-      </th>
-      <th>
-        Device ID
-      </th>
-      <th>
-        Period Borrowed
-      </th>
-      <th>
-        Reason
-      </th>
-      <th>
-        Period Returned
-      </th>
-      <th>
-        Sign-Off
-      </th>
-      <th>
-        Notes
-      </th>
-    </thead>
-    <tbody>
-      {% for row in rows %}
-      <tr>
-          <td>{{ row[0] }}</td>
-          <td>{{ row[1] }}</td>
-          <td>{{ row[2] }}</td>
-          <td>{{ row[3] }}</td>
-          <td>{{ row[4] }}</td>
-          <td>{{ row[5] }}</td>
-          <td>{{ row[6] }}</td>
-          <td>{{ row[7] }}</td>
-          <td>{{ row[8] }}</td>
-          <td>{{ row[9] }}</td>
-          <td>{{ row[10] }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+        </th>
+        <th>
+          Student Name
+        </th>
+        <th>
+          Homeroom
+        </th>
+        <th>
+          Device Type
+        </th>
+        <th>
+          Device ID
+        </th>
+        <th>
+          Period Borrowed
+        </th>
+        <th>
+          Reason
+        </th>
+        <th>
+          Period Returned
+        </th>
+        <th>
+          Sign-Off
+        </th>
+        <th>
+          Notes
+        </th>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>{{ row[6] }}</td>
+            <td>{{ row[7] }}</td>
+            <td>{{ row[8] }}</td>
+            <td>{{ row[9] }}</td>
+            <td>{{ row[10] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 </html>
 <style>
   .main_title {
   position: relative;
-  top: -170px;
-  right: -57px;
+  top: -190px;
+  right: -50px;
   z-index: 2;
 }
 
@@ -199,3 +186,45 @@ left: -7px;
 }
 
 </style>
+
+<script>
+  function filterTable() {
+   let datepicker = document.getElementById("datepicker");
+   let date = datepicker.value;
+   let [year, month, day] = date.split("-");
+   let formattedDate = `${day}-${month}`;
+ 
+   let url = `/rental-logs/${formattedDate}`;
+   window.location.href = url;
+ }
+ </script>
+ <script>
+   $(document).ready(function() {
+   $('#devices-table').DataTable({
+     paging: true,
+     pageLength: 20, // Number of rows per page
+     lengthMenu: [10, 20, 50, 100], // Options for rows per page dropdown
+     searching: true, // Enable search functionality
+     ordering: true, // Enable column sorting
+     info: true, // Show information about current page and total entries
+     language: {
+       paginate: {
+         first: 'First',
+         last: 'Last',
+         next: '&raquo;',
+         previous: '&laquo;'
+       },
+       info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+     }
+   });
+ });
+ </script>
+<script>
+  function validateInput(input) {
+    input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
+    input.value = input.value.slice(0, 4); // Limit to 4 digits
+    if (input.value < 0) {
+      input.value = ''; // Clear negative values
+    }
+  }
+</script>

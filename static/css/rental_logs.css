@@ -1,0 +1,195 @@
+.datepicker-container {
+    position: relative;
+    top: -70px;
+    left: 500px;
+  }
+  
+  .datepicker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  #datepicker {
+    font-size: 16px;
+    padding: 5px;
+    background-color: #f1f1f1;
+    border-radius:5px;
+    border: none;
+    height: 30px;
+
+  }
+  
+
+
+  .submit-btn {
+    background-color: #ffffff;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 4px;
+    padding: 8px 16px;
+    position: fixed;
+    left: 340px;
+    top:150px;
+    height: 40px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .submit-btn:hover {
+    background-color: #008000;
+    border: #008000 1px solid;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 8px 16px;
+    
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+
+
+  #confirm-btn {
+    background-color: #ffffff;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 4px;
+    padding: 8px 16px;
+    position: relative;
+    left: 5px;
+    height: 40px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  #confirm-btn:hover {
+    background-color: #008000;
+    border: #008000 1px solid;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 8px 16px;
+    position: relative;
+    left: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  #chevron-arrow-left {
+    display: inline-block;
+    position: relative;
+    z-index: 5;
+    left: 8px;
+    border-right: 4.8px solid black;
+    border-bottom: 4.8px solid black;
+    width: 12px; height: 12px;
+    transform: rotate(-225deg);
+    cursor: pointer;
+  }
+  
+  #chevron-arrow-right {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    z-index: 5;
+    right: 8px;
+    border-right: 4.8px solid black;
+    border-bottom: 4.8px solid black;
+    width: 12px; height: 12px;
+    transform: rotate(-45deg);
+  }
+
+  .idpicker {
+    width: 10%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: block;
+  margin: 0 auto;
+  border: none;
+  background: #f1f1f1;
+  }
+
+  .idpicker:focus {
+    background-color: #ddd;
+    outline: none;
+  }
+
+
+  .select-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Styling the select element */
+  .select-container select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 120px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+  }
+  
+  /* Styling the arrow icon */
+  .select-container::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  /* Styling when select element is open */
+  .select-container.select-open select {
+    border-color: #888;
+  }
+  
+  /* Styling the dropdown options */
+  .select-container select option {
+    font-size: 14px;
+  }
+  
+  /* Styling when an option is selected */
+  .select-container.select-open select option:checked {
+    background-color: #f0f0f0;
+  }
+
+
+  .select-container {
+    position: fixed;
+    top: 150px;
+    left:15px;
+    width: 120px;
+    z-index: 3;
+  }
+
+  .idpicker {
+    position: fixed;
+    top: 150px;
+    height: 10px;
+    border-radius: 5px;
+    left: 145px;
+    z-index: 3;
+  }
+
+  #devicepicker {
+    width: 120px;
+    background: #f1f1f1;
+
+
+  }
+
+  #devicepicker:select {
+    background-color: #ddd;
+
+  }
+
+  .download-btn {
+    text-decoration: none;
+  }
+
+  .download-btn:hover {
+    text-decoration: underline;
+  }

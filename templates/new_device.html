@@ -14,12 +14,15 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/new_device.css') }}">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
         <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
+
+
 
       </head>
       <div class="topheader">
@@ -70,5 +73,41 @@
         </div>
       </div>
 </html>
-<title>Student Records</title>
-<h1  class="main_title">Student Records</h1>
+<body>
+  <title>New Device</title>
+  <div class="new-device-container">
+    <h1 class="newdevice-title">Create New Device</h1>
+    <form style="position: relative;top:20px" method="POST" action="/new-item">
+		  <label for="device_id">Device ID:</label>
+		  <input  required type="number"  oninput="validateInput(this)"   id="device_id" name="device_id">
+      <br>
+      <div class="select-container">
+		    <select id="device_type" name="device_type" required>
+          <option selected value="">Device Type:</option>
+          <option value="iPad">iPad</option>
+          <option value="Laptop">Laptop</option>
+          <option value="Chromebook">Chromebook</option>
+        </select>
+      </div>
+      <br>
+      <br>
+      <label for="notes">Notes:</label>
+      <input  type="text" id="notes" name="notes" >
+      <br>
+		  <input id="newdevice-submit" type="submit" value="Submit">
+	  </form>
+  </div>
+</body>
+
+<script>
+  function validateInput(input) {
+    input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
+    input.value = input.value.slice(0, 4); // Limit to 4 digits
+    if (input.value < 0) {
+      input.value = ''; // Clear negative values
+    }
+  }
+</script>
+
+
+

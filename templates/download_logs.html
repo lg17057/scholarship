@@ -1,0 +1,275 @@
+<!DOCTYPE html> 
+  <html lang="en-US">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <head>
+        <meta charset="utf-8">
+        <style type="text/css" ></style>
+        <meta name="author" content="LG17057">
+        <meta name="description" content="A website framework designed for scholarship, with the aim to provide a device logbook for students using rental devices">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="DeviceLog">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-16x16.png') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/side_nav.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/download_logs.css') }}">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+        <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/date_picker.js') }}"></script>
+
+      </head>
+      <div class="topheader">
+        <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
+        <br><br><br>
+        <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" title="Home Page" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>
+        {% if loginstatus %}
+          <span id="admin-span" onclick="window.location.href='/admin'"  title="Admin Options" class="fa fa-user-circle-o" style="font-size:36px;cursor:pointer;float: right;"></span>
+        {% else %}
+          <a onclick="window.location.href='/login-page'"  class="button" id="login-btn">Sign In</a>
+        {% endif %}
+      </div>
+      <button class="openbtn" title="Open Nav" onclick="toggleNav()">☰ </button>
+      
+      <div class="sidebar" id="mySidebar">
+        <button class="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
+        <h3c class="sidenavheader" onclick="togglePanel(this)">Options</h3>
+        <hr>
+        <button class="accordion" title="Rental Logs Options" onclick="togglePanel(this)">Rental Logs</button>
+        <div class="panel">
+          <a onclick="window.location.href='/new-log'">New Rental</a>
+          <a onclick="window.location.href='/sign-off'">Sign Off Rental</a>
+          <a onclick="window.location.href='/rental-logs'">View Rental Logs</a>
+        </div>
+        <hr>
+        <button class="accordion" title="Devices Options" onclick="togglePanel(this)">Devices</button>
+        <div class="panel">          
+          <a onclick="window.location.href='/new-item'">New Device</a>
+          <a onclick="window.location.href='/circulations'">Circulating Devices</a>
+          <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
+          <a onclick="window.location.href='/device-logs'">View Current Devices</a>
+        </div>
+        <hr>
+        <button class="accordion"  title="Statistics Options" onclick="togglePanel(this)">Data</button>
+        <div class="panel">
+          <a onclick="window.location.href='/general-data'">Statistics</a>
+          <a onclick="window.location.href='/student-data'">Student Data</a>
+          <a onclick="window.location.href='/homeroom-data'">Homeroom Data</a>
+        </div>
+        <hr>
+        <button class="accordion" title="Admin Options" onclick="togglePanel(this)">Admins</button>
+        <div class="panel">
+          <a onclick="window.location.href='/admin'">Admin Page</a>
+          <a onclick="window.location.href='/dev-admin'">Dev Page</a>
+        </div>
+        <div class="help">
+          <a onclick="window.location.href='/help'" title="help">Help</a>
+        </div>
+      </div>
+</html>
+<title>Rental Log - Dash</title>
+<div class="primary-container">
+    <h1 class="main_title">{{message}}</h1>
+    <div class="middle-container">
+        <div class="download-content0">
+          <h1 class="originaldivtitle">Select data type:</h1>
+          <br><br><hr>
+            <button id="download-content-btn1" class="download-content-btn1">Rental Data</button>
+            <br>
+            <button id="download-content-btn2" class="download-content-btn2">Device Data</button>
+            <br>
+            <button id="download-content-btn3" class="download-content-btn3">Student Data</button>
+            <br>
+            <button id="download-content-btn4" class="download-content-btn4">User Data</button>
+            <hr>
+        </div>
+        <div class="download-content1">
+          <button class="back-btn" id="back-btn-div1">Back</button>
+          <form action="/download-logs/" method="POST" value="download-content1">
+            <h1 class="middle-title" id="firstdivtitle">Rental Logs:</h1>
+              <hr class="middle-hr">
+              <div class="select-container">  
+                  <label for="formatpicker" id="formatpickerlabel">Select Format: </label>
+                  <select id="formatpicker" name="formatpicker" placeholder="Choose Format.." value="formatpicker">
+                    <option select value="CSV">CSV</option>
+                    <option value="PDF">PDF</option>
+                  </select>
+              </div>
+              <br><br><br><br><br>
+              <div class="select-container1">
+                <label for="devicepicker">Device Type:</label>
+                <select id="devicepicker" style="font-size: 14px;" name="devicepicker" placeholder="Device Type.." value="devicepicker">
+                  <option value="">Device Type: </option>
+                  <option value="Chromebook">Chromebook</option>
+                  <option value="iPad">iPad</option>
+                  <option value="Laptop">Laptop</option>
+                </select>
+              </div>
+              <br><br><br><br><br>
+              <label id="labelidpicker" for="idpicker">Device ID:</label><br>
+              <input type=number id="idpicker"  oninput="validateInput(this)"  name="idpicker" placeholder="Device ID.." value="idpicker"></input>
+              <br><br>
+              <p>Or</p>
+              <div class="datepicker-container-download">
+                  <label for="datepicker">Date:</label>
+                  <div class="datepicker-download">
+                    <input type="date" min="2023-01-01" max="2023-25-12"  id="datepicker">
+                    <br>
+                  </div>
+              </div>
+            <button id="confirm-btn-download" >Confirm</button>
+         </form>      
+        </div>
+        <div class="download-content2">
+          <h1 id="seconddivtitle">Device Logs</h1>
+          <button class="back-btn" id="back-btn-div2">Back</button>
+        </div>
+        <div class="download-content3">
+          <h1 id="seconddivtitle">Student Data</h1>
+          <button class="back-btn" id="back-btn-div3" >Back</button>
+        </div>
+        <div class="download-content4">
+          <h1 id="fourthdivtitle">User Data</h1>
+          <button class="back-btn " id="back-btn-div4">Back</button>
+        </div>
+    </div>
+  </div>
+<script>
+// Get the login buttons
+var primarydiv = document.querySelector('.download-content0');
+var button1 = document.querySelector('.download-content-btn1');
+var button2 = document.querySelector('.download-content-btn2');
+var button3 = document.querySelector('.download-content-btn3');
+var button4 = document.querySelector('.download-content-btn4');
+
+// Get the student and staff login divs
+var div1 = document.querySelector('.download-content1');
+var div2 = document.querySelector('.download-content2');
+var div3 = document.querySelector('.download-content3');
+var div4 = document.querySelector('.download-content4');
+
+// Get the "Back" buttons
+var back_btn1 = document.querySelector('.download-content1 .back-btn');
+var back_btn2 = document.querySelector('.download-content2 .back-btn');
+var back_btn3 = document.querySelector('.download-content3 .back-btn');
+var back_btn4 = document.querySelector('.download-content4 .back-btn');
+
+button1.addEventListener('click', function() {
+  div1.style.display = 'block';
+  primarydiv.style.display = 'none';
+  div2.style.display = 'none';
+  div3.style.display = 'none';
+  div4.style.display = 'none';
+});
+
+button2.addEventListener('click', function() {
+  div2.style.display = 'block';
+  primarydiv.style.display = 'none';
+  div1.style.display = 'none';
+  div3.style.display = 'none';
+  div4.style.display = 'none';
+});
+
+button3.addEventListener('click', function() {
+  div3.style.display = 'block';
+  primarydiv.style.display = 'none';
+  div1.style.display = 'none';
+  div2.style.display = 'none';
+  div4.style.display = 'none';
+});
+
+button4.addEventListener('click', function() {
+  div4.style.display = 'block';
+  primarydiv.style.display = 'none';
+  div1.style.display = 'none';
+  div2.style.display = 'none';
+  div3.style.display = 'none';
+});
+
+// Hide the student login div when the "Back" button is clicked
+back_btn1.addEventListener('click', function() {
+  div1.style.display = 'none';
+  primarydiv.style.display = 'block';
+});
+
+back_btn2.addEventListener('click', function() {
+  div2.style.display = 'none';
+  primarydiv.style.display = 'block';
+});
+
+back_btn3.addEventListener('click', function() {
+  div3.style.display = 'none';
+  primarydiv.style.display = 'block';
+});
+
+back_btn4.addEventListener('click', function() {
+  div4.style.display = 'none';
+  primarydiv.style.display = 'block';
+});
+</script>
+<style>
+  .main_title {
+  position: relative;
+  top: -132px;
+  right: -50px;
+  z-index: 2;
+  }
+ .openbtn {
+ background-color: #f1f1f1;
+ color: black;
+ cursor: pointer;
+ padding: 10px 15px;
+ border: none;
+ border-radius: 5px;
+ font-size: 30px;
+ position:relative;
+ top: -60px;
+ cursor: pointer;
+ left: -7px;
+ }
+ </style>
+ <script>
+     function validateInput(input) {
+       input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
+       input.value = input.value.slice(0, 4); // Limit to 4 digits
+       if (input.value < 0) {
+         input.value = ''; // Clear negative values
+       }
+     }
+   </script>
+ <script>
+  function filterTable() {
+   let datepicker = document.getElementById("datepicker");
+   let date = datepicker.value;
+   let [year, month, day] = date.split("-");
+   let formattedDate = `${day}-${month}`;
+ 
+   let url = `/rental-logs/${formattedDate}`;
+   window.location.href = url;
+ }
+ </script>
+ <script>
+   $(document).ready(function() {
+   $('#devices-table').DataTable({
+     paging: true,
+     pageLength: 20, // Number of rows per page
+     lengthMenu: [10, 20, 50, 100], // Options for rows per page dropdown
+     searching: true, // Enable search functionality
+     ordering: true, // Enable column sorting
+     info: true, // Show information about current page and total entries
+     language: {
+       paginate: {
+         first: 'First',
+         last: 'Last',
+         next: '&raquo;',
+         previous: '&laquo;'
+       },
+       info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+     }
+   });
+ });
+ </script>

@@ -25,53 +25,53 @@
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
         <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
       </head>
-        <div class="topheader">
-          <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
-          <br><br><br>
-          <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" title="Home Page" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>
-          {% if loginstatus %}
-            <span id="admin-span" onclick="window.location.href='/admin'"  title="Admin Options" class="fa fa-user-circle-o" style="font-size:36px;cursor:pointer;float: right;"></span>
-          {% else %}
-            <a onclick="window.location.href='/login-page'"  class="button" id="login-btn">Sign In</a>
-          {% endif %}
+      <div class="topheader">
+        <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
+        <br><br><br>
+        <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" title="Home Page" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>
+        {% if loginstatus %}
+          <span id="admin-span" onclick="window.location.href='/admin'"  title="Admin Options" class="fa fa-user-circle-o" style="font-size:36px;cursor:pointer;float: right;"></span>
+        {% else %}
+          <a onclick="window.location.href='/login-page'"  class="button" id="login-btn">Sign In</a>
+        {% endif %}
+      </div>
+      <button class="openbtn" title="Open Nav" onclick="toggleNav()">☰ </button>
+      
+      <div class="sidebar" id="mySidebar">
+        <button class="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
+        <h3c class="sidenavheader" onclick="togglePanel(this)">Options</h3>
+        <hr>
+        <button class="accordion" title="Rental Logs Options" onclick="togglePanel(this)">Rental Logs</button>
+        <div class="panel">
+          <a onclick="window.location.href='/new-log'">New Rental</a>
+          <a onclick="window.location.href='/sign-off'">Sign Off Rental</a>
+          <a onclick="window.location.href='/rental-logs'">View Rental Logs</a>
         </div>
-        <button class="openbtn" title="Open Nav" onclick="toggleNav()">☰ </button>
-        
-        <div class="sidebar" id="mySidebar">
-          <button class="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
-          <h3c class="sidenavheader" onclick="togglePanel(this)">Options</h3>
-          <hr>
-          <button class="accordion" title="Rental Logs Options" onclick="togglePanel(this)">Rental Logs</button>
-          <div class="panel">
-            <a onclick="window.location.href='/new-log'">New Rental</a>
-            <a onclick="window.location.href='/sign-off'">Sign Off Rental</a>
-            <a onclick="window.location.href='/rental-logs'">View Rental Logs</a>
-          </div>
-          <hr>
-          <button class="accordion" title="Devices Options" onclick="togglePanel(this)">Devices</button>
-          <div class="panel">
-            <a onclick="window.location.href='/circulations'">View Circulating Devices</a>
-            <a onclick="window.location.href='/new-item'">Create New Device</a>
-            <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
-          </div>
-          <hr>
-          <button class="accordion"  title="Statistics Options" onclick="togglePanel(this)">Statistics</button>
-          <div class="panel">
-            <a onclick="window.location.href='/statistics'">Statistics</a>
-            <a onclick="window.location.href='/students'">Students</a>
-          </div>
-          <hr>
-          <button class="accordion" title="Admin Options" onclick="togglePanel(this)">Admins</button>
-          <div class="panel">
-            <a onclick="window.location.href='/admin'">View Admin Options</a>
-            <a onclick="window.location.href='/dev-admin'">Dev Admin Page</a>
-            <a onclick="window.location.href='/device-logs'">View Device Logs</a>
-
-          </div>
-          <div class="help">
-            <a onclick="window.location.href='/help'" title="help">Help</a>
-          </div>
+        <hr>
+        <button class="accordion" title="Devices Options" onclick="togglePanel(this)">Devices</button>
+        <div class="panel">          
+          <a onclick="window.location.href='/new-item'">New Device</a>
+          <a onclick="window.location.href='/circulations'">Circulating Devices</a>
+          <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
+          <a onclick="window.location.href='/device-logs'">View Current Devices</a>
         </div>
+        <hr>
+        <button class="accordion"  title="Statistics Options" onclick="togglePanel(this)">Data</button>
+        <div class="panel">
+          <a onclick="window.location.href='/general-data'">Statistics</a>
+          <a onclick="window.location.href='/student-data'">Student Data</a>
+          <a onclick="window.location.href='/homeroom-data'">Homeroom Data</a>
+        </div>
+        <hr>
+        <button class="accordion" title="Admin Options" onclick="togglePanel(this)">Admins</button>
+        <div class="panel">
+          <a onclick="window.location.href='/admin'">Admin Page</a>
+          <a onclick="window.location.href='/dev-admin'">Dev Page</a>
+        </div>
+        <div class="help">
+          <a onclick="window.location.href='/help'" title="help">Help</a>
+        </div>
+      </div>
 </html>
 <title>New Log</title>
 <div class="primary-container">
@@ -96,7 +96,7 @@
   	        	<input type="text" id="homeroom" name="homeroom" pattern="^[7-9]|1[0-3][A-Z]{3}$" required><br>
             
   	        	<label for="device_id">Device ID:</label>
-  	        	<input min="0" type="number" id="device_id" name="device_id"><br>
+  	        	<input  type="number" id="device_id" oninput="validateInput(this)" name="device_id"><br>
             
   	        	<label for="reason_borrowed">Reason Borrowed:</label>
   	        	<input type="text" id="reason_borrowed" name="reason_borrowed" required max="60"><br>
@@ -125,10 +125,10 @@
             
   	        	<label for="device_type">Device Type:</label>
   	        	<select required id="device_type" name="device_type">
-                <option value="">--Select--</option>
-  	        		<option value="laptop">Laptop</option>
-  	        		<option value="tablet">Chromebook</option>
-  	        		<option value="phone">iPad</option>
+                <option value="">-- Select --</option>
+  	        		<option value="Laptop">Laptop</option>
+  	        		<option value="Chromebook">Chromebook</option>
+  	        		<option value="iPad">iPad</option>
   	        	</select><br>
             
               <label for="checkbox_id">Teacher Signoff:</label>
@@ -203,3 +203,16 @@
   
   </script>  
 </div>
+
+<script>
+  function validateInput(input) {
+    input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
+    input.value = input.value.slice(0, 4); // Limit to 4 digits
+    if (input.value < 0) {
+      input.value = ''; // Clear negative values
+    }
+  }
+</script>
+
+
+

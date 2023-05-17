@@ -75,7 +75,7 @@ body {
   position: relative;
   left: 1325px;
   z-index: 3;
-  top: -63px;
+  top: -9px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
@@ -89,4 +89,26 @@ body {
   
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+}
+
+/* Width and height of the scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #b8afaf;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #cebebe;
 }
