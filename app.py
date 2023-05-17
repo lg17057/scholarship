@@ -185,11 +185,19 @@ def date_id_logs(device_type, device_id):
         message = "Viewing rental logs for {} ID {}".format(device_type, device_id)
         return render_template('rental_logs.html', loginstatus=loginstatus, rows=rows, message=message)
 
+@app.route('/download-logs/')
+def download_logs():
+    with opendb('logs.db') as c:
+        loginstatus = session['logged_in']
+
+        
+        return render_template('/download_logs.html', loginstatus=loginstatus, message="Download All Rental Data" )
+
 
 
 ############################################3
-@app.route('/download-logs/', methods=['GET','POST'])
-def download_logs():
+@app.route('/download-logs/<string:date>', methods=['GET','POST'])
+def download_logs_date(date):
     with opendb('logs.db') as c:
         loginstatus = session['logged_in']
 
@@ -197,22 +205,21 @@ def download_logs():
 
                     device_type = request.form.get('devicepicker')
                     device_id = request.form.get('idpicker')
-                    date_picker = request.form.get('datepicker')
 
-                    rows = fetch_rows(device_type, device_id, date_picker)
+                    rows = fetch_rows(device_type, device_id, date)
 
                     if rows:
                         format_picker = request.form.get('formatpicker')
                         if format_picker == 'CSV':
                             csv_data = generate_csv(rows)
                             response = make_response(csv_data)
-                            response.headers['Content-Disposition'] = 'attachment; filename=RentalLogs_{}_{}_{}.csv'.format(device_type, device_id, date_picker)
+                            response.headers['Content-Disposition'] = 'attachment; filename=RentalLogs_{}_{}_{}.csv'.format(device_type, device_id, date)
                             response.headers['Content-Type'] = 'text/csv'
                             return response
                         elif format_picker == 'PDF':
                             pdf_data = generate_pdf(rows)
                             response = make_response(pdf_data)
-                            response.headers['Content-Disposition'] = 'attachment; filename=RentalLogs_{}_{}_{}.pdf'.format(device_type, device_id, date_picker)
+                            response.headers['Content-Disposition'] = 'attachment; filename=RentalLogs_{}_{}_{}.pdf'.format(device_type, device_id, date)
                             response.headers['Content-Type'] = 'application/pdf'
                             return response
                         else: 
