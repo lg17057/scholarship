@@ -1,7 +1,7 @@
 .datepicker-container {
     position: relative;
-    top: -70px;
-    left: 500px;
+    top: -170px;
+    left: 600px;
   }
   
   .datepicker {
@@ -20,7 +20,10 @@
 
   }
   
-
+  #rentalhr {
+    position: relative;
+    top: -50px;
+  }
 
   .submit-btn {
     background-color: #ffffff;
@@ -28,7 +31,7 @@
     border: #008000 1px solid;
     border-radius: 4px;
     padding: 8px 16px;
-    position: fixed;
+    position: relative;
     left: 340px;
     top:150px;
     height: 40px;
@@ -158,33 +161,39 @@
 
 
   .select-container {
-    position: fixed;
-    top: 150px;
-    left:15px;
+    position: relative;
+    top: -50px;
     width: 120px;
     z-index: 3;
   }
 
   .idpicker {
-    position: fixed;
-    top: 150px;
+    position: relative;
+    top: -88px;
+    left: -550px;
     height: 10px;
     border-radius: 5px;
-    left: 145px;
+    height:9px;
     z-index: 3;
+    width: 120px;
   }
 
   #devicepicker {
     width: 120px;
+    height: 38px;
+    border-radius: 5px;
     background: #f1f1f1;
-
-
   }
 
   #devicepicker:select {
     background-color: #ddd;
-
   }
+
+.idpicker-container {
+  position: relative;
+
+}
+
 
   .download-btn {
     text-decoration: none;
@@ -193,3 +202,35 @@
   .download-btn:hover {
     text-decoration: underline;
   }
+
+#return-btn {
+  left: -50px; 
+}
+
+#return-btn {
+  background-color: #ffffff;
+  color: #008000;
+  border: #008000 1px solid;
+  border-radius: 5px;
+  padding: 10px 20px;
+  position: relative;
+  left: 1265px;
+  z-index: 3;
+  top: -50px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+#return-btn:hover {
+  background-color: #008000;
+  border: #008000 1px solid;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+
+ 

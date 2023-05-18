@@ -3,8 +3,7 @@
     color: white;
     font-size: 20px;
     position: relative;
-    right: 15px;
-    top: -10px
+    top: -60px
 }          
 body, h1, h2, h3, h4, h5 {
 color: black;
@@ -40,8 +39,33 @@ position: fixed;
 top: 80px;
 left: 0;
 z-index: 10;
+overflow-y: auto; 
 display: none;
+transition: width 0.5s ease;
+
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+}
+
+.sidebar.active {
+  width: 250px;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 .sidebar a {
@@ -102,12 +126,15 @@ display: block;
 padding: 10px;
 text-decoration: none;
 cursor: pointer;
-
+position: inherit;
+top: -80px;
 color: #ccc;
 }
 
 .panel.active {
 max-height: 500px; /* Adjust this value to match the height of your content */
+transition: max-height 0.4s ease-out;
+
 }
 .panel a:hover{
 color: #007bff;
@@ -132,10 +159,11 @@ background-color: #f1f1f1;
 
 .closebtn {
 position: relative;
-top: -10px;
+top: -8px;
+
 cursor: pointer;
 z-index: 9;
-right: -220px;
+right: -160px;
 font-size: 30px;
 color: #007bff;
 cursor: pointer;
@@ -144,11 +172,14 @@ background-color: transparent;
 }
 
 .closebtn:hover {
-color: #000000;
+color: #ffffff;
 }
 
-hr {
-border-color: #ccc;
+.sidebar hr {
+border-color: #ffffff;
+height: 1px;
+background-color: #ffffff;
+width: 200px;
 }
 .openbtn {
   position: relative;
@@ -175,3 +206,24 @@ border-color: #ccc;
   z-index: 2;
 }
 
+.side-panel1 {
+  position: relative;
+  top: -60px;
+}
+.side-panel2 {
+  position: relative;
+  top: -55px;
+}
+.side-panel3 {
+  position: relative;
+  top: -50px;
+}
+.side-panel4 {
+  position: relative;
+  top: -45px;
+}
+
+
+.side-panel1, .side-panel2, .side-panel3, .side-panel4 {
+  left: -10px;
+}

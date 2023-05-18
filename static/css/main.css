@@ -66,31 +66,6 @@ body {
   text-decoration: underline;
 }
 
-#return-btn {
-  background-color: #ffffff;
-  color: #008000;
-  border: #008000 1px solid;
-  border-radius: 5px;
-  padding: 10px 20px;
-  position: relative;
-  left: 1325px;
-  z-index: 3;
-  top: -9px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-#return-btn:hover {
-  background-color: #008000;
-  border: #008000 1px solid;
-  color: #ffffff;
-  border-radius: 5px;
-  padding: 10px 20px;
-  
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
 /* Width and height of the scrollbar */
 ::-webkit-scrollbar {
   width: 10px;

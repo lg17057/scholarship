@@ -82,7 +82,7 @@ def device_logs():
 
         rows = c.fetchall()
         loginstatus = session['logged_in']
-        return render_template('/device_logs.html', rows=rows, loginstatus=loginstatus, device_id=rows)
+        return render_template('/device_modifier.html', rows=rows, loginstatus=loginstatus, device_id=rows)
 
 #used to provide link for the device barcode;
 
@@ -299,7 +299,7 @@ def sign_off_deviceid(device_type,device_id):
 #Link that confirms entries after devices have been selected to sign off
 @app.route('/confirm-entries', methods=['POST'])
 def confirm_entries():
-    with sql.connect('logs.db') as c:
+    with opendb('logs.db') as c:
         device_ids = request.form.getlist('device_ids[]')
         loginstatus = session['logged_in']
         if device_ids:
@@ -307,7 +307,6 @@ def confirm_entries():
                 c.execute('UPDATE device_logs SET teacher_signoff = "Confirmed" WHERE device_id IN ({})'.format(','.join('?' * len(device_ids))), device_ids)
                 message = 'Selected entries have been confirmed.'
                 message_type = 'success'
-                c.commit()
             except sql.Error as e:
                 print('Error confirming entries:', e)
                 c.rollback()

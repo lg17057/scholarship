@@ -36,38 +36,46 @@
       
       <div class="sidebar" id="mySidebar">
         <button class="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
-        <h3c class="sidenavheader" onclick="togglePanel(this)">Options</h3>
-        <hr>
-        <button class="accordion" title="Rental Logs Options" onclick="togglePanel(this)">Rental Logs</button>
-        <div class="panel">
-          <a onclick="window.location.href='/new-log'">New Rental</a>
-          <a onclick="window.location.href='/sign-off'">Sign Off Rental</a>
-          <a onclick="window.location.href='/rental-logs'">View Rental Logs</a>
+        <h3 class="sidenavheader">Options</h3>
+        <div class=side-panel1>
+          <hr>
+          <button class="accordion" title="Rental Logs Options" onclick="togglePanel(this)">Rental Logs</button>
+          <div class="panel">
+            <a onclick="window.location.href='/new-log'">New Rental</a>
+            <a onclick="window.location.href='/sign-off'">Sign Off Rental</a>
+            <a onclick="window.location.href='/rental-logs'">View Rental Logs</a>
+          </div>
         </div>
-        <hr>
-        <button class="accordion" title="Devices Options" onclick="togglePanel(this)">Devices</button>
-        <div class="panel">          
-          <a onclick="window.location.href='/new-item'">New Device</a>
-          <a onclick="window.location.href='/circulations'">Circulating Devices</a>
-          <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
-          <a onclick="window.location.href='/device-logs'">View Current Devices</a>
+        <div class=side-panel2>
+          <hr>
+          <button class="accordion" title="Devices Options" onclick="togglePanel(this)">Devices</button>
+          <div class="panel">          
+            <a onclick="window.location.href='/new-item'">New Device</a>
+            <a onclick="window.location.href='/circulations'">Circulating Devices</a>
+            <a onclick="window.location.href='/modify-device'">Modify Current Device</a>
+            <a onclick="window.location.href='/device-logs'">View Current Devices</a>
+          </div>
         </div>
-        <hr>
-        <button class="accordion"  title="Statistics Options" onclick="togglePanel(this)">Data</button>
-        <div class="panel">
-          <a onclick="window.location.href='/general-data'">Statistics</a>
-          <a onclick="window.location.href='/student-data'">Student Data</a>
-          <a onclick="window.location.href='/homeroom-data'">Homeroom Data</a>
+        <div class=side-panel3>
+          <hr>
+          <button class="accordion"  title="Statistics Options" onclick="togglePanel(this)">Data</button>
+          <div class="panel">
+            <a onclick="window.location.href='/general-data'">Statistics</a>
+            <a onclick="window.location.href='/student-data'">Student Data</a>
+            <a onclick="window.location.href='/homeroom-data'">Homeroom Data</a>
+          </div>
         </div>
-        <hr>
-        <button class="accordion" title="Admin Options" onclick="togglePanel(this)">Admins</button>
-        <div class="panel">
-          <a onclick="window.location.href='/admin'">Admin Page</a>
-          <a onclick="window.location.href='/dev-admin'">Dev Page</a>
-        </div>
-        <div class="help">
-          <a onclick="window.location.href='/help'" title="help">Help</a>
-        </div>
+        <div class=side-panel4>
+          <hr>
+          <button class="accordion" title="Admin Options" onclick="togglePanel(this)">Admins</button>
+          <div class="panel">
+            <a onclick="window.location.href='/admin'">Admin Page</a>
+            <a onclick="window.location.href='/dev-admin'">Dev Page</a>
+          </div>
+          <div class="help">
+            <a onclick="window.location.href='/help'" title="help">Help</a>
+          </div>
+        </div>  
       </div>
 </html>
 <title>Modify Device</title>

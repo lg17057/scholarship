@@ -163,3 +163,5 @@ Rental Logs Data;
 - Download all data?
 -----------
 wokring on the 4 different divs for these data types and the back buttons
+
+barcode not working? enter manually option
