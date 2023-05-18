@@ -42,7 +42,7 @@ z-index: 10;
 overflow-y: auto; 
 display: none;
 transition: width 0.5s ease;
-
+height: 90vh; 
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
 }
 
@@ -116,7 +116,7 @@ background-color: #0d3e7d;
 display: none;
 cursor: pointer;
 animation-name: slideInPanel;
-  animation-duration: 0.5s;
+  animation-duration: 0.7s;
   animation-timing-function: ease;
   animation-fill-mode: forwards;
 
@@ -126,7 +126,7 @@ overflow: hidden;
 }
 .panel.closing {
   animation-name: slideOutPanel;
-  animation-duration: 0.5s;
+  animation-duration: 0.7s;
   animation-timing-function: ease;
   animation-fill-mode: forwards;
 }
@@ -259,3 +259,5 @@ width: 200px;
 .side-panel1, .side-panel2, .side-panel3, .side-panel4 {
   left: -10px;
 }
+
+

@@ -78,9 +78,82 @@
         </div>  
       </div>
 </html>
-<title>Modify Device</title>
+<title>Devices</title>
+
 <h1  class="main_title">{{message}}</h1>
 <div class="primary-container">
   
+  <table id="devices-table" class="devices">
+    <thead>
+      <th>
+        Device Type
+      </th>
+      <th>
+        Device ID
+      </th>
+      <th>
+        Date Added
+      </th>
+      <th>
+        Added By
+      </th>
+      <th>
+        In Circulation
+      </th>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+          <td>{{ row[0] }}</td>
+          <td>{{ row[1] }}</td>
+          <td>{{ row[2] }}</td>
+          <td>{{ row[3] }}</td>
+          <td>{{ row[4] }}</td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+  
+
 </div>
+<script>
+  $(document).ready(function() {
+  $('#devices-table').DataTable({
+    paging: true,
+    
+    pageLength: 20, // Number of rows per page
+    lengthMenu: [10, 20, 50, 100], // Options for rows per page dropdown
+    searching: true, // Enable search functionality
+    ordering: true, // Enable column sorting
+    info: true, // Show information about current page and total entries
+    language: {
+      paginate: {
+        first: 'First',
+        last: 'Last',
+        next: '&raquo;',
+        previous: '&laquo;'
+      },
+      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+    }
+  });
+});
+</script>
+
+<script>
+ function validateInput(input) {
+   input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
+   input.value = input.value.slice(0, 4); // Limit to 4 digits
+   if (input.value < 0) {
+     input.value = ''; // Clear negative values
+   }
+ }
+</script>
+
+<style>
+  .primary-container {
+    position: relative;
+    top: -120px;
+  }
+</style>
 

@@ -113,62 +113,64 @@
     <a href="/download-logs/" class="download-btn">Download Data</a>
   </div>
   <br>
-  <div class="table-container">
-    <table id="devices-table" class="devices">
-      <thead>
-        <th>
-          Date Borrowed
-        </th>
-        <th>
-          Submitted Under
+  <div class="secondary-container">
+    <div class="table-container">
+      <table id="devices-table" class="devices">
+        <thead>
+          <th>
+            Date Borrowed
+          </th>
+          <th>
+            Submitted Under
 
-        </th>
-        <th>
-          Student Name
-        </th>
-        <th>
-          Homeroom
-        </th>
-        <th>
-          Device Type
-        </th>
-        <th>
-          Device ID
-        </th>
-        <th>
-          Period Borrowed
-        </th>
-        <th>
-          Reason
-        </th>
-        <th>
-          Period Returned
-        </th>
-        <th>
-          Sign-Off
-        </th>
-        <th>
-          Notes
-        </th>
-      </thead>
-      <tbody>
-        {% for row in rows %}
-        <tr>
-            <td>{{ row[0] }}</td>
-            <td>{{ row[1] }}</td>
-            <td>{{ row[2] }}</td>
-            <td>{{ row[3] }}</td>
-            <td>{{ row[4] }}</td>
-            <td>{{ row[5] }}</td>
-            <td>{{ row[6] }}</td>
-            <td>{{ row[7] }}</td>
-            <td>{{ row[8] }}</td>
-            <td>{{ row[9] }}</td>
-            <td>{{ row[10] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+          </th>
+          <th>
+            Student Name
+          </th>
+          <th>
+            Homeroom
+          </th>
+          <th>
+            Device Type
+          </th>
+          <th>
+            Device ID
+          </th>
+          <th>
+            Period Borrowed
+          </th>
+          <th>
+            Reason
+          </th>
+          <th>
+            Period Returned
+          </th>
+          <th>
+            Sign-Off
+          </th>
+          <th>
+            Notes
+          </th>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+          <tr>
+              <td>{{ row[0] }}</td>
+              <td>{{ row[1] }}</td>
+              <td>{{ row[2] }}</td>
+              <td>{{ row[3] }}</td>
+              <td>{{ row[4] }}</td>
+              <td>{{ row[5] }}</td>
+              <td>{{ row[6] }}</td>
+              <td>{{ row[7] }}</td>
+              <td>{{ row[8] }}</td>
+              <td>{{ row[9] }}</td>
+              <td>{{ row[10] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 </html>
@@ -237,3 +239,22 @@ left: -7px;
     }
   }
 </script>
+<style>
+  .secondary-container {
+    position: relative;
+    top: -140px;
+  }
+
+  .download-container {
+    position: fixed;
+    top: 150px;
+  }
+  .download-btn {
+    text-decoration: none;
+  }
+
+  .download-btn:hover {
+    text-decoration: underline;
+  }
+
+</style>

@@ -78,11 +78,12 @@ def main():
 def device_logs():
     with opendb('logs.db') as c:
         #selects all device logs data
-        c.execute('SELECT * FROM devices')
-
+    
+        c.execute("SELECT * FROM devices ")
         rows = c.fetchall()
+
         loginstatus = session['logged_in']
-        return render_template('/device_modifier.html', rows=rows, loginstatus=loginstatus, device_id=rows)
+        return render_template('/device_logs.html', rows=rows, loginstatus=loginstatus, message="Current devices")
 
 #used to provide link for the device barcode;
 

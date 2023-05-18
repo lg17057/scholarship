@@ -195,14 +195,7 @@
 }
 
 
-  .download-btn {
-    text-decoration: none;
-  }
-
-  .download-btn:hover {
-    text-decoration: underline;
-  }
-
+  
 #return-btn {
   left: -50px; 
 }
