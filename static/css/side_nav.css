@@ -95,7 +95,7 @@ font-size: 17px;
 width: 100%;
 text-align: left;
 cursor: pointer;
-
+transition: background-color 0.4s;
 border: none;
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
 outline: none;
@@ -115,10 +115,42 @@ padding: 0 10px;
 background-color: #0d3e7d;
 display: none;
 cursor: pointer;
+animation-name: slideInPanel;
+  animation-duration: 0.5s;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
+
 
 overflow: hidden;
-transition: max-height 0.2s ease-out;
 
+}
+.panel.closing {
+  animation-name: slideOutPanel;
+  animation-duration: 0.5s;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slideInPanel {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    max-height: 500px; 
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutPanel {
+  from {
+    max-height: 500px; 
+    opacity: 1;
+  }
+  to {
+    max-height: 0;
+    opacity: 0;
+  }
 }
 
 .panel a {
