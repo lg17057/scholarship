@@ -14,9 +14,9 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
         <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
@@ -33,7 +33,6 @@
         {% endif %}
       </div>
       <button class="openbtn" title="Open Nav" onclick="toggleNav()">☰ </button>
-      
       <div class="sidebar" id="mySidebar">
         <button class="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
         <h3 class="sidenavheader">Options</h3>
@@ -77,55 +76,55 @@
           </div>
         </div>  
       </div>
-</html>
-
-
 <title>Circulations</title>
 <h1 class="main_title">Circulations</h1>
 <div class="circulation-content">
   <h3>Ipads: {{ipads_c}}</h3> <h3>Laptops: {{laptops_c}}</h3><h3>Chromebooks {{chromebooks_c}}</h3>
-    <table class="devices devices-table" id="devices-table">
-      <thead>
-        <tr>
-          <th>Date Borrowed</th>
-          <th>Device Type</th>
-          <th>Device ID</th>
-          <th>Period Borrowed</th>
-          <th>Reason Borrowed</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in rows %}
-        <tr>
+  <table id="devices-table" class="devices">
+    <thead>
+      <th>
+        Device Type
+      </th>
+      <th>
+        Device ID
+      </th>
+      <th>
+        Date Added
+      </th>
+      <th>
+        Added By
+      </th>
+      <th>
+        In Circulation
+      </th>
+      <th>
+        Notes
+      </th>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
           <td>{{ row[0] }}</td>
           <td>{{ row[1] }}</td>
           <td>{{ row[2] }}</td>
           <td>{{ row[3] }}</td>
           <td>{{ row[4] }}</td>
           <td>{{ row[5] }}</td>
+      </tr>
+      {% endfor %}
 
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    </tbody>
+  </table>
+  
+
 </div>
-<style>
-  .devices {
-  position: relative;
-  top: -10px;
-  z-index: 8;
-}
-.circulation-content {
-  position: relative;
-  top: -130px;
-}
-</style>
 <script>
   $(document).ready(function() {
   $('#devices-table').DataTable({
     paging: true,
-    pageLength: 10, // Number of rows per page
-    lengthMenu: [5, 10, 25, 50], // Options for rows per page dropdown
+    
+    pageLength: 20, // Number of rows per page
+    lengthMenu: [10, 20, 50, 100], // Options for rows per page dropdown
     searching: true, // Enable search functionality
     ordering: true, // Enable column sorting
     info: true, // Show information about current page and total entries
@@ -141,3 +140,16 @@
   });
 });
 </script>
+   
+</div>
+<style>
+  .devices {
+  position: relative;
+  top: -10px;
+  z-index: 8;
+}
+.circulation-content {
+  position: relative;
+  top: -130px;
+}
+</style>

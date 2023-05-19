@@ -1,0 +1,79 @@
+
+.delete-account-btn {
+    border: 2px solid #000000;
+    text-decoration: none;
+    font-size: 16px;
+    color: #000000;
+    cursor: pointer;
+    background-color: #ffffff;
+    display: block;
+    transition: 0.3s;
+    position: relative;
+    top: 300px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.delete-account-btn:hover {
+    border-radius: 5px;
+    border: 2px solid #aa0404;
+    color: #aa0404;
+    border-radius: 5px;
+    padding: 10px 20px;
+    
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}    
+
+#logoutBtn {
+    border: 2px solid #000000;
+    text-decoration: none;
+    font-size: 16px;
+    color: #000000;
+    cursor: pointer;
+    background-color: #ffffff;
+    display: block;
+    transition: 0.3s;
+    position: relative;
+    top: 285px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#logoutBtn:hover {
+    border: 2px solid #aa6804;
+    color: #aa6804;
+    border-radius: 5px;
+    padding: 10px 20px;
+    
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}    
+
+
+#return-btn {
+    background-color: #ffffff;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 5px;
+    padding: 10px 20px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  #return-btn:hover {
+    background-color: #008000;
+    border: #008000 1px solid;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  

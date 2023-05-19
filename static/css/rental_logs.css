@@ -1,6 +1,6 @@
 .datepicker-container {
     position: relative;
-    top: -170px;
+    top: -205px;
     left: 600px;
   }
   
@@ -32,8 +32,8 @@
     border-radius: 4px;
     padding: 8px 16px;
     position: relative;
-    left: 340px;
-    top:150px;
+    left: 290px;
+    top:-128px;
     height: 40px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
@@ -196,9 +196,6 @@
 
 
   
-#return-btn {
-  left: -50px; 
-}
 
 #return-btn {
   background-color: #ffffff;
@@ -207,9 +204,9 @@
   border-radius: 5px;
   padding: 10px 20px;
   position: relative;
-  left: 1265px;
+  left: 1395px;
   z-index: 3;
-  top: -50px;
+  top: -165px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
@@ -226,4 +223,29 @@
 }
 
 
- 
+.secondary-container {
+  position: relative;
+  top: -140px;
+}
+
+
+.download-btn {
+  text-decoration: none;
+}
+
+.download-btn:hover {
+  text-decoration: underline;
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.unselectable-date {
+  color: #aaa;
+  cursor: default;
+  background-color: #f5f5f5;
+}
+
+

@@ -144,7 +144,7 @@ position: relative;
 .account-type-item2:hover {
 transition: ease-in 0.2s;
 border: #114e91 solid 3px;
-background-color: rgb(242, 229, 229);
+background-color: rgb(218, 218, 221);
 }
 
 #create-account {

@@ -163,6 +163,8 @@ def rental_logs_date(date):
         loginstatus = session['logged_in']
         return render_template('rental_logs.html', rows=rows, message="Viewing rental logs for {}".format(date), loginstatus=loginstatus)
  
+
+
 @app.route('/rental-logs/', methods=['GET', 'POST'])
 def rental_logs():
     with opendb('logs.db') as c:
@@ -171,6 +173,7 @@ def rental_logs():
         c.execute("SELECT * from device_logs")
         logs = c.fetchall()
         loginstatus = session['logged_in']
+        
         if request.method == 'POST':
             device_type = request.form.get('devicepicker')
             device_id = request.form.get('idpicker')
@@ -188,7 +191,12 @@ def date_id_logs(device_type, device_id):
         message = "Viewing rental logs for {} ID {}".format(device_type, device_id)
         return render_template('rental_logs.html', loginstatus=loginstatus, rows=rows, message=message)
 
-
+@app.route('/check-data/<string:date>')
+def check_data_availability(date):
+    with opendb('logs.db') as c:
+        c.execute("SELECT COUNT(*) FROM device_logs WHERE date_borrowed LIKE ?", (f"%{date}%",))
+        count = c.fetchone()[0]
+        return jsonify({"exists": count > 0})
 
 ############################################3
 

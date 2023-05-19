@@ -165,3 +165,10 @@ Rental Logs Data;
 wokring on the 4 different divs for these data types and the back buttons
 
 barcode not working? enter manually option
+-----------
+CSS fixed on circulations page
+extra notes column added to circulations and device logs page as a bug fix
+admin page styling fixed fire side/top nav and buttons on the page 
+sign up page css fixed as a result of user feedback
+-
+trying to fix issue where i cant see the confirm selection button for device id and type picker on rental logs page 

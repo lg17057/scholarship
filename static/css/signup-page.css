@@ -167,20 +167,40 @@ body {
     position: fixed;
     top: 475px;
     left: 620px;
-    width: 150px;
+    width: 300px;
     
     border-radius: 5px;
 }
 
 #loginbtn {
     position: fixed;
-    top: 475px;
-    left: 775px;
-    width: 150px;
-    
-    border-radius: 5px;
+    top: 495px;
+    left: 900px;
+    font-size: 14px;
+  height: 29px;
+  width: 200px;
+  padding: 4px 8px 4px 8px;
+  color: #6c757D;
+  transition: color 0.15s ease-in-out 0s;
+  background-color: transparent;
+  border: none;
+  vertical-align: middle;
+  min-height: auto;
+  min-width: auto;
+  text-decoration: none;
+  text-align: center;
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+  position: fixed;
 }
 
+
+#loginbtn:hover {
+  color: #6c757D;
+  background-color: transparent;
+  border-bottom: 1px solid transparent;
+  text-decoration: underline;
+  }
 #register-back {
   font-size: 14px;
   height: 29px;

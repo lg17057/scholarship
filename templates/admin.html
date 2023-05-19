@@ -14,14 +14,26 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_page.css') }}">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
         <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
 
       </head>
+      <div class="topheader">
+        <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
+        <br><br><br>
+        <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" title="Home Page" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>
+        {% if loginstatus %}
+          <span id="admin-span" onclick="window.location.href='/admin'"  title="Admin Options" class="fa fa-user-circle-o" style="font-size:36px;cursor:pointer;float: right;"></span>
+        {% else %}
+          <a onclick="window.location.href='/login-page'"  class="button" id="login-btn">Sign In</a>
+        {% endif %}
+      </div>
+      <button class="openbtn" title="Open Nav" onclick="toggleNav()">☰ </button>
       <div class="sidebar" id="mySidebar">
         <button class="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
         <h3 class="sidenavheader">Options</h3>
@@ -76,36 +88,3 @@
   <input type="submit" value="Delete Account" id="delete-accountbtn" class="delete-account-btn">
 </div>
 
-<style>
-  
-  .delete-account-btn {
-        font-weight: 300;
-        font-style: normal;
-        padding: 14px 28px;
-        border: 2px solid #000000;
-        border-radius: 3px;
-        text-decoration: none;
-        font-size: 16px;
-        color: #000000;
-        cursor: pointer;
-        background-color: #ffffff;
-        display: block;
-        transition: 0.3s;
-    }
-    
-    .delete-account-btn:hover {
-        font-weight: 300;
-        font-style: normal;
-        padding: 14px 28px;
-        border-radius: 5px;
-        border: 2px solid #aa0404;
-        border-radius: 6px;
-        text-decoration: none;
-        font-size: 16px;
-        color: #aa0404;
-        cursor: pointer;
-        background-color: #ffffff;
-        display: block;
-        transition: 0.1s;
-    }    
-</style>

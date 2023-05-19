@@ -86,10 +86,10 @@
   <table id="devices-table" class="devices">
     <thead>
       <th>
-        Device Type
+        Device ID
       </th>
       <th>
-        Device ID
+        Device Type
       </th>
       <th>
         Date Added
@@ -100,6 +100,9 @@
       <th>
         In Circulation
       </th>
+      <th>
+        Notes
+      </th>
     </thead>
     <tbody>
       {% for row in rows %}
@@ -109,6 +112,7 @@
           <td>{{ row[2] }}</td>
           <td>{{ row[3] }}</td>
           <td>{{ row[4] }}</td>
+          <td>{{ row[5] }}</td>
       </tr>
       {% endfor %}
 
@@ -139,7 +143,6 @@
   });
 });
 </script>
-
 <script>
  function validateInput(input) {
    input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
@@ -149,7 +152,6 @@
    }
  }
 </script>
-
 <style>
   .primary-container {
     position: relative;
