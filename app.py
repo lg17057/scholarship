@@ -3,10 +3,8 @@ from select import select
 import sqlite3 as sql
 from sqlite3 import *
 #used for hashing
-import hashlib
 import re
 #for generating secrect key
-import os
 #used for data on dates
 from datetime import date, timedelta
 import datetime
@@ -23,11 +21,9 @@ import io
 from io import BytesIO
 #used for generating barcode
 import barcode
-import binascii
 from barcode.writer import ImageWriter
 import csv
-import cv2
-from pyzbar import pyzbar
+import bcrypt
 
 #defines static file path
 app = Flask(__name__, static_url_path='/static')   
@@ -154,15 +150,17 @@ def homeroom_data():
 
 #example of date specific viewing; /rental-logs/11-04 
 
-
 @app.route('/rental-logs/<string:date>')
 def rental_logs_date(date):
     with opendb('logs.db') as c:
         c.execute("SELECT * FROM device_logs WHERE date_borrowed LIKE ?", (f"%{date}%",))
         rows = c.fetchall()
         loginstatus = session['logged_in']
+
+        if not re.match(r'\d{2}-\d{2}', date):
+            # checks for any invalid date format
+            return render_template('rental_logs.html',rows=rows, message="Invalid date format. Please use dd-mm format.", loginstatus=loginstatus )
         return render_template('rental_logs.html', rows=rows, message="Viewing rental logs for {}".format(date), loginstatus=loginstatus)
- 
 
 
 @app.route('/rental-logs/', methods=['GET', 'POST'])
@@ -190,9 +188,6 @@ def date_id_logs(device_type, device_id):
         loginstatus = session['logged_in']
         message = "Viewing rental logs for {} ID {}".format(device_type, device_id)
         return render_template('rental_logs.html', loginstatus=loginstatus, rows=rows, message=message)
-
-
-
 
 
 @app.route('/rental-logs/<string:device_type>/')
@@ -485,108 +480,98 @@ def logout():
         session['user_id'] = "Invalid"
         loginstatus = session['logged_in']
         return render_template('/message.html', message="You are already not logged in", loginstatus=loginstatus, message_btn="Login",message_link="login-page")
+    
 
-#Used for loggin the user in
 @app.route('/login-page')
 def login_page():
-    loginstatus = session['logged_in']
+    loginstatus = session.get('logged_in', False)
     return render_template('/login_page.html', loginstatus=loginstatus)
 
-#used in conjunction with login page to update login related variables
 def login_success(teacher_name, last_login):
     with opendb('main.db') as c:
         c.execute("SELECT logins FROM users WHERE teacher_name = ?", (teacher_name,))
         c.execute("UPDATE users SET logins = logins + 1 WHERE teacher_name = ?", (teacher_name,))
-        #updates number of successful logins for a teacher
-        c.execute("UPDATE users SET last_login = ? WHERE teacher_name = ?", (last_login, teacher_name))
-        #sets last_login value to current date and time 
+        c.execute("UPDATE users SET last_login = ?", (last_login,))
 
-#login page post that confirms user details and then logs them in
-@app.route('/login-page', methods=['POST'])
+@app.route('/login-page', methods=["POST"])
 def login_page_post():
     with opendb('main.db') as c:
-        teacher_name = request.form['teacher_name']
+        input_value = request.form['teacher_name']  # Get the input value from the form
         passkey = request.form['password']
-        c.execute('SELECT teacher_name,password FROM users WHERE teacher_name = ?', (teacher_name,))
-        user = c.fetchone()
-        #passkey = decoded password with hash and salt
-        #checks if the user data is correct
-        if user[0] == teacher_name and user[1] == passkey:
-            session['logged_in'] = True
-            session['user_id'] = teacher_name
-            last_login = datetime.datetime.now().strftime("%d-%m %H:%M")
-            login_success(teacher_name, last_login)
-            loginstatus = session.get('logged_in', False)
-            return render_template('message.html', message='Login Success', loginstatus=loginstatus, message_btn="Admin_Page",message_link="admin")
-        else:
-            session['logged_in'] = False
-            session['user_id'] = 'Invalid'
-            loginstatus = session.get('logged_in', False)
-            return render_template('message.html', message='Login Failure', loginstatus=loginstatus, message_btn="Login",message_link="login-page")
         
-def is_valid_email(email):
-    """
-    Check if the email address is valid.
-    """
-    # Regular expression for email validation
-    pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
-    return re.match(pattern, email) is not None
+        # Check if the input value is an email
+        is_email = re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', input_value)
 
+        # Use appropriate query based on whether the input value is an email or username
+        if is_email:
+            c.execute('SELECT * FROM users WHERE email=?', (input_value,))
+        else:
+            c.execute('SELECT * FROM users WHERE teacher_name=?', (input_value,))
+
+        user_data = c.fetchone()
+
+        if user_data:
+            stored_password_bytes = user_data[3]  
+            stored_salt_bytes = user_data[4]  
+
+            stored_password = stored_password_bytes.decode('utf-8')
+            stored_salt = stored_salt_bytes.decode('utf-8')
+
+            if bcrypt.checkpw(passkey.encode('utf-8'), stored_password.encode('utf-8')):
+                session['logged_in'] = True
+                session['user_id'] = user_data[1]  # Assuming the username or email is at index 1
+                last_login = datetime.datetime.now().strftime("%d-%m %H:%M")
+                login_success(user_data[1], last_login)  # Assuming the username or email is at index 1
+                loginstatus = session['logged_in']
+                return render_template('message.html', message="Login Success", loginstatus=loginstatus)
+
+        session['logged_in'] = False
+        session['user_id'] = "Invalid"
+        loginstatus = session['logged_in']
+        return render_template('message.html', message="Login Failure", loginstatus=loginstatus)
 
 @app.route('/signup-page')
 def signup_page():
-    loginstatus = session['logged_in']
+    loginstatus = session.get('logged_in', False)
     return render_template('/signup_page.html', loginstatus=loginstatus)
 
-#used to create a new account
 @app.route('/signup-page', methods=['POST'])
 def signup_page_post():
     with opendb('main.db') as c:
-
-        if request.method == 'POST':
+        if request.method == "POST":
             teacher_name = request.form['teacher_name']
             email = request.form['email']
-            password = request.form['password']
-            confirm_password = request.form['confirm_password']
+            passkey = request.form['password']
 
-            # Check if teacher name already exists in the database
-            c.execute('SELECT * FROM users WHERE teacher_name = ?', (teacher_name,))
-            user = c.fetchone()
-            if user:
-                message = 'Teacher name already exists!'
-                return render_template('message.html', message=message, message_btn="Sign_Up",message_link="signup-page")
+            # Check if user already exists
+            cursor = c.execute('SELECT teacher_name FROM users WHERE teacher_name=? OR email=?', (teacher_name, email,))
+            user_check = cursor.fetchone()
 
-            # Check if email is valid and not already in the database
-            c.execute('SELECT * FROM users WHERE email = ?', (email,))
-            user = c.fetchone()
-            if not is_valid_email(email):
-                message = 'Invalid email address!'
-                return render_template('message.html', message=message, message_btn="Sign_Up",message_link="signup-page")
-            elif user:
-                message = 'Email already exists!'
-                return render_template('message.html', message=message, message_btn="Sign_Up",message_link="signup-page")
+            if user_check:  # if user already exists
+                loginstatus = session.get('logged_in', False)
+                return render_template('message.html',
+                                       message='Sign Up failure. User with the same name or email already exists.',
+                                       loginstatus=loginstatus)
 
-            # Check if password and confirm_password match
-            if password != confirm_password:
-                message = 'Passwords do not match!'
-                return render_template('message.html', message=message, message_btn="Sign_Up",message_link="signup-page")
+            else:  # if user does not exist
+                now = datetime.datetime.now()
+                date_created = now.strftime("%d-%m %H:%M")
+                salt = bcrypt.gensalt()
+                hashed_password = bcrypt.hashpw(passkey.encode('utf-8'), salt)
 
-            # Hash the password and insert the user into the database
-            salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
-            hash_password = 'blablah'
-            hashed_password = hash_password(password, salt)
-            last_login = datetime.datetime.now().strftime("%d-%m %H:%M")
-            c.execute('INSERT INTO users (teacher_name, email, password, salt, logins, date_created, last_login) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                          (teacher_name, email, hashed_password, salt, 0, "N/A", last_login))
-            message = 'Sign up successful!'
-            loginstatus = session['logged_in']
-            return render_template('message.html', message=message, loginstatus=loginstatus , message_btn="Login",message_link="login-page")
+                # Store the salt and hashed password as bytes
+                salt_bytes = salt
+                hashed_password_bytes = hashed_password
+
+                c.execute(
+                    'INSERT INTO users (teacher_name, email, password, salt, logins, date_created, last_login) '
+                    'VALUES (?, ?, ?, ?, ?, ?, ?)',
+                    (teacher_name, email, hashed_password_bytes, salt_bytes, 0, date_created, "N/A"))
+                loginstatus = session.get('logged_in', False)
+                return render_template('message.html', message="Sign Up success", loginstatus=loginstatus)
+
         else:
-            loginstatus = session['logged_in']
-            return render_template('/signup_page.html', loginstatus=loginstatus)
-
-
-
+            return render_template('signup_page.html', loginstatus=loginstatus)
 
 
 #Custom message page

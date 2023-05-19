@@ -30,21 +30,35 @@
 <h1  class="main_title">Register</h1>
 <title>Register Account</title>
 <div class="signup-container">
-  <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img class="login-logo-shc"  src="{{ url_for('static', filename='shc-log1.svg') }}"  width="325px" height="72px" alt="sacred heart logo"></a>
+  <a title="Home Page" style="cursor: pointer;" onclick="window.location.href='/'"><img class="login-logo-shc" src="{{ url_for('static', filename='shc-log1.svg') }}" width="325px" height="72px" alt="sacred heart logo"></a>
   <p id="sign-in">Create Account</p>
 
-    <form action="/signup-page" method="POST">
-      <label for="teacher_name" id="username-label">Username:</label><br>
-      <input type="text" id="teacher_name" name="teacher_name" ><br>
-      <label for="email" id="email-label">Email:</label><br>
-      <input type="email" id="email" name="email" ><br>
-      <label for="password" id="password-label">Password:</label><br>
-      <input type="password" id="password" name="password" ><br>
-      <label for="confirm_password" id="confirm-password-label">Confirm Password:</label><br>
-      <input type="password" id="confirm-password" name="confirm_password"><br>
-      <input type="submit" value="Register" id="registerbtn">
-    </form>
-    <input type="submit" value="Login" id="loginbtn" onclick="window.location.href='/login-page'">
-    <button  class="button-back" id="register-back" onclick="window.location.href='/'">Back</button>
+  <form action="/signup-page" method="POST" onsubmit="return validateForm()">
+    <label for="teacher_name" id="username-label">Username:</label><br>
+    <input type="text" id="teacher_name" name="teacher_name" required><br>
+    <label for="email" id="email-label">Email:</label><br>
+    <input type="email" id="email" name="email" required><br>
+    <label for="password" id="password-label">Password:</label><br>
+    <input type="password" id="password" name="password" required><br>
+    <label for="confirm_password" id="confirm-password-label">Confirm Password:</label><br>
+    <input type="password" id="confirm-password" name="confirm_password" required><br>
+    <input type="submit" value="Register" id="registerbtn">
+  </form>
+  
+  <input type="submit" value="Login" id="loginbtn" onclick="window.location.href='/login-page'">
+  <button class="button-back" id="register-back" onclick="window.location.href='/'">Back</button>
+</div>
 
-  </div>
+<script>
+function validateForm() {
+  var password = document.getElementById("password").value;
+  var confirmPassword = document.getElementById("confirm-password").value;
+  
+  if (password !== confirmPassword) {
+    alert("Passwords do not match!");
+    return false;
+  }
+  
+  return true;
+}
+</script>

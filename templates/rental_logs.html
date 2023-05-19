@@ -31,7 +31,6 @@
           {% endif %}
         </div>
       </head>
-
       <button class="openbtn" title="Open Nav" onclick="toggleNav()">☰ </button>
       <div class="sidebar" id="mySidebar">
         <button class="closebtn" id="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
@@ -175,6 +174,32 @@
   </div>
 </div>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style>
   .main_title {
   position: relative;
@@ -207,11 +232,11 @@ left: -7px;
    $(document).ready(function() {
    $('#devices-table').DataTable({
      paging: true,
-     pageLength: 20, // Number of rows per page
-     lengthMenu: [10, 20, 50, 100], // Options for rows per page dropdown
-     searching: true, // Enable search functionality
-     ordering: true, // Enable column sorting
-     info: true, // Show information about current page and total entries
+     pageLength: 20, // num of rows / page
+     lengthMenu: [10, 20, 50, 100], 
+     searching: true, 
+     ordering: true, 
+     info: true, 
      language: {
        paginate: {
          first: 'First',
@@ -226,22 +251,24 @@ left: -7px;
 </script>
 <script>
   function validateInput(input) {
-    input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
-    input.value = input.value.slice(0, 4); // Limit to 4 digits
-    if (input.value < 0) {
-      input.value = ''; // Clear negative values
-    }
+  input.value = input.value.replace(/[^0-9]/g, ''); // remove non-digit
+  input.value = input.value.slice(0, 4); // limit to 4 digits
+  if (input.value < 0) {
+    input.value = ''; // clear negative 
   }
-</script>
-<script>
-  function validateInput(input) {
-    input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
-    input.value = input.value.slice(0, 4); // Limit to 4 digits
-    if (input.value < 0) {
-      input.value = ''; // Clear negative values
-    }
+}
+function submitForm() {
+  let devicepicker = document.getElementById('devicepicker');
+  let idpicker = document.querySelector('.idpicker');
+  if (devicepicker.value === "") {
+    alert("Please select a device type.");
+    return false; // prevent submission
   }
-
+  if (idpicker.value !== "" && idpicker.value.length !== 4) {
+    alert("Please enter a four-digit ID.");
+    return false; // prevent submission
+  }
+}
   function filterTable() {
     let datepicker = document.getElementById("datepicker");
     let date = datepicker.value;
@@ -254,7 +281,7 @@ left: -7px;
     let [year, month, day] = date.split("-");
     let formattedDate = `${day}-${month}`;
 
-    // Check if data exists for the selected date
+    // check if data exists for date
     fetch('/check-data/' + formattedDate)
       .then(response => response.json())
       .then(data => {
