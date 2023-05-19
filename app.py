@@ -187,9 +187,24 @@ def date_id_logs(device_type, device_id):
     with opendb('logs.db') as c:
         c.execute("SELECT * from device_logs WHERE device_type = ? AND device_id = ?", (device_type, device_id,))
         rows = c.fetchall()
-        loginstatus = session.get('logged_in', False)
+        loginstatus = session['logged_in']
         message = "Viewing rental logs for {} ID {}".format(device_type, device_id)
         return render_template('rental_logs.html', loginstatus=loginstatus, rows=rows, message=message)
+
+
+
+
+
+@app.route('/rental-logs/<string:device_type>/')
+def device_type_logs(device_type):
+    with opendb('logs.db') as c:
+        c.execute("SELECT * FROM device_logs WHERE device_type = ?",(device_type,))
+        rows = c.fetchall()
+        loginstatus = session['logged_in']
+        message = "Viewing rental logs for {}s".format(device_type)
+        return render_template('rental_logs.html', loginstatus=loginstatus, rows=rows, message=message)
+
+
 
 @app.route('/check-data/<string:date>')
 def check_data_availability(date):
