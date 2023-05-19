@@ -81,137 +81,158 @@
         </div>  
       </div>
 </html>
-<title>New Log</title>
-<div class="primary-container">
-  <h1 class="main_title">Device Submission Form</h1>
-    <div class="button-container">
-      <button class="button" id="left-button" title="Rent a Device">Rent Device</button>
-      <button class="button" id="right-button" title="Return a Device">Return Device</button>
-    </div>
-    <div class="modal-container" id="modal-container-left">
-      <div class="modal" id="modal-left">
-        <div class="modal-header">
-          <h3 id="modal-title-left"></h3>
-          <button class="modal-close" title="Close Modal" id="close-button-left">&times;</button>
-        </div>
-        <div class="modal-content">
-          <div class="newlog-container">
-  	        <form method="POST" action="/new-log">
-  	        	<label for="student_name">Student Name:</label>
-  	        	<input type="text" id="student_name" name="student_name" pattern="[A-Za-z ]+" required><br>
-            
-  	        	<label for="homeroom">Homeroom:</label>
-  	        	<input type="text" id="homeroom" name="homeroom" pattern="^[7-9]|1[0-3][A-Z]{3}$" required><br>
-            
-  	        	<label for="device_id">Device ID:</label>
-  	        	<input  type="number" id="device_id" oninput="validateInput(this)" name="device_id"><br>
-            
-  	        	<label for="reason_borrowed">Reason Borrowed:</label>
-  	        	<input type="text" id="reason_borrowed" name="reason_borrowed" required max="60"><br>
-            
-  	        	<label for="period_borrowed">Period Borrowed:</label>
-  	        	<select id="period_borrowed" name="period_borrowed">
-                <option selected value="Homeroom">Homeroom</option>
-  	        		<option value="1">1</option>
-  	        		<option value="2">2</option>
-  	        		<option value="3">3</option>
-  	        		<option value="4">4</option>
-  	        		<option value="5">5</option>
-                <option value="6">6</option>
-  	        	</select><br>
-            
-  	        	<label for="period_returned">Period Returned:</label>
-  	        	<select id="period_returned" name="period_returned">
-  	        		<option value="1">1</option>
-  	        		<option value="2">2</option>
-  	        		<option value="3">3</option>
-  	        		<option value="4">4</option>
-  	        		<option value="5">5</option>
-                <option value="6">6</option>
-  	        		<option selected value="Not Returned">Not Returned</option>
-  	        	</select><br>
-            
-  	        	<label for="device_type">Device Type:</label>
-  	        	<select required id="device_type" name="device_type">
-                <option value="">-- Select --</option>
-  	        		<option value="Laptop">Laptop</option>
-  	        		<option value="Chromebook">Chromebook</option>
-  	        		<option value="iPad">iPad</option>
-  	        	</select><br>
-            
-              <label for="checkbox_id">Teacher Signoff:</label>
-              <select required id="teacher_signoff" name="teacher_signoff">
-                  <option value="Confirmed">Confirmed</option>
-                  <option selected value="Unconfirmed">Unconfirmed</option>
-              </select><br>
+<title>New Log</title>  
+<h1 class="main_title">Device Submission Form</h1>
 
-              <label for="reason_borrowed">Notes:</label>
-              <input type="text" id="notes" name="notes"><br><hr>
-            
-  	        	<input type="submit" title="Confirm Selection" value="Submit">
-  	        </form>
-          </div>
-        </div>
+<div class="primary-container">
+  <div class="button-container">
+    <button class="button" id="left-button" title="Rent a Device">Rent Device</button>
+    <button class="button" id="right-button" title="Return a Device">Return Device</button>
+  </div>
+<!------------------------------------------------------------------------------------------------------------------------>
+<!------------------------------------------------------------------------------------------------------------------------>
+  <div class="modal-container" id="modal-container-left">
+    <div class="modal" id="modal-left">
+      <div class="modal-header">
+        <h1 id="modal-title-left">Rent Device</h1>
+        <button class="modal-close" title="Close Modal" id="close-button-left">×</button>
       </div>
-    </div>
-    <div class="modal-container" id="modal-container-right">
-      <div class="modal" id="modal-right">
-        <div class="modal-header">
-          <h3 id="modal-title-right"></h3>
-          <button class="modal-close" title="Close Modal" id="close-button-right">&times;</button>
-        </div>
-        <div class="modal-content">
-          <p>Return Device </p>
+      <div class="modal-content">
+        <div class="newlog-container">
+          <form>
+            <input type="button" class="button" id="confirm-button-left" value="Confirm" title="Confirm Return">
+
+          </form>
+          <button id="not-working-rent">Not Working?</button>
         </div>
       </div>
     </div>
   </div>
-  
+<!------------------------------------------------------------------------------------------------------------------------>
+<!------------------------------------------------------------------------------------------------------------------------>
+  <div class="modal-container" id="modal-container-right">
+    <div class="modal" id="modal-right">
+      <div class="modal-header">
+        <h1 id="modal-title-right">Return Device</h1>
+        <button class="modal-close" title="Close Modal" id="close-button-right">×</button>
+      </div>
+      <div class="modal-content">
+          <form>
+            <input type="button" class="button" id="confirm-button-right" value="Confirm" title="Confirm Return">
 
+          </form>
+          <button id="not-working-return">Not Working?</button>
+      </div>
+    </div>
+  </div>
+<!------------------------------------------------------------------------------------------------------------------------>
+<!------------------------------------------------------------------------------------------------------------------------>
+  <div class="modal-container" id="modal-container-confirm">
+    <div class="modal" id="modal-confirm">
+      <div class="modal-header">
+        <h1 id="modal-title-confirm">Entering Data Manually</h1>
+        <button class="modal-close" title="Close Modal" id="close-button-confirm">×</button>
+      </div>
+      <div class="modal-content">
+        <form method="POST" action="/new-log">
+          <!-- Form fields -->
 
-  <script>
-    /* Modal Script */ /*Uses event listeners instead of onclick*/
-    const leftButton = document.getElementById("left-button");
-    const rightButton = document.getElementById("right-button");
-    const modalContainerLeft = document.getElementById("modal-container-left");
-    const modalLeft = document.getElementById("modal-left");
-    const modalTitleLeft = document.getElementById("modal-title-left");
-    const closeButtonLeft = document.getElementById("close-button-left");
-    const modalContainerRight = document.getElementById("modal-container-right");
-    const modalRight = document.getElementById("modal-right");
-    const modalTitleRight = document.getElementById("modal-title-right");
-    const closeButtonRight = document.getElementById("close-button-right");
-  
-    leftButton.addEventListener("click", () => {
-      modalTitleLeft.textContent = "Rent a Device";
-      modalContainerLeft.style.display = "block";
-    });
-  
-    rightButton.addEventListener("click", () => {
-      modalTitleRight.textContent = "Return Device";
-      modalContainerRight.style.display = "block";
-    });
-  
-    closeButtonLeft.addEventListener("click", () => {
-      modalContainerLeft.style.display = "none";
-    });
-  
-    closeButtonRight.addEventListener("click", () => {
-      modalContainerRight.style.display = "none";
-    });
-  
-    window.addEventListener("click", (event) => {
-      if (event.target === modalContainerLeft) {
-        modalContainerLeft.style.display = "none";
-      }
-      if (event.target === modalContainerRight) {
-        modalContainerRight.style.display = "none";
-      }
-    });
-  
-  </script>  
+          <input type="button" class="button" id="confirm-button-left2" value="Confirm" title="Confirm Selection">
+        </form>
+      </div>
+    </div>
+  </div>
+<!------------------------------------------------------------------------------------------------------------------------>
+<!------------------------------------------------------------------------------------------------------------------------>
+  <div class="modal-container" id="modal-container-return">
+    <div class="modal" id="modal-return">
+      <div class="modal-header">
+        <h1 id="modal-title-return">Entering Data Manually</h1>
+        <button class="modal-close" title="Close Modal" id="close-button-return">×</button>
+      </div>
+      <div class="modal-content">
+        <form method="POST" action="/new-log">
+          <!-- Form fields -->
+
+          <input type="button" class="button" id="confirm-button-right2" value="Confirm" title="Confirm Selection">
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
+<style>
+  .primary-container {
+    position: relative;
+    top: -120px;
+  }
+</style>
+<script>
+const leftButton = document.getElementById("left-button");
+const rightButton = document.getElementById("right-button");
+const modalContainerLeft = document.getElementById("modal-container-left");
+const modalLeft = document.getElementById("modal-left");
+const closeButtonLeft = document.getElementById("close-button-left");
+const modalContainerRight = document.getElementById("modal-container-right");
+const modalRight = document.getElementById("modal-right");
+const closeButtonRight = document.getElementById("close-button-right");
+const notWorkingRentButton = document.getElementById("not-working-rent");
+const notWorkingReturnButton = document.getElementById("not-working-return");
+const modalContainerConfirm = document.getElementById("modal-container-confirm");
+const modalConfirm = document.getElementById("modal-confirm");
+const closeButtonConfirm = document.getElementById("close-button-confirm");
+const modalContainerReturn = document.getElementById("modal-container-return");
+const modalReturn = document.getElementById("modal-return");
+const closeButtonReturn = document.getElementById("close-button-return");
 
+leftButton.addEventListener("click", () => {
+  modalContainerLeft.style.display = "block";
+});
+
+rightButton.addEventListener("click", () => {
+  modalContainerRight.style.display = "block";
+});
+
+notWorkingRentButton.addEventListener("click", () => {
+  modalContainerConfirm.style.display = "block";
+});
+
+notWorkingReturnButton.addEventListener("click", () => {
+  modalContainerReturn.style.display = "block";
+});
+
+closeButtonLeft.addEventListener("click", () => {
+  modalContainerLeft.style.display = "none";
+});
+
+closeButtonRight.addEventListener("click", () => {
+  modalContainerRight.style.display = "none";
+});
+
+closeButtonConfirm.addEventListener("click", () => {
+  modalContainerConfirm.style.display = "none";
+});
+
+closeButtonReturn.addEventListener("click", () => {
+  modalContainerReturn.style.display = "none";
+});
+
+window.addEventListener("click", (event) => {
+  if (event.target === modalContainerLeft) {
+    modalContainerLeft.style.display = "none";
+  }
+  if (event.target === modalContainerRight) {
+    modalContainerRight.style.display = "none";
+  }
+  if (event.target === modalContainerConfirm) {
+    modalContainerConfirm.style.display = "none";
+  }
+  if (event.target === modalContainerReturn) {
+    modalContainerReturn.style.display = "none";
+  }
+});
+
+
+</script>  
 <script>
   function validateInput(input) {
     input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters

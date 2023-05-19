@@ -26,6 +26,8 @@ import barcode
 import binascii
 from barcode.writer import ImageWriter
 import csv
+import cv2
+from pyzbar import pyzbar
 
 #defines static file path
 app = Flask(__name__, static_url_path='/static')   
@@ -607,6 +609,43 @@ def service_unavailable_error(error):
     return render_template('error_page.html',error_code="503", error_message="Service Unavailable"), 503
 
 
+
+#camera = cv2.VideoCapture(0)
+#
+#def gen_frames():
+#    while True:
+#        success, frame = camera.read()  # Read the camera frame
+#        if not success:
+#            break
+#        else:
+#            # Convert the frame to grayscale for barcode detection
+#            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+#            # Detect barcodes in the grayscale frame
+#            barcodes = pyzbar.decode(gray)
+#
+#            for barcode in barcodes:
+#                # Extract the barcode data and type
+#                barcode_data = barcode.data.decode("utf-8")
+#                barcode_type = barcode.type
+#
+#                # Draw a rectangle around the barcode
+#                (x, y, w, h) = barcode.rect
+#                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+#
+#                # Display the barcode data and type on the frame
+#                cv2.putText(frame, f"{barcode_data} ({barcode_type})", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+#
+#            # Convert the frame to JPEG format
+#            ret, buffer = cv2.imencode('.jpg', frame)
+#            frame = buffer.tobytes()
+#
+#            # Yield the frame for streaming
+#            yield (b'--frame\r\n'
+#                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+#
+#@app.route('/video_feed')
+#def video_feed():
+#    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 # Responsible for running the website
