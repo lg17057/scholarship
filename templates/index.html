@@ -91,6 +91,30 @@
               <h2 class="title" id="checkout-title">Checkouts</h2>
             </div>
             <div class="content">
+              <div class="table-container-checkout">
+                <table class="devices" id="checkouts-table">
+                  <thead>
+                    <th>Date Borrowed</th>
+                    <th>Device Type</th>
+                    <th>Device ID</th>
+                    <th>Student Name</th>
+                    <th>Homeroom</th>
+                    <th>Period Borrowed</th>
+                  </thead>
+                  <tbody>
+                    {% for row in row1 %}
+                    <tr>
+                      <td>{{ row[0] }}</td>
+                      <td>{{ row[1] }}</td>
+                      <td>{{ row[2] }}</td>
+                      <td>{{ row[3] }}</td>
+                      <td>{{ row[4] }}</td>
+                      <td>{{ row[5] }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
           
@@ -151,6 +175,27 @@
 <script>
   $(document).ready(function() {
   $('#overdue-table').DataTable({
+    paging: false,
+    pageLength: 20, // num of rows / page
+    lengthMenu: [10, 20, 50, 100], 
+    searching: true, 
+    ordering: true, 
+    info: false, 
+    language: {
+      paginate: {
+        first: 'First',
+        last: 'Last',
+        next: '&raquo;',
+        previous: '&laquo;'
+      },
+      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+    }
+  });
+});
+</script>
+<script>
+  $(document).ready(function() {
+  $('#checkouts-table').DataTable({
     paging: false,
     pageLength: 20, // num of rows / page
     lengthMenu: [10, 20, 50, 100], 

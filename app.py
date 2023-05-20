@@ -59,19 +59,19 @@ def main():
         if loginstatus:
             today = date.today()
             formatted_date = today.strftime("%d-%m")
-            c.execute("SELECT COUNT(*) FROM device_logs WHERE date_borrowed = ?",(formatted_date,))
+            c.execute("SELECT COUNT(*) FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ?",(formatted_date,))
             row1_descriptor = c.fetchone()[0]
-            c.execute("SELECT COUNT(*) FROM device_logs WHERE date_borrowed = ? AND period_returned NOT IN ('Not Returned')",(formatted_date,))
+            c.execute("SELECT COUNT(*) FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? AND period_returned NOT IN ('Not Returned')",(formatted_date,))
             row2_descriptor = c.fetchone()[0]
-            c.execute("SELECT COUNT(*) FROM device_logs WHERE date_borrowed = ? and teacher_signoff = ?",(formatted_date,"Confirmed"))
+            c.execute("SELECT COUNT(*) FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? and teacher_signoff = ?",(formatted_date,"Confirmed"))
             row3_descriptor = c.fetchone()[0]
-
             yesterday = date.today() - timedelta(days=1)
             formatted_yesterday = yesterday.strftime("%d-%m")
-            
-            c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE date_borrowed = ? AND date_borrowed < ?", (formatted_yesterday, date.today()))
+            c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? AND SUBSTR(date_borrowed, 1, 5) < ? AND period_returned = 'Not Returned'", (formatted_yesterday, date.today()))
             rows = c.fetchall()
-            return render_template('/index.html', row1_descriptor=row1_descriptor, row2_descriptor=row2_descriptor, row3_descriptor=row3_descriptor, message="Index Page", loginstatus=loginstatus, rows=rows)
+            c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? AND period_returned = ? AND teacher_signoff = ?", (formatted_date,"Not Returned","Unconfirmed"))
+            row1 = c.fetchall()
+            return render_template('/index.html', row1_descriptor=row1_descriptor, row2_descriptor=row2_descriptor, row3_descriptor=row3_descriptor, message="Index Page", loginstatus=loginstatus, rows=rows, row1=row1)
         else:
             session['logged_in'] = False
             session['user_id'] = False

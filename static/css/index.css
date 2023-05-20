@@ -235,31 +235,28 @@ body {
     left: 170px;
   }
   
-  .table-container {
-    position: relative;
-    top:20px;
-    height: 240px; /* Adjust the height as per your requirements */
-    overflow-y: auto;
-  }
-
-  #overdue-table {
+  #overdue-table,
+  #checkouts-table {
     table-layout: fixed;
     width: 100%;
   }
 
-  .table-container {
+  .table-container,
+  .table-container-checkout {
     position: relative;
     top: 0px;
-    height: 200px; /* Adjust the height as per your requirements */
+    height: 200px;
     overflow-y: auto;
   }
   
-  .table-container table {
+  .table-container table,
+  .table-container-checkout table {
     table-layout: fixed;
     width: 100%;
   }
   
-  .table-container thead {
+  .table-container thead,
+  .table-container-checkout thead {
     position: sticky;
     top: 0;
     background-color: #ffffff;
