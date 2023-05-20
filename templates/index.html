@@ -14,6 +14,8 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
@@ -83,8 +85,87 @@
     <body>
       <title>Index Page</title>
         <h1 class="main_title">{{message}}</h1>
-        <form action="/logout" method="get">
-        <input type="submit" value="Logout" id="logout-btn" class="logoutBtn" name="logout" >
-    </form>
+        <div class="primary-container">
+          <div class="card" id="checkout-card">
+            <div class="header" id="checkout-header">
+              <h2 class="title" id="checkout-title">Checkouts</h2>
+            </div>
+            <div class="content">
+            </div>
+          </div>
+          
+          <div class="card" id="overdue-card">
+            <div class="header" id="overdue-header">
+              <h2 class="title" id="overdue-title">Overdues</h2>
+            </div>
+            <div class="content">
+              <div class="table-container">
+                <table class="devices" id="overdue-table">
+                  <thead>
+                    <th>Date Borrowed</th>
+                    <th>Device Type</th>
+                    <th>Device ID</th>
+                    <th>Student Name</th>
+                    <th>Homeroom</th>
+                    <th>Period Borrowed</th>
+                  </thead>
+                  <tbody>
+                    {% for row in rows %}
+                    <tr>
+                      <td>{{ row[0] }}</td>
+                      <td>{{ row[1] }}</td>
+                      <td>{{ row[2] }}</td>
+                      <td>{{ row[3] }}</td>
+                      <td>{{ row[4] }}</td>
+                      <td>{{ row[5] }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div> 
+          <div  id="data-card">
+            <div id="data-header">
+              <h2 id="data-title">Rental Data Today</h2>
+            </div>
+            <div class="content">
+              <div class="data-row" id="row1">
+                <h2 class="datacard-header" id="row1-header">Total Rentals Today:</h2>
+                <h2 class="datacard-header" id="row1-descriptor">{{row1_descriptor}}</h2>
+              </div>
+              <div class="data-row" id="row2">
+                <h2 class="datacard-header" id="row2-header">Devices Returned:</h2>
+                <h2 class="datacard-header" id="row2-descriptor">{{row2_descriptor}}</h2>
+              </div>
+              <div class="data-row" id="row3">
+                <h2 class="datacard-header" id="row3-header">Devices Confirmed:</h2>
+                <h2 class="datacard-header" id="row3-descriptor">{{row3_descriptor}}</h2>
+              </div>
+            </div>
+          </div> 
+        </div>
     </body>
 </html>
+
+<script>
+  $(document).ready(function() {
+  $('#overdue-table').DataTable({
+    paging: false,
+    pageLength: 20, // num of rows / page
+    lengthMenu: [10, 20, 50, 100], 
+    searching: true, 
+    ordering: true, 
+    info: false, 
+    language: {
+      paginate: {
+        first: 'First',
+        last: 'Last',
+        next: '&raquo;',
+        previous: '&laquo;'
+      },
+      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+    }
+  });
+});
+</script>

@@ -1,0 +1,274 @@
+
+body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #f0eded;
+  }
+
+  
+
+/* Width and height of the scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #b8afaf;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #cebebe;
+  }
+  
+  .openbtn {
+    background-color: #f0eded;
+  }
+
+  .card {
+    width: 682px;
+    height: 281px;
+    background-color:#ffffff;
+    border: 1px solid rgb(251, 251, 251);
+    border-radius: 3px;
+  }
+  
+  .header {
+    height: 41px;
+    width: 582px;
+    background-color: #ffffff;
+  }
+  
+  .title {
+    color: black
+  }
+  
+  .content {
+    height: 219px;
+  }
+
+  #checkout-card {
+    position: relative;
+    top: -120px;
+    left: 50px;
+    z-index: -10;
+  }
+
+  #checkout-title {
+    color: black;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+    font-weight:300;
+    position: relative;
+    left: 15px;
+    top: -5px;
+  }
+
+  #checkout-header {
+    border-bottom: 1px solid #ccc;
+  }
+
+  #overdue-card {
+    position: relative;
+    top: -402.5px;
+    left: 760px;
+    z-index: 0;
+  }
+
+  #overdue-title {
+    color: black;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+    font-weight:300;
+    position: relative;
+    left: 10px;
+    top: -5px;
+  }
+
+  #overdue-header {
+    border-bottom: 1px solid #ccc;
+  }
+
+
+
+  #viewlogs {
+    background-color: #ffffff;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    z-index: 10000000000000;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  #viewlogs:hover {
+    background-color: #008000;
+    border: #008000 1px solid;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+
+
+  .main_title {
+    left: 50px;
+  }
+
+  
+  #data-card {
+    position: relative;
+    top: -380px;
+    left: 50px;
+    z-index: -10;
+    width: 1392px;
+    height: 215px;
+    background-color:#ffffff;
+    border: 1px solid rgb(251, 251, 251);
+    border-radius: 3px;
+  }
+
+  #data-title {
+    color: black;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+    font-weight:300;
+    position: relative;
+    left: 10px;
+    top: -5px;
+  }
+
+  #data-header {
+    border-bottom: 1px solid #2f2d2d;
+    height: 41px;
+    z-index: -11;
+    width: 1193px;
+    background-color: #ffffff;
+  }
+
+  .data-row {
+    height: 40px;
+  }
+
+  #row1 {
+    background-color: #f1f1f1;
+    position: relative;
+    top: -20px;
+  }
+
+  #row2 {
+    background-color: #ffffff;
+    position: relative;
+    top: -20px;
+  }
+ 
+  #row3 {
+    background-color: #f1f1f1;
+    position: relative;
+    top: -50px;
+  }
+
+  #row4 {
+    background-color: #ffffff;
+    position: relative;
+  }
+
+  #row5 {
+    background-color: #f1f1f1;
+    position: relative;
+  }
+
+  #viewlogs {
+    position: relative;
+    top: -45px;
+    left: 1050px;
+  }
+
+  .datacard-header {
+    font-weight:300;
+    font-size: 19px;
+  }
+
+  #row1-header {
+    position: relative;
+    top: 5px;
+    left: 5px;
+  }
+
+  #row1-descriptor {
+    position: relative;
+    font-weight: 400;
+    top: -35px;
+    left: 170px;
+  }
+
+  #row2-header {
+    position: relative;
+    top: -10px;
+    left: 5px;
+  }
+
+  #row2-descriptor {
+    position: relative;
+    font-weight: 400;
+    top: -50px;
+    left: 160px;
+  }
+
+  #row3-header {
+    position: relative;
+    top: 5px;
+    left: 5px;
+  }
+
+  #row3-descriptor {
+    position: relative;
+    font-weight: 400;
+    top: -35px;
+    left: 170px;
+  }
+  
+  .table-container {
+    position: relative;
+    top:20px;
+    height: 240px; /* Adjust the height as per your requirements */
+    overflow-y: auto;
+  }
+
+  #overdue-table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .table-container {
+    position: relative;
+    top: 0px;
+    height: 200px; /* Adjust the height as per your requirements */
+    overflow-y: auto;
+  }
+  
+  .table-container table {
+    table-layout: fixed;
+    width: 100%;
+  }
+  
+  .table-container thead {
+    position: sticky;
+    top: 0;
+    background-color: #ffffff;
+    z-index: 1;
+  }
+  
+  
+  
+  
+  
+  
+  

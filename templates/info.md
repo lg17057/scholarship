@@ -172,3 +172,7 @@ admin page styling fixed fire side/top nav and buttons on the page
 sign up page css fixed as a result of user feedback
 -
 trying to fix issue where i cant see the confirm selection button for device id and type picker on rental logs page 
+fixed this issue
+--- 
+
+working on the system that the librarika website uses that displays overdues and checkouts (rentals)
