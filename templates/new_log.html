@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/new_log.css') }}">
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
@@ -134,11 +134,55 @@
         <button class="modal-close" title="Close Modal" id="close-button-confirm">×</button>
       </div>
       <div class="modal-content">
-        <form method="POST" action="/new-log">
-          <!-- Form fields -->
-
-          <input type="button" class="button" id="confirm-button-left2" value="Confirm" title="Confirm Selection">
-        </form>
+        <div id="form-content">
+          <form method="POST" action="/new-log">
+            <!-- Form fields -->
+            <label for="student_name">Full Name:</label><br>
+            <input type="text" class="input-field" id="student_name" name="student_name" placeholder="Full Name" required>
+            <br>
+            <div id="student-id-div-rent">
+              <label for="student_name">Student ID:</label><br>
+              <input type="number" class="input-field" id="student_id" name="student_id" placeholder="Student ID" required  oninput="validateID(this)"  >
+            </div>
+            <br>
+            <div id="homeroom-div-rent">
+              <label for="student_name">Homeroom:</label><br>
+              <input  type="text" class="input-field" id="homeroom" name="homeroom" placeholder="Homeroom" required>
+              <br>
+            </div>
+            <label for="device_id" id="labeldeviceid">Device Data:</label><br>
+            <div class="select-container">
+              <select id="device_type" name="device_type" required>
+                <option selected value="">Device Type:</option>
+                <option value="iPad">iPad</option>
+                <option value="Laptop">Laptop</option>
+                <option value="Chromebook">Chromebook</option>
+              </select>
+            </div>
+		        <input  required type="number"  oninput="validateInput(this)"   id="device_id" class="input-field" name="device_id" placeholder="Device ID">
+            <br>
+            <div id="reason_borrowed-div-rental">
+              <label for="reason_borrowed">Reason Borrowed:</label><br>
+		          <input type="text" id="reason_borrowed" name="reason_borrowed" placeholder="Reason..." class="input-field"><br>
+              <br>
+            </div>
+            <div id="period_borrowed-div-rental">
+              <label for="period_borrowed">Period Borrowed:</label><br>
+              <div class="select-container1">
+		            <select id="period_borrowed" name="period_borrowed">
+                  <option selected value="Homeroom">Homeroom</option>
+		            	<option value="1">1</option>
+		            	<option value="2">2</option>
+		            	<option value="3">3</option>
+		            	<option value="4">4</option>
+		            	<option value="5">5</option>
+                  <option value="6">6</option>
+                </select>
+              </div>
+            </div>
+            <input type="button" class="button" id="confirm-button-left2" value="Confirm" title="Confirm Selection">
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -150,10 +194,48 @@
         <h1 id="modal-title-return">Entering Data Manually</h1>
         <button class="modal-close" title="Close Modal" id="close-button-return">×</button>
       </div>
-      <div class="modal-content">
+      <div id="form-content">
         <form method="POST" action="/new-log">
           <!-- Form fields -->
-
+          <label for="student_name">Full Name:</label><br>
+          <input type="text" class="input-field" id="student_name" name="student_name" placeholder="Full Name" required>
+          <br>
+          <div id="student-id-div-rent">
+            <label for="student_name">Student ID:</label><br>
+            <input type="number" class="input-field" id="student_id" name="student_id" placeholder="Student ID" required  oninput="validateID(this)"  >
+          </div>
+          <br>
+          <div id="homeroom-div-rent">
+            <label for="student_name">Homeroom:</label><br>
+            <input  type="text" class="input-field" id="homeroom" name="homeroom" placeholder="Homeroom" required>
+            <br>
+          </div>
+          <label for="device_id" id="labeldeviceid">Device Data:</label><br>
+          <div class="select-container">
+            <select id="device_type" name="device_type" required>
+              <option selected value="">Device Type:</option>
+              <option value="iPad">iPad</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Chromebook">Chromebook</option>
+            </select>
+          </div>
+          <input  required type="number"  oninput="validateInput(this)"   id="device_id" class="input-field" name="device_id" placeholder="Device ID">
+          <br>
+          
+          <div id="period_returned-div-rental">
+            <label for="period_borrowed">Period Returned:</label><br>
+            <div class="select-container1">
+              <select id="period_borrowed" name="period_returned">
+                <option selected value="Homeroom">Homeroom</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+            </div>
+          </div>
           <input type="button" class="button" id="confirm-button-right2" value="Confirm" title="Confirm Selection">
         </form>
       </div>
@@ -242,6 +324,17 @@ window.addEventListener("click", (event) => {
     }
   }
 </script>
+
+<script>
+  function validateID(input) {
+    input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
+    input.value = input.value.slice(0, 5); // Limit to 4 digits
+    if (input.value < 0) {
+      input.value = ''; // Clear negative values
+    }
+  }
+</script>
+
 
 
 
