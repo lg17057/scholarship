@@ -21,6 +21,8 @@ app = Flask(__name__, static_url_path='/static')
 app.secret_key = 'ajnasdN&aslpo0912nlasiqwenz'
 
 
+
+
 #This class is used to open a database connection and automatically close it
 #Use as such:
 # with opendb('filename') as c:
@@ -54,28 +56,44 @@ class login_verification():
 # Home page
 @app.route('/')
 def main():
+    session.setdefault('logged_in', False)
+    session.setdefault('user_id', "Invalid")
+
     with opendb('logs.db') as c:
         loginstatus = session['logged_in']
-        if loginstatus:
+        # if loginstatus is true display data
+        #if loginstatus does not exist (aka program has just been launched), set loginstatus to false
+        #fixes issues with keyError = none when program is first launched and certain pages are accessed
+        if loginstatus is True:
             today = date.today()
             formatted_date = today.strftime("%d-%m")
+            #SUBSTR date_borrowed, 1,5 takes the first 5 characters "dd-mm" from the date borrowed column
+            #this ensures that formatted_date and formatted_yesterday will not take the time a device was rented
+            #therefore ensuries that displayed data is from today
             c.execute("SELECT COUNT(*) FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ?",(formatted_date,))
             row1_descriptor = c.fetchone()[0]
+            #total rentals today
             c.execute("SELECT COUNT(*) FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? AND period_returned NOT IN ('Not Returned')",(formatted_date,))
             row2_descriptor = c.fetchone()[0]
+            #devices returned today
             c.execute("SELECT COUNT(*) FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? and teacher_signoff = ?",(formatted_date,"Confirmed"))
             row3_descriptor = c.fetchone()[0]
+            #devices confirmed as returned today
+            #takes the value of today any removes 1 day from it
             yesterday = date.today() - timedelta(days=1)
             formatted_yesterday = yesterday.strftime("%d-%m")
+            #formates date to dd-mm format 
             c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? AND SUBSTR(date_borrowed, 1, 5) < ? AND period_returned = 'Not Returned'", (formatted_yesterday, date.today()))
             rows = c.fetchall()
+            #selects all devices that are overdue (takes all values from date_borrowed value of formatted_yesterday and earlier)
             c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? AND period_returned = ? AND teacher_signoff = ?", (formatted_date,"Not Returned","Unconfirmed"))
             row1 = c.fetchall()
+            #selects all devices that have been rented today
             return render_template('/index.html', row1_descriptor=row1_descriptor, row2_descriptor=row2_descriptor, row3_descriptor=row3_descriptor, message="Index Page", loginstatus=loginstatus, rows=rows, row1=row1)
         else:
             session['logged_in'] = False
-            session['user_id'] = False
-            return render_template('/index.html', message="Index Page", loginstatus=loginstatus)
+            session['user_id'] = "Invalid"
+            return render_template('/index.html', message="Index Page. Please login to access data", loginstatus=loginstatus)
 
 
 #device log page
@@ -120,7 +138,7 @@ def circulations():
         chromebooks_circulating = c.fetchone()[0]
         c.execute("SELECT COUNT(*) FROM devices WHERE device_type='Laptop' AND in_circulation='Yes'")
         laptops_circulating = c.fetchone()[0]
-        # Selecting only devices that are currently in circulation
+        # Selecting only devices that are currently in circulation --> combines data from different
         c.execute('SELECT device_logs.date_borrowed, devices.device_type, device_logs.device_id, device_logs.period_borrowed, device_logs.reason_borrowed '
                   'FROM device_logs INNER JOIN devices ON device_logs.device_id = devices.device_id '
                   'WHERE devices.in_circulation = "Yes"')
@@ -129,10 +147,6 @@ def circulations():
                                laptops_c=laptops_circulating, rows=circulating_data)
 
 
-#Page created for displaying different device rental and creation statistics
-@app.route('/general-data')
-def general_data():
-    return render_template('statistics.html')
 
 
 #Page designed for data on students
@@ -141,12 +155,6 @@ def student_data():
     loginstatus = session['logged_in']
     return render_template('students.html', loginstatus=loginstatus)
 
-
-#page for homeroom data
-@app.route('/homeroom-data')
-def homeroom_data():
-    loginstatus = session['logged_in']
-    return render_template('homeroom_data.html', loginstatus=loginstatus)
 
 
 #Displays all rental logs in a table 
@@ -616,5 +624,8 @@ def service_unavailable_error(error):
 
 # Responsible for running the website
 if __name__ == '__main__':
+
     app.run(debug="True")
+
+
 
