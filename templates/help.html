@@ -14,6 +14,8 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/help.css') }}">
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
@@ -82,8 +84,48 @@
         <body>
             <title>Help Page</title>
             <h1 class="main_title">Help Page</h1>
+            <div class="primary-container">
+              <h2>Frequently Asked Questions</h2>
+              <button class="div-opener">Question Goes Here</button>
+              <div   title="Click here to access information"  class="panel-opener">
+                  <p>Answer Goes Here</p>
+                  <br>
+                </div>
+                <button class="div-opener">Question Goes Here</button>
+                <div  title="Click here to access information" class="panel-opener">
+                  <p>Answer Goes Here</p>
+                </div>
+                <button class="div-opener">Question Goes Here</button>
+                <div title="Click here to access information" class="panel-opener">
+                  <p>Answer Goes Here</p>
+                </div>
+                <button class="div-opener">Question Goes Here</button>
+                <div title="Click here to access information" class="panel-opener">
+                  <p>Answer Goes Here</p>
+                </div>
+            </div>
         </body>
 </html>
+<style>
+  .primary-container {
+    position: relative;
+    top: -120px;
+  }
+</style>
+<script>
+  var acc = document.getElementsByClassName("div-opener");
+var i;
 
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.maxHeight) {
+      panel.style.maxHeight = null;
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+    } 
+  });
+}
 
-
+</script>

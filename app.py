@@ -318,8 +318,8 @@ def download_logs():
                             message = 'No data found for the specified criteria.'
                             return render_template('download_logs.html', loginstatus=loginstatus, message=message)
             else:        
-                return render_template('/download_logs.html', loginstatus=loginstatus, message="Download All Rental Data" )
-            return render_template('/download_logs.html', loginstatus=loginstatus, message="Download All Rental Data" )
+                return render_template('/download_logs.html', loginstatus=loginstatus, message="Download Data" )
+            return render_template('/download_logs.html', loginstatus=loginstatus, message="Download Data" )
 
         else:
             message = "Please login to access this feature"
@@ -443,6 +443,11 @@ def new_log():
                         period_borrowed = request.form.get('period_borrowed')
                         reason_borrowed = request.form.get('reason_borrowed')
                         notes = request.form.get('notes')
+                        if notes is None:
+                            notes = "No notes"
+                        else: 
+                            pass
+
                         period_returned = "Not Returned"
                         # Check if the device exists
                         c.execute("SELECT * FROM devices WHERE device_id = ? AND device_type = ?",
@@ -484,6 +489,10 @@ def new_log():
                     elif form_type == "return":
                         period_returned = request.form.get('period_returned')
                         notes = request.form.get('notes')
+                        if notes is None:
+                            notes = "No notes"
+                        else:
+                            pass
                         # Check if the device exists
                         c.execute("SELECT * FROM devices WHERE device_id = ? AND device_type = ?",
                                   (device_id,device_type))
@@ -505,7 +514,7 @@ def new_log():
                             
                             c.execute("UPDATE devices SET in_circulation = ? WHERE device_id = ? and device_type = ? ", ("No",device_id, device_type,))
                             print(period_returned)
-                            c.execute("UPDATE device_logs SET period_returned = ? WHERE device_id = ? and device_type = ? ", (period_returned,device_id, device_type,))
+                            c.execute("UPDATE device_logs SET period_returned = ?, notes = ? WHERE device_id = ? and device_type = ? ", (period_returned,notes,device_id, device_type,))
 
                             return render_template('message.html', message="Device Returned", loginstatus=status, message_btn="View_Rental_Logs",message_link="rental-logs")
                         elif device_exists is None:
