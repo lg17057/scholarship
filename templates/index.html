@@ -115,7 +115,11 @@
                     {% endfor %}
                   </tbody>
                 </table>
-              </div>
+              </div>              
+              <button id="new-checkouts" onclick="window.location.href='/new-log'">Check In</button>
+
+              <button id="view-checkouts" onclick="window.location.href='/circulations'">View Checkouts</button>
+
             </div>
           </div>
           
@@ -148,6 +152,8 @@
                   </tbody>
                 </table>
               </div>
+              <button id="view-overdues" onclick="window.location.href='/overdues'">View Overdues</button>
+
             </div>
           </div> 
           <div  id="data-card">
@@ -155,18 +161,22 @@
               <h2 id="data-title">Rental Data Today</h2>
             </div>
             <div class="content">
-              <div class="data-row" id="row1">
-                <h2 class="datacard-header" id="row1-header">Total Rentals Today:</h2>
-                <h2 class="datacard-header" id="row1-descriptor">{{row1_descriptor}}</h2>
+              <div class="row-content">
+                <div class="data-row" id="row1">
+                  <h2 class="datacard-header" id="row1-header">Total Rentals Today:</h2>
+                  <h2 class="datacard-header" id="row1-descriptor">{{row1_descriptor}}</h2>
+                </div>
+                <div class="data-row" id="row2">
+                  <h2 class="datacard-header" id="row2-header">Devices Returned:</h2>
+                  <h2 class="datacard-header" id="row2-descriptor">{{row2_descriptor}}</h2>
+                </div>
+                <div class="data-row" id="row3">
+                  <h2 class="datacard-header" id="row3-header">Devices Confirmed:</h2>
+                  <h2 class="datacard-header" id="row3-descriptor">{{row3_descriptor}}</h2>
+                </div>
               </div>
-              <div class="data-row" id="row2">
-                <h2 class="datacard-header" id="row2-header">Devices Returned:</h2>
-                <h2 class="datacard-header" id="row2-descriptor">{{row2_descriptor}}</h2>
-              </div>
-              <div class="data-row" id="row3">
-                <h2 class="datacard-header" id="row3-header">Devices Confirmed:</h2>
-                <h2 class="datacard-header" id="row3-descriptor">{{row3_descriptor}}</h2>
-              </div>
+              <button id="view-rentals" onclick="window.location.href='/rental-logs'">View All Rentals</button>
+
             </div>
           </div> 
         </div>

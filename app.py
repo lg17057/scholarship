@@ -89,7 +89,7 @@ def device_logs():
     with opendb('logs.db') as c:
         status = session["logged_in"]
         if status is True:
-            c.execute("SELECT * FROM devices ")
+            c.execute("SELECT device_id, device_type, date_added, added_by, notes, num_rentals FROM devices")
             rows = c.fetchall()
             loginstatus = session['logged_in']
             return render_template('/device_logs.html', rows=rows, loginstatus=loginstatus, message="Current devices")

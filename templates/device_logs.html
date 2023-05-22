@@ -14,9 +14,11 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
         <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
@@ -84,7 +86,7 @@
 <h1  class="main_title">{{message}}</h1>
 <div class="primary-container">
   
-  <table id="devices-table" class="devices">
+  <table id="devices-table" class="devices devices-table">
     <thead>
       <th>
         Device ID
@@ -104,6 +106,9 @@
       <th>
         Notes
       </th>
+      <th>
+        Number of rentals
+      </th>
     </thead>
     <tbody>
       {% for row in rows %}
@@ -114,6 +119,9 @@
           <td>{{ row[3] }}</td>
           <td>{{ row[4] }}</td>
           <td>{{ row[5] }}</td>
+          <td>{{ row[6] }}</td>
+          <td>{{ row[7] }}</td>
+
       </tr>
       {% endfor %}
 
@@ -124,14 +132,13 @@
 </div>
 <script>
   $(document).ready(function() {
-  $('#devices-table').DataTable({
+  $('.devices').DataTable({
     paging: true,
-    
-    pageLength: 20, // Number of rows per page
-    lengthMenu: [10, 20, 50, 100], // Options for rows per page dropdown
-    searching: true, // Enable search functionality
-    ordering: true, // Enable column sorting
-    info: true, // Show information about current page and total entries
+    pageLength: 20, // num of rows / page
+    lengthMenu: [10, 20, 50, 100], 
+    searching: true, 
+    ordering: true, 
+    info: true, 
     language: {
       paginate: {
         first: 'First',

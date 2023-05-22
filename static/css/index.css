@@ -39,27 +39,31 @@ body {
     background-color:#ffffff;
     border: 1px solid rgb(251, 251, 251);
     border-radius: 3px;
+    z-index: 0;
   }
   
   .header {
     height: 41px;
-    width: 582px;
+    width: 680px;
     background-color: #ffffff;
+    z-index: 2;
   }
   
   .title {
-    color: black
+    color: black;
+    z-index: 3;
   }
   
   .content {
     height: 219px;
+    z-index: 4;
   }
 
   #checkout-card {
     position: relative;
     top: -120px;
     left: 50px;
-    z-index: -10;
+    
   }
 
   #checkout-title {
@@ -79,7 +83,6 @@ body {
     position: relative;
     top: -402.5px;
     left: 760px;
-    z-index: 0;
   }
 
   #overdue-title {
@@ -104,7 +107,6 @@ body {
     border-radius: 4px;
     padding: 8px 16px;
     cursor: pointer;
-    z-index: 10000000000000;
     transition: all 0.2s ease-in-out;
   }
   
@@ -128,7 +130,6 @@ body {
     position: relative;
     top: -380px;
     left: 50px;
-    z-index: -10;
     width: 1392px;
     height: 215px;
     background-color:#ffffff;
@@ -148,7 +149,6 @@ body {
   #data-header {
     border-bottom: 1px solid #2f2d2d;
     height: 41px;
-    z-index: -11;
     width: 1193px;
     background-color: #ffffff;
   }
@@ -265,7 +265,55 @@ body {
   
   
   
+  #new-checkouts, #view-checkouts,
+  #view-overdues, #view-rentals {
+  background-color: #ffffff;
+  color: #008000;
+  border: #008000 1px solid;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  pointer-events: auto;
+}
+
+#new-checkouts:hover, #view-checkouts:hover,
+#view-overdues:hover, #view-rentals:hover {
+  background-color: #008000;
+  border: #008000 1px solid;
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
   
   
-  
-  
+#view-checkouts {
+  position: relative;
+  top: -250px;
+  left: 455px;
+  z-index: 5;
+}
+
+#new-checkouts {
+  position: relative;
+  top: -250px;
+  left: 450px;
+  z-index: 5;
+}
+
+
+#view-overdues {
+  position: relative;
+  top: -250px;
+  left: 550px;
+  z-index: 5;
+}
+
+#view-rentals {
+  position: relative;
+  top: -220px;
+  left: 1250px;
+  z-index: 5;
+}
