@@ -155,7 +155,23 @@ def circulations():
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
         # The below section is proof of concept. The ipads, chromebooks, and laptops_circulating variables will become dynamic
        
+@app.route('/overdues')
+def overdue_rentals():
+    with opendb('logs.db') as c:
+        status = session["logged_in"]
+        if status is True:    
+            formatted_date = date.today().strftime("%d-%m")
+            yesterday = date.today() - timedelta(days=1) #SUBSTR(date_borrowed, 1, 5) = ? AND SUBSTR(date_borrowed, 1, 5) < ? 
+            formatted_yesterday = yesterday.strftime("%d-%m")
+            c.execute("SELECT * FROM device_logs WHERE period_returned = 'Not Returned' AND teacher_signoff = 'Unconfirmed' AND SUBSTR(date_borrowed, 1, 5) < ?", (formatted_date,))
+            rows = c.fetchall()
+            print('datata')
+            print(rows)
+            return render_template('overdues.html', loginstatus=status, rows=rows, message="Viewing Overdue Rentals")
 
+        else:
+            message = "Please login to access this feature"
+            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
 
 
 
@@ -460,7 +476,7 @@ def new_log():
                 else:
                     return render_template('new_log.html', loginstatus=status)
             else:
-                return render_template('message.html', message="Please login to access this feature", message_btn="Login",message_link="login-page")
+                return render_template('message.html', message="Please login to access this feature", message_btn="Login",message_link="login-page", loginstatus=status)
 
         else:
             message = "Please login to access this feature"
@@ -728,11 +744,3 @@ if __name__ == '__main__':
 
 
 
-
-def do_login():
-    session['user_department'] = "Art"
-
-
-def addto_calendar():
-    department = session['user_department']
-    query = (f"ADD to table where table name = ?")

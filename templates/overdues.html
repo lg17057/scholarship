@@ -12,7 +12,7 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-16x16.png') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/side_nav.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/rental_logs.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/overdues.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
@@ -41,7 +41,6 @@
           <div class="panel">
             <a onclick="window.location.href='/new-log'">New Rental</a>
             <a onclick="window.location.href='/sign-off'">Sign Off Rental</a>
-            <a onclick="window.location.href='/overdues'">Overdue Rentals</a>
             <a onclick="window.location.href='/rental-logs'">View Rental Logs</a>
           </div>
         </div>
@@ -81,38 +80,13 @@
 <title>Rental Log - Dash</title>
 <div class="primary-container">
   <hr id="rentalhr">
-  <div class="idpicker-container">
-    <form action="/rental-logs/" method="POST">
-      <div class="select-container" style="font-size:14px;">  
-        <select id="devicepicker" style="font-size: 14px;" name="devicepicker" placeholder="Device Type.." value="devicepicker">
-          <option value="">Device Type: </option>
-          <option value="Chromebook">Chromebook</option>
-          <option value="iPad">iPad</option>
-          <option value="Laptop">Laptop</option>
-        </select>
-        
-      </div>
-
-      <input type=number class="idpicker"  oninput="validateInput(this)"   name="idpicker" placeholder="Enter Device ID.." value="idpicker"></input>
-      <input type="submit" class="submit-btn" onclick="submitForm()" id="submit-btn" value="Select">
-    </form>
-    <button onclick="window.location.href='/rental-logs/'" id="return-btn" class="return-btn">View All Logs</button>
+    
 
     
-  </div>
-  <div class="datepicker-container">
-    <div class="datepicker">
-      <div id="chevron-arrow-left" onclick="goToPreviousDay()"></div>
-      <input type="date" min="2023-01-01" max="2023-12-25" id="datepicker" class="datepicker" required>
-      <div id="chevron-arrow-right" onclick="goToNextDay()"></div>
-      <button id="confirm-btn" onclick="filterTable()">Select Date</button>
-    </div>
-  </div>
   
-  <h1 class="main_title">{{message}}</h1>
-  <div class="download-container" style="position: relative;top: -125px;">
-    <a href="/download-logs/" class="download-btn">Download Data</a>
-  </div>
+  
+  <h1 class="main_title">Viewing overdue rentals</h1>
+  
   <br>
   <div class="secondary-container">
     <div class="table-container">

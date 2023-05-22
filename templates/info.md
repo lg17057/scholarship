@@ -187,7 +187,7 @@ make help continue with theme of whole website
 expand on this
 
 
-make issues in github corresponding to what ive done
+make issues in github corresponding to what ive done - done
 make it so that no user is required to be logged in to rent/return? - done
 make it so everything else requires user logged in/admin logged in - done
 remove sign up page access except for an admin login confirmation? - done
@@ -195,3 +195,23 @@ remove sign up page access except for an admin login confirmation? - done
 
 login to access page feature done
 message = "Please login as an admin to create new admin account"
+
+
+-----------
+
+Now working on rental/return manual functionality
+Figoure out how to differentiate the two forms being submitted
+
+
+For renting this means;
+
+Logging all data to device logs, set period returned and teacher signoff to "Not Returned" and "Unconfirmed"
+Creating or modifying student data; outstanding_rental = yes, num_rentals, last_rental, device_id, device_type 
+Modifying device data; num_rentals and in_circulation
+
+
+For Returning this means
+
+Modifying rental data; period returned, 
+Modifying student data; outstanding_rental = no, 
+Modifying device data; num_rentals and in_circulation
