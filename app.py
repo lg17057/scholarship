@@ -155,6 +155,9 @@ def circulations():
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
         # The below section is proof of concept. The ipads, chromebooks, and laptops_circulating variables will become dynamic
        
+
+
+
 @app.route('/overdues')
 def overdue_rentals():
     with opendb('logs.db') as c:
@@ -424,55 +427,91 @@ def new_log():
         if status is True:
             if status:
                 if request.method == "POST":
+                    form_type = request.form.get('form_type')
                     # Retrieve form data
-                    date_borrowed = datetime.datetime.now().strftime("%d-%m %H:%M")
-                    student_name = request.form.get('student_name') 
-                    homeroom = request.form.get('homeroom') 
+                    date = datetime.datetime.now().strftime("%d-%m %H:%M")
+                    student_name = request.form.get('student_name')
+                    student_id = request.form.get('student_id')
+
+                    homeroom = request.form.get('homeroom')
                     device_type = request.form.get('device_type')
                     device_id = request.form.get('device_id')
-                    period_borrowed = request.form.get('period_borrowed')
-                    reason_borrowed = request.form.get('reason_borrowed')
-                    period_returned = request.form.get('period_returned')
                     submitted_under = session['user_id']
-                    teacher_signoff = request.form.get('teacher_signoff')
-                    notes = request.form.get('notes')
-                    # Check if the device exists
-                    c.execute("SELECT * FROM devices WHERE device_id = ? AND device_type = ?",
-                              (device_id,device_type))
-                    device_exists = c.fetchall()
-                    # Check if the rental log exists
-                    c.execute("SELECT * FROM device_logs WHERE device_id = ? and device_type = ? and teacher_signoff = ? and period_returned = ?",
-                              (device_id,device_type,"Unconfirmed","Not Returned"))
-                    rental_log_exists = c.fetchall()
-                    if rental_log_exists:
-                        return render_template('message.html', message="Device already being rented. Please choose another device", loginstatus=status, message_btn="Try_Again",message_link="new-item")
-                    elif device_exists:
-                        #update student_data table
-                        c.execute("SELECT * FROM student_data WHERE student_name = ?", (student_name,))
-                        student_exists = c.fetchall()
-                        if student_exists:
-                            c.execute("UPDATE student_data SET last_rental = ?, device_type = ?, device_id = ? AND outstanding_rental = ? ", (date_borrowed, device_id, device_type, "YES"))
-                        else: 
-                            #deprecated if check --> no longer necessary
-                            #c.execute("SELECT num_rentals FROM student_data WHERE student_name = ?", (student_name,))
-                            #is_null = c.fetchone()
+                    teacher_signoff="Unconfirmed"
 
-                            #if is_null[0] is None:
-                            #    c.execute("UPDATE student_data SET num_rentals = 0 WHERE student_name = ?", (student_name,))                        
-                            c.execute("INSERT INTO student_data(homeroom, student_name,num_rentals, last_rental, device_id, device_type, outstanding_rental) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                                      (homeroom, student_name, 0, date_borrowed, device_id, device_type, "Yes"))
-                        c.execute("UPDATE student_data SET num_rentals = num_rentals + 1 WHERE student_name = ?", (student_name,))
-                        #update devices table
-                        c.execute("UPDATE devices SET in_circulation = ? WHERE device_id = ? and device_type = ? ", ("Yes",device_id, device_type,))
-                        #update device logs table
-                        c.execute("INSERT INTO device_logs (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                                  (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
-                        return render_template('message.html', message="Successful Rental", loginstatus=status, message_btn="View_Rental_Logs",message_link="rental-logs")
-                    elif device_exists is None:
-                        return render_template('message.html', message="Device doesn't exist. Please select a device that exists.", loginstatus=status, message_btn="Try_Again",message_link="new-log")
-                    else:
-                        return render_template('message.html', message="Issue with renting a device. Please try again", loginstatus=status, message_btn="Try_Again",message_link="new-log")
+                    if form_type == "rent":
+                        period_borrowed = request.form.get('period_borrowed')
+                        reason_borrowed = request.form.get('reason_borrowed')
+                        notes = request.form.get('notes')
+                        period_returned = "Not Returned"
+                        # Check if the device exists
+                        c.execute("SELECT * FROM devices WHERE device_id = ? AND device_type = ?",
+                                  (device_id,device_type))
+                        device_exists = c.fetchall()
+                        # Check if the rental log exists
+                        c.execute("SELECT * FROM device_logs WHERE device_id = ? and device_type = ? and teacher_signoff = ? and period_returned = ?",
+                                  (device_id,device_type,"Unconfirmed","Not Returned"))
+                        rental_log_exists = c.fetchall()
+                        if rental_log_exists:
+                            return render_template('message.html', message="Device already being rented. Please choose another device", loginstatus=status, message_btn="Try_Again",message_link="new-item")
+                        elif device_exists:
+                            #update student_data table
+                            c.execute("SELECT * FROM student_data WHERE student_name = ?", (student_name,))
+                            student_exists = c.fetchall()
+                            if student_exists:
+                                c.execute("UPDATE student_data SET last_rental = ?, device_type = ?, device_id = ? AND outstanding_rental = ? ", (date, device_id, device_type, "Yes"))
+                            else: 
+                                #deprecated if check --> no longer necessary
+                                #c.execute("SELECT num_rentals FROM student_data WHERE student_name = ?", (student_name,))
+                                #is_null = c.fetchone()
 
+                                #if is_null[0] is None:
+                                #    c.execute("UPDATE student_data SET num_rentals = 0 WHERE student_name = ?", (student_name,))                        
+                                c.execute("INSERT INTO student_data(homeroom, student_name,num_rentals, last_rental, device_id, device_type, outstanding_rental, student_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                                          (homeroom, student_name, 0, date, device_id, device_type, "Yes", student_id))
+                            c.execute("UPDATE student_data SET num_rentals = num_rentals + 1 WHERE student_name = ?", (student_name,))
+                            #update devices table
+                            c.execute("UPDATE devices SET in_circulation = ? WHERE device_id = ? and device_type = ? AND num_rentals = num_rentals + 1", ("Yes",device_id, device_type,))
+                            #update device logs table
+                            c.execute("INSERT INTO device_logs (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                                      (date, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes))
+                            return render_template('message.html', message="Successful Rental", loginstatus=status, message_btn="View_Rental_Logs",message_link="rental-logs")
+                        elif device_exists is None:
+                            return render_template('message.html', message="Device doesn't exist. Please select a device that exists.", loginstatus=status, message_btn="Try_Again",message_link="new-log")
+                        else:
+                            return render_template('message.html', message="Issue with renting a device. Please try again", loginstatus=status, message_btn="Try_Again",message_link="new-log")
+                    
+                    elif form_type == "return":
+                        period_returned = request.form.get('period_returned')
+                        notes = request.form.get('notes')
+                        # Check if the device exists
+                        c.execute("SELECT * FROM devices WHERE device_id = ? AND device_type = ?",
+                                  (device_id,device_type))
+                        device_exists = c.fetchall()
+                        # Check if the rental log exists
+                        c.execute("SELECT * FROM device_logs WHERE device_id = ? and device_type = ? and teacher_signoff = ? and period_returned = ?",
+                                  (device_id,device_type,"Unconfirmed","Not Returned"))
+                        rental_log_exists = c.fetchall()
+                        if rental_log_exists is None:
+                            return render_template('message.html', message="Rental Log does not exist. Please choose another device", loginstatus=status, message_btn="Try_Again",message_link="new-item")
+                        elif device_exists:
+                            #update student_data table
+                            c.execute("SELECT * FROM student_data WHERE student_name = ?", (student_name,))
+                            student_exists = c.fetchall()
+                            if student_exists:
+                                c.execute("UPDATE student_data SET last_rental = ?, device_type = ?, device_id = ?, outstanding_rental= ? WHERE student_name = ?", (date, device_type, device_id, "No", student_name))
+                            else: 
+                                return render_template('message.html', message="Student has no outstanding rentals", loginstatus=status, message_btn="Return_Device",message_link="new-log")
+                            
+                            c.execute("UPDATE devices SET in_circulation = ? WHERE device_id = ? and device_type = ? ", ("No",device_id, device_type,))
+                            print(period_returned)
+                            c.execute("UPDATE device_logs SET period_returned = ? WHERE device_id = ? and device_type = ? ", (period_returned,device_id, device_type,))
+
+                            return render_template('message.html', message="Device Returned", loginstatus=status, message_btn="View_Rental_Logs",message_link="rental-logs")
+                        elif device_exists is None:
+                            return render_template('message.html', message="Device doesn't exist. Please select a device that exists.", loginstatus=status, message_btn="Try_Again",message_link="new-log")
+                        else:
+                            return render_template('message.html', message="Issue with returning a device. Please try again", loginstatus=status, message_btn="Try_Again",message_link="new-log")
                 else:
                     return render_template('new_log.html', loginstatus=status)
             else:
@@ -481,7 +520,6 @@ def new_log():
         else:
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-        loginstatus = session['logged_in']
         
 
 #Used for creating a new device

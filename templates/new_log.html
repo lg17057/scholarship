@@ -136,7 +136,10 @@
       </div>
       <div class="modal-content">
         <div id="form-content">
+          <!--This is the form used to rent a device-->
           <form method="POST" action="/new-log">
+            <input type="hidden" name="form_type" value="rent">
+
             <!-- Form fields -->
             <label for="student_name">Full Name:</label><br>
             <input type="text" class="input-field" id="student_name" name="student_name" placeholder="Full Name" required>
@@ -181,7 +184,7 @@
                 </select>
               </div>
             </div>
-            <input type="button" class="button" id="confirm-button-left2" value="Confirm" title="Confirm Selection">
+            <input type="submit" class="button" id="confirm-button-left2" value="Confirm" title="Confirm Selection">
           </form>
         </div>
       </div>
@@ -196,7 +199,10 @@
         <button class="modal-close" title="Close Modal" id="close-button-return">×</button>
       </div>
       <div id="form-content">
+        <!--THis is the form used to return a device-->
         <form method="POST" action="/new-log">
+          <input type="hidden" name="form_type" value="return">
+
           <!-- Form fields -->
           <label for="student_name">Full Name:</label><br>
           <input type="text" class="input-field" id="student_name" name="student_name" placeholder="Full Name" required>
@@ -224,9 +230,9 @@
           <br>
           
           <div id="period_returned-div-rental">
-            <label for="period_borrowed">Period Returned:</label><br>
+            <label for="period_returned">Period Returned:</label><br>
             <div class="select-container1">
-              <select id="period_borrowed" name="period_returned">
+              <select id="period_returned" name="period_returned">
                 <option selected value="Homeroom">Homeroom</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -237,7 +243,7 @@
               </select>
             </div>
           </div>
-          <input type="button" class="button" id="confirm-button-right2" value="Confirm" title="Confirm Selection">
+          <input type="submit" class="button" id="confirm-button-right2" value="Confirm" title="Confirm Selection">
         </form>
       </div>
     </div>
