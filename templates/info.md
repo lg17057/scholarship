@@ -177,3 +177,21 @@ fixed this issue
 
 working on the system that the librarika website uses that displays overdues and checkouts (rentals)
 done
+
+-----
+
+couldhave two separate links for renting and returning a device- think of implications
+makes it take more time
+possibly less friendly for usiers unfamiliar with database
+make help continue with theme of whole website 
+expand on this
+
+
+make issues in github corresponding to what ive done
+make it so that no user is required to be logged in to rent/return? - done
+make it so everything else requires user logged in/admin logged in - done
+remove sign up page access except for an admin login confirmation? - done
+
+
+login to access page feature done
+message = "Please login as an admin to create new admin account"

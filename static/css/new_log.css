@@ -2,50 +2,63 @@
   display: flex;
 }
 
-#right-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+#right-button, #left-button {
   width: 200px;
   height: 50px;
-  border: 2px solid;
+  justify-content: center;
+  text-align: center;
+  font-size: 20px;
+}
+
+
+#right-button {
+  display: flex;
+  background-color: #ffffff;
+  color: #008000;
+  border: #008000 1px solid;
   border-radius: 5px;
-  font-size: 18px;
-  font-weight: bold;
-  text-transform: uppercase;
+  padding: 10px 20px;
+  position: relative;
+  z-index: 3;
+  right: -20px;
   cursor: pointer;
-  transition: background-color 0.2s ease-out, color 0.2s ease-out;
-  border-color: #00a8e0;
-  background-color: #fff;
-  color: #00a8e0;
+  transition: all 0.2s ease-in-out;
 }
 
 #right-button:hover {
-  background-color: #00a8e0;
-  color: #fff;
+  background-color: #008000;
+  border: #008000 1px solid;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
 
 #left-button {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 200px;
-  height: 50px;
-  border: 2px solid;
+  background-color: #ffffff;
+  color: #008000;
+  border: #008000 1px solid;
   border-radius: 5px;
-  font-size: 18px;
-  font-weight: bold;
-  text-transform: uppercase;
+  padding: 10px 20px;
+  position: relative;
+  z-index: 3;
+
   cursor: pointer;
-  transition: background-color 0.2s ease-out, color 0.2s ease-out;
-  border-color: #00e04b;
-  background-color: #fff;
-  color: #00e04b;
+  transition: all 0.2s ease-in-out;
 }
 
 #left-button:hover {
-  background-color: #00e04b;
-  color: #fff;
+  background-color: #008000;
+  border: #008000 1px solid;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
 
 .modal-container {
