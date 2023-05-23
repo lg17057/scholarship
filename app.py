@@ -133,6 +133,9 @@ def circulations():
     with opendb('logs.db') as c:
         status = session["logged_in"]
         if status is True:
+            today = date.today()       
+            formatted_date = today.strftime("%d-%m")
+     
             ipads_circulating = 'None circulating'
             chromebooks_circulating = 'None circulating'
             laptops_circulating = 'None circulating'
@@ -144,12 +147,10 @@ def circulations():
             c.execute("SELECT COUNT(*) FROM devices WHERE device_type='Laptop' AND in_circulation='Yes'")
             laptops_circulating = c.fetchone()[0]
             # Selecting only devices that are currently in circulation --> combines data from different
-            c.execute('SELECT device_logs.date_borrowed, devices.device_type, device_logs.device_id, device_logs.period_borrowed, device_logs.reason_borrowed '
-                      'FROM device_logs INNER JOIN devices ON device_logs.device_id = devices.device_id '
-                      'WHERE devices.in_circulation = "Yes"')
+            c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? AND period_returned = ? AND teacher_signoff = ?", (formatted_date,"Not Returned","Unconfirmed"))
             circulating_data = c.fetchall()
             return render_template('circulations.html', ipads_c=ipads_circulating, chromebooks_c=chromebooks_circulating,
-                                   laptops_c=laptops_circulating, rows=circulating_data)
+                                   laptops_c=laptops_circulating, rows=circulating_data, status=status)
         else:
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")

@@ -215,3 +215,8 @@ For Returning this means
 Modifying rental data; period returned, 
 Modifying student data; outstanding_rental = no, 
 Modifying device data; num_rentals and in_circulation
+--------------
+
+This feature is done
+
+user radio buttons for download buttons

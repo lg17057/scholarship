@@ -24,7 +24,7 @@
     transition: 0.4s;
   }
   
-  .active, .div-opener:hover {
+  .active-help, .div-opener:hover {
     background-color: #ccc;
   }
   
@@ -36,7 +36,7 @@
     margin-left: 5px;
   }
   
-  .active:after {
+  .active-help:after {
     content: "\2212";
   }
   
