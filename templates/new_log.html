@@ -99,10 +99,49 @@
         <button class="modal-close" title="Close Modal" id="close-button-left">×</button>
       </div>
       <div class="modal-content">
-        <div class="newlog-container">
-          <form>
-            <input type="button" class="button" id="confirm-button-left" value="Confirm" title="Confirm Return">
+        <div class="newlog-container-scan">
+          <form id="form-id" method="POST" action="/new-log">
+            <input type="hidden" name="form_type" value="rent_scan">
 
+            <div id="barcode-input-container">
+              <label for="barcode_input">Scan Device</label><br>
+              <input required type="text" id="barcode_input" name="barcode_input" placeholder="Scan Barcode" class="input-field" pattern="(iPad|Chromebook|Laptop)-\d{4}" title="Please enter the barcode in the format 'DeviceType-XXXX-xxxxxxxx'">
+              <button type="button" id="clear-button-rent">Scan</button>
+            </div>
+
+            <div id="student-data-input-container">
+              <label for="student-data-input">Scan ID Card</label><br>
+              <input required type="text" id="student-data-input" placeholder="Scan ID" name="id_input" class="input-field" readonly>
+              <button type="button" id="clear-button-student-rent">Scan</button>
+            </div>
+
+            <div id="homeroom-div-rent-scan">
+              <label for="student_name">Homeroom:</label><br>
+              <input required type="text" class="input-field" id="homeroom-input" name="homeroom" placeholder="Homeroom" required>
+              <br>
+            </div>
+
+            <div id="reason_borrowed-div-rental-scan">
+              <label for="reason_borrowed">Reason Borrowed:</label><br>
+		          <input required type="text" id="reason_borrowed" name="reason_borrowed" placeholder="Reason..." class="input-field"><br>
+              <br>
+            </div>
+
+            <div id="period_borrowed-div-rental-scan">
+              <label for="period_borrowed">Period Borrowed:</label><br>
+              <div class="select-container1-scan">
+		            <select required id="period_borrowed-scan" name="period_borrowed">
+                  <option selected value="Homeroom">Homeroom</option>
+		            	<option value="1">1</option>
+		            	<option value="2">2</option>
+		            	<option value="3">3</option>
+		            	<option value="4">4</option>
+		            	<option value="5">5</option>
+                  <option value="6">6</option>
+                </select>
+              </div>
+            </div>
+            <button id="confirm-button-left"  value="Confirm" form="form-id" type="submit">Confirm</button>
           </form>
           <button id="not-working-rent">Not Working?</button>
         </div>
@@ -118,13 +157,51 @@
         <button class="modal-close" title="Close Modal" id="close-button-right">×</button>
       </div>
       <div class="modal-content">
-          <form>
-            <input type="button" class="button" id="confirm-button-right" value="Confirm" title="Confirm Return">
+        <div id="form-content-manual">
+          <!--THis is the form used to return a device-->
+          <form method="POST" action="/new-log">
+            <input type="hidden" name="form_type" value="return">
+  
+            <!-- Form fields -->
+            <div id="barcode-input-container">
+              <label for="barcode_input">Scan Device</label><br>
+              <input required type="text" id="barcode_input" name="barcode_input" placeholder="Scan Barcode" class="input-field" pattern="(iPad|Chromebook|Laptop)-\d{4}" title="Please enter the barcode in the format 'DeviceType-XXXX-xxxxxxxx'">
+              <button type="button" id="clear-button-rent">Scan</button>
+            </div>
 
+            <div id="student-data-input-container">
+              <label for="student-data-input">Scan ID Card</label><br>
+              <input required type="text" id="student-data-input" placeholder="Scan ID" name="id_input" class="input-field" readonly>
+              <button type="button" id="clear-button-student-rent">Scan</button>
+            </div>
+            <br>
+            <div id="homeroom-div-rent-scan">
+              <label for="student_name">Homeroom:</label><br>
+              <input  type="text" class="input-field" id="homeroom" name="homeroom" placeholder="Homeroom" required>
+              <br>
+            </div>
+            
+            
+            <div id="period_returned-div-rental-scan">
+              <label for="period_returned">Period Returned:</label><br>
+              <div class="select-container1">
+                <select id="period_returned" name="period_returned">
+                  <option selected value="Homeroom">Homeroom</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                </select>
+              </div>
+            </div>
+            <input type="submit" class="button" id="confirm-button-right" value="Confirm" title="Confirm Selection">
           </form>
           <button id="not-working-return">Not Working?</button>
       </div>
     </div>
+  </div>
   </div>
 <!------------------------------------------------------------------------------------------------------------------------>
 <!------------------------------------------------------------------------------------------------------------------------>
@@ -248,12 +325,27 @@
       </div>
     </div>
   </div>
+<!------------------------------------------------------------------------------------------------------------------------>
+<!------------------------------------------------------------------------------------------------------------------------>
+
+
 </div>
 <style>
   .primary-container {
     position: relative;
     top: -120px;
   }
+
+  #homeroom-div-rent-scan {
+  position: relative;
+  top: -10px;
+}
+
+#homeroom-div-rent-scan {
+  position: relative;
+  top: 10px;
+}
+
 </style>
 <script>
 const leftButton = document.getElementById("left-button");
@@ -339,6 +431,71 @@ window.addEventListener("click", (event) => {
       input.value = ''; // Clear negative values
     }
   }
+</script>
+<script>
+const barcodeInput = document.getElementById('barcode_input');
+const clearButtonRent = document.getElementById('clear-button-rent');
+const studentInput = document.getElementById('student-data-input');
+const clearButtonStudentRent = document.getElementById('clear-button-student-rent');
+const confirmButton = document.getElementById('confirm-button-left');
+
+clearButtonRent.addEventListener('click', function() {
+  if (clearButtonRent.textContent === 'Scan') {
+    if (clearButtonStudentRent.textContent === 'Clear') {
+      clearButtonStudentRent.textContent = 'Scan';
+      studentInput.readOnly = true;
+      studentInput.blur();
+    }
+
+    clearButtonRent.textContent = 'Clear';
+    barcodeInput.readOnly = false;
+    barcodeInput.focus();
+    barcodeInput.select();
+  } else {
+    clearButtonRent.textContent = 'Scan';
+    barcodeInput.value = '';
+    barcodeInput.readOnly = true;
+    barcodeInput.blur();
+  }
+});
+
+barcodeInput.addEventListener('input', function() {
+  if (barcodeInput.value.length > 0) {
+    confirmButton.disabled = false;
+  } else {
+    confirmButton.disabled = true;
+  }
+});
+
+clearButtonStudentRent.addEventListener('click', function() {
+  if (clearButtonStudentRent.textContent === 'Scan') {
+    if (clearButtonRent.textContent === 'Clear') {
+      clearButtonRent.textContent = 'Scan';
+      barcodeInput.readOnly = true;
+      barcodeInput.blur();
+    }
+
+    clearButtonStudentRent.textContent = 'Clear';
+    studentInput.readOnly = false;
+    studentInput.focus();
+    studentInput.select();
+  } else {
+    clearButtonStudentRent.textContent = 'Scan';
+    studentInput.value = '';
+    studentInput.readOnly = true;
+    studentInput.blur();
+  }
+});
+
+studentInput.addEventListener('input', function() {
+  if (studentInput.value.length > 0) {
+    confirmButton.disabled = false;
+  } else {
+    confirmButton.disabled = true;
+  }
+});
+
+
 </script>
 
 

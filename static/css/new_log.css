@@ -218,12 +218,12 @@ background-color: transparent;
 }
 
 #confirm-button-right {
-  top: 445px;
+  top: 115px;
   left: 155px;
 }
 
 #confirm-button-left {
-  top: 425px;
+  top: 45px;
   left: 160px;
 }
 
@@ -278,7 +278,7 @@ text-decoration: underline;
 
 #modal-title-left {
   position: fixed;
-  top: 130px;
+  top: 110px;
 }
 
 #modal-title-right {
@@ -406,6 +406,11 @@ background: #f1f1f1;
   top: -50px;
 }
 
+#form-content-manual {
+  position: relative;
+  top: 40px;
+}
+
 #student-name {
   width: 22%;
 }
@@ -425,12 +430,11 @@ background: #f1f1f1;
   top: -85px;
 }
 
+
 #device_id {
   position: relative;
   top: -70px;
   left: 0px;
-  width: 20%;
-  height: 7px;
 }
 
 #labeldeviceid {
@@ -453,3 +457,131 @@ background: #f1f1f1;
   top: -60px;
 }
 
+#period_returned-div-rental-scan {
+  position: relative;
+  top: 5  px;
+}
+
+#clear-button-rent {
+  background-color: #ffffff;
+  color: #008000;
+  border: #008000 1px solid;
+  border-radius: 5px;
+  padding: 10px 20px;
+  position: relative;
+  z-index: 3;
+  height: 45px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+#clear-button-rent:hover {
+  background-color: #008000;
+  border: #008000 1px solid;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.newlog-container-scan {
+  position: relative;
+  top: 40px;
+}
+
+
+.select-container1-scan {
+  position: relative;
+  display: inline-block;
+  top:0px;
+  left: -1px;
+  font-size: 14px;
+}
+
+/* Styling the select element */
+.select-container1-scan select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 180px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+/* Styling the arrow icon */
+.select-container1-scan::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  left:155px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Styling when select element is open */
+.select-container1-scan.select-open select {
+  border-color: #888;
+}
+
+/* Styling the dropdown options */
+.select-container1-scan select option {
+  font-size: 16px;
+}
+
+/* Styling when an option is selected */
+.select-container1-scan.select-open select option:checked {
+  background-color: #f0f0f0;
+}
+
+.barcode-input-container {
+  position: relative;
+  top: 0px;
+}
+
+#homeroom-div-rent-scan {
+  position: relative;
+  top: 50px;
+}
+
+#reason_borrowed-div-rental-scan {
+  position: relative;
+  top: 20px;
+}
+
+#period_borrowed-div-rental-scan {
+  position: relative;
+  top: 10px;
+}
+
+
+#clear-button-student-rent {
+  background-color: #ffffff;
+  color: #008000;
+  border: #008000 1px solid;
+  border-radius: 5px;
+  padding: 10px 20px;
+  position: relative;
+  z-index: 3;
+  height: 45px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+#clear-button-student-rent:hover {
+  background-color: #008000;
+  border: #008000 1px solid;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+#student-data-input-container {
+  position: relative;
+  top: 5px;
+}

@@ -165,4 +165,24 @@
 
   
 </script>
-
+<script>
+  $(document).ready(function() {
+  $('#devices-tables').DataTable({
+    paging: true,
+    pageLength: 20, // num of rows / page
+    lengthMenu: [10, 20, 50, 100], 
+    searching: true, 
+    ordering: true, 
+    info: true, 
+    language: {
+      paginate: {
+        first: 'First',
+        last: 'Last',
+        next: '&raquo;',
+        previous: '&laquo;'
+      },
+      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+    }
+  });
+});
+</script>

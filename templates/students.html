@@ -14,9 +14,11 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/students.css') }}">
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
         <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
@@ -26,14 +28,13 @@
         <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
         <br><br><br>
         <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img style="position:relative; top:-65px;" class="img1" title="Home Page" src="{{ url_for('static', filename='shc-logo.svg') }}" z-index="-1" width="300px" height="65px" alt="sacred heart logo"></a>
-        {% if loginstatus %}
+        {% if status %}
           <span id="admin-span" onclick="window.location.href='/admin'"  title="Admin Options" class="fa fa-user-circle-o" style="font-size:36px;cursor:pointer;float: right;"></span>
         {% else %}
           <a onclick="window.location.href='/login-page'"  class="button" id="login-btn">Sign In</a>
         {% endif %}
       </div>
       <button class="openbtn" title="Open Nav" onclick="toggleNav()">☰ </button>
-      
       <div class="sidebar" id="mySidebar">
         <button class="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
         <h3 class="sidenavheader">Options</h3>
@@ -78,6 +79,121 @@
           </div>
         </div>  
       </div>
-</html>
-<title>Student Records</title>
-<h1  class="main_title">Student Records</h1>
+<title>Student Data</title>
+<h1 class="main_title">Student Data</h1>
+<div class="circulation-content">
+  <button type="submit" id="submit-button" >See Overview</button>
+
+  <table id="devices-tables" class="devices">
+    <thead>
+      <th>
+        Homeroom
+      </th>
+      <th>
+        Student Name
+      </th>
+      <th>
+        Student  ID
+      </th>
+      <th>
+        Num Rentals
+      </th>
+      <th>
+        Last Rental
+      </th>
+      <th>
+        Device ID
+      </th>
+      <th>
+        Device Type
+      </th>
+      <th>
+        Outstanding Rental
+      </th>
+      <th>
+        Notes
+      </th>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+          <td>{{ row[0] }}</td>
+          <td>{{ row[1] }}</td>
+          <td>{{ row[2] }}</td>
+          <td>{{ row[3] }}</td>
+          <td>{{ row[4] }}</td>
+          <td>{{ row[5] }}</td>
+          <td>{{ row[6] }}</td>
+          <td>{{ row[7] }}</td>
+          <td>{{ row[8] }}</td>
+
+
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+  <div class="popup-overlay" id="popup-overlay"></div>
+  <div class="popup" id="popup">
+    <h2 class="popup-title">Data Overview:</h2>
+    <ul class="popup-list" id="popup-list">
+      <li># of Students: {{students_total}}</li>
+      <li>Chromebooks: {{chromebooks_c}}</li>
+      <li>Laptops: {{laptops_c}}</li>
+
+    </ul>
+    <div class="popup-buttons">
+      <button class="popup-button" id="undo-button">Close</button>
+    </div>
+  </div>
+</div> 
+<script>
+  const submitButton = document.getElementById('submit-button');
+  const popupOverlay = document.getElementById('popup-overlay');
+  const popup = document.getElementById('popup');
+  const popupList = document.getElementById('popup-list');
+  const undoButton = document.getElementById('undo-button');
+  submitButton.addEventListener('click', (e) => {
+    popupOverlay.style.display = 'block';
+    popup.style.display = 'block';
+  });
+
+
+
+  popupOverlay.addEventListener('click', () => {
+    closePopup();
+  });
+
+  undoButton.addEventListener('click', () => {
+    closePopup();
+  });
+
+
+  function closePopup() {
+    popupOverlay.style.display = 'none';
+    popup.style.display = 'none';
+  }
+
+  
+</script>
+<script>
+  $(document).ready(function() {
+  $('#devices-table').DataTable({
+    paging: true,
+    pageLength: 20, // num of rows / page
+    lengthMenu: [10, 20, 50, 100], 
+    searching: true, 
+    ordering: true, 
+    info: true, 
+    language: {
+      paginate: {
+        first: 'First',
+        last: 'Last',
+        next: '&raquo;',
+        previous: '&laquo;'
+      },
+      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+    }
+  });
+});
+</script>
