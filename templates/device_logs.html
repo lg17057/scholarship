@@ -86,7 +86,7 @@
 <h1  class="main_title">{{message}}</h1>
 <div class="primary-container">
   
-  <table id="devices-tabless" class="devices devices-table">
+  <table id="devices-table" class="devices devices-table">
     <thead>
       <th>
         Device ID
@@ -104,7 +104,7 @@
         In Circulation
       </th>
       <th>
-        Number of rentals
+        Num# rentals
       </th>
       <th>
         Notes
@@ -127,8 +127,7 @@
           <td>{{ row[5] }}</td>
           <td>{{ row[6] }}</td>
           <td>{{ row[7] }}</td>
-          <td>{{ row[8] }}</td>
-          <td>{{ row[9] }}</td>
+          <td><a href="/barcode/{{ row[1] }}/{{ row[0] }}">View Barcode</a></td>
 
       </tr>
       {% endfor %}
@@ -140,7 +139,7 @@
 </div>
 <script>
   $(document).ready(function() {
-  $('#devices-tabless').DataTable({
+  $('#devices-table').DataTable({
     paging: true,
     pageLength: 20, // num of rows / page
     lengthMenu: [10, 20, 50, 100], 

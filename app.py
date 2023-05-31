@@ -93,7 +93,7 @@ def device_logs():
             c.execute("SELECT device_id, device_type, date_added, added_by, in_circulation, num_rentals, notes, last_rental FROM devices")
             rows = c.fetchall()
             loginstatus = session['logged_in']
-            return render_template('/device_logs.html', rows=rows, loginstatus=status, message="Current devices")
+            return render_template('/device_logs.html', rows=rows, loginstatus=status, message="Current devices", )
         else:
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
