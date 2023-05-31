@@ -87,9 +87,11 @@
   <div class="new-device-container">
     <h1 class="newdevice-title">Create New Device</h1>
     <form style="position: relative;top:20px" method="POST" action="/new-item">
-		  <label for="device_id">Device ID:</label>
-		  <input  required type="number"  oninput="validateInput(this)"   id="device_id" name="device_id">
-      <br>
+      <div id="idcontainer">
+		    <label for="device_id">Device ID:</label>
+		    <input  required type="number"  oninput="validateInput(this)"   id="device_id" name="device_id">
+        <br>
+      </div>
       <div class="select-container">
 		    <select id="device_type" name="device_type" required>
           <option selected value="">Device Type:</option>
@@ -100,8 +102,10 @@
       </div>
       <br>
       <br>
-      <label for="notes">Notes:</label>
-      <input  type="text" id="notes" name="notes" >
+      <div class="notescontainer">
+        <label for="notes">Notes:</label>
+        <input  type="text" id="notes" name="notes" >
+      </div>
       <br>
 		  <input id="newdevice-submit" type="submit" value="Submit">
 	  </form>
@@ -119,7 +123,7 @@
 </script>
 <style>
   body {
-    background-color: #e1dfdf;
+    background-color: #edebeb;
   }
 </style>
 
