@@ -148,8 +148,8 @@
   pointer-events: auto;
   position: relative;
   z-index: 100;
-  top: -485px;
-  left: 1425px;
+  top: -400px;
+  left: 1430px;
   }
 
 
@@ -183,3 +183,29 @@
   transition: all 0.2s ease-in-out;
 }
   
+
+
+#clearinput-button {
+  background-color: #ffffff;
+color: #008000;
+border: #008000 1px solid;
+border-radius: 4px;
+padding: 10px 20px;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+pointer-events: auto;
+position: relative;
+z-index: 100;
+top: -439.5px;
+left: 1295px;
+}
+
+
+#clearinput-button:hover {
+background-color: #008000;
+border: #008000 1px solid;
+color: #ffffff;
+border-radius: 4px;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+}

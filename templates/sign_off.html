@@ -123,7 +123,10 @@
       </table>
     </div>
     <button type="submit" id="submit-button" style="display: none;">Submit</button>
+
   </form>
+  <button  id="clearinput-button" style="display: none;">Clear Selection</button>
+
 </div>
 <div class="popup-overlay" id="popup-overlay"></div>
 <div class="popup" id="popup">
@@ -157,20 +160,41 @@
 });
 </script>
 <script>
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-  const submitButton = document.getElementById('submit-button');
+  $(document).ready(function() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const submitButton = document.getElementById('submit-button');
+    const clearInputButton = document.getElementById('clearinput-button');
+
+    checkboxes.forEach((checkbox) => {
+      checkbox.addEventListener('change', updateButtons);
+    });
+
+    clearInputButton.addEventListener('click', clearSelection);
+
+    function updateButtons() {
+      const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+      submitButton.style.display = checkedCheckboxes.length > 0 ? 'block' : 'none';
+      clearInputButton.style.display = checkedCheckboxes.length > 0 ? 'block' : 'none';
+    }
+
+    function clearSelection() {
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+      updateButtons();
+    }
+
+    updateButtons();
+  });
+
   const popupOverlay = document.getElementById('popup-overlay');
   const popup = document.getElementById('popup');
   const popupList = document.getElementById('popup-list');
   const undoButton = document.getElementById('undo-button');
   const confirmButton = document.getElementById('confirm-button');
 
-  checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener('change', () => {
-      const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-      submitButton.style.display = checkedCheckboxes.length > 0 ? 'block' : 'none';
-    });
-  });
+  const submitButton = document.getElementById('submit-button');
+  const clearInputButton = document.getElementById('clearinput-button');
 
   submitButton.addEventListener('click', (e) => {
     e.preventDefault();
