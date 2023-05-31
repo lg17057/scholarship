@@ -2,8 +2,6 @@
 
 #newdevice-submit {
     display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
     font-weight: bold;
     text-align: center;
     text-decoration: none;
@@ -11,33 +9,35 @@
     border-radius: 4px;
     color: #fff;
     position: inherit;
-    top: -10px;
+    top: -35px;
     left: -2px;
-    width: 80px;
-    height: 40px;
-    background-color: #007bff;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
+   
+    background-color: #ffffff;
+color: #008000;
+border: #008000 1px solid;
+border-radius: 4px;
+padding: 10px 20px;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+pointer-events: auto;
+position: relative;
+z-index: 100;
   }
   
   #newdevice-submit:hover {
-    background-color: #0056b3;
+    background-color: #008000;
+border: #008000 1px solid;
+color: #ffffff;
+border-radius: 4px;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
   }
   
-  #newdevice-submit:active {
-    background-color: #003d80;
-  }
-  
-  #newdevice-submit:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
     
     .select-container {
     position: relative;
     display: inline-block;
-    top:0px;
+    top:-45px;
     left: -1px;
   }
   
@@ -81,7 +81,7 @@
   
     #device_id,
     #notes {
-      width: 90%;
+      width: 30%;
     padding: 15px;
     margin: 5px 0 22px 0;
     display: block;
@@ -106,7 +106,7 @@
       position: fixed;
       top: 50%;
       left: 50%;
-      height: 370px;
+      height: 340px;
       width: 400px;
       transform: translate(-50%, -50%);
       background-color: #ffffff;
@@ -114,20 +114,24 @@
       border-radius: 12px;
       z-index: 10000;
     }
-    .newdevice-title {
-      margin-bottom: 10px;
+
+    .notescontainer {
+      position: relative;
+      top: -50px;
     }
   
-    
   
-  
+    #notes {
+      position: relative;
+      left: -125px;
+    }
     .main_title {
       position: relative;
       left:50px;
     }
   
     .openbtn {
-  background-color: #e1dfdf;
+  background-color: #edebeb;
   color: black;
   cursor: pointer;
   padding: 10px 15px;
@@ -139,3 +143,21 @@
   cursor: pointer;
   left: -7px;
   }
+  .newdevice-title {
+    margin-bottom: 10px;
+    position: relative;
+    top: -30px;
+  }
+
+  #device_id {
+  width: 30%;
+  position: relative;
+  left: -125px;    
+  }
+
+  #idcontainer {
+    position: relative;
+    top: -45px;
+  }
+
+
