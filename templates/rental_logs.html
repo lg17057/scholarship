@@ -96,9 +96,7 @@
       <input type=number class="idpicker"  oninput="validateInput(this)"   name="idpicker" placeholder="Enter Device ID.." value="idpicker"></input>
       <input type="submit" class="submit-btn" onclick="submitForm()" id="submit-btn" value="Select">
     </form>
-    <button onclick="window.location.href='/rental-logs/'" id="return-btn" class="return-btn">View All Logs</button>
-
-    
+    <button onclick="window.location.href='/rental-logs/'" id="return-btn" class="return-btn">View All Logs</button> 
   </div>
   <div class="datepicker-container">
     <div class="datepicker">
@@ -108,7 +106,6 @@
       <button id="confirm-btn" onclick="filterTable()">Select Date</button>
     </div>
   </div>
-  
   <h1 class="main_title">{{message}}</h1>
   <div class="download-container" style="position: relative;top: -125px;">
     <a href="/download-logs/" class="download-btn">Download Data</a>
@@ -175,6 +172,17 @@
   </div>
 </div>
 </html>
+
+
+
+
+
+
+
+
+
+
+
 <style>
   .main_title {
   position: relative;

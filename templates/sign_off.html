@@ -92,6 +92,7 @@
       <table class="devices" id="devices-table">
         <thead>
           <tr>
+            <th >Device Type</th>
             <th >Device ID</th>
             <th >Date Borrowed</th>
             <th >Borrowed Under</th>
@@ -116,6 +117,7 @@
             <td>{{ row[6] }}</td>
             <td>{{ row[7] }}</td>
             <td>{{ row[8] }}</td>
+            <td>{{ row[9] }}</td>
             <td><input type="checkbox" name="device_ids[]" value="{{ row[0] }}"></td>
           </tr>
           {% endfor %}
@@ -160,74 +162,76 @@
 });
 </script>
 <script>
-  $(document).ready(function() {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    const submitButton = document.getElementById('submit-button');
-    const clearInputButton = document.getElementById('clearinput-button');
-
-    checkboxes.forEach((checkbox) => {
-      checkbox.addEventListener('change', updateButtons);
-    });
-
-    clearInputButton.addEventListener('click', clearSelection);
-
-    function updateButtons() {
-      const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-      submitButton.style.display = checkedCheckboxes.length > 0 ? 'block' : 'none';
-      clearInputButton.style.display = checkedCheckboxes.length > 0 ? 'block' : 'none';
-    }
-
-    function clearSelection() {
-      checkboxes.forEach((checkbox) => {
-        checkbox.checked = false;
-      });
-      updateButtons();
-    }
-
-    updateButtons();
-  });
-
-  const popupOverlay = document.getElementById('popup-overlay');
-  const popup = document.getElementById('popup');
-  const popupList = document.getElementById('popup-list');
-  const undoButton = document.getElementById('undo-button');
-  const confirmButton = document.getElementById('confirm-button');
-
+ 
+$(document).ready(function() {
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
   const submitButton = document.getElementById('submit-button');
   const clearInputButton = document.getElementById('clearinput-button');
 
-  submitButton.addEventListener('click', (e) => {
-    e.preventDefault();
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', updateButtons);
+  });
+
+  clearInputButton.addEventListener('click', clearSelection);
+
+  function updateButtons() {
     const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-    popupList.innerHTML = '';
-    checkedCheckboxes.forEach((checkbox) => {
-      const deviceID = checkbox.value;
-      const listItem = document.createElement('li');
-      const link = document.createElement('a');
-      link.href = `/rental-logs/${deviceID}`;
-      link.textContent = deviceID;
-      listItem.appendChild(link);
-      popupList.appendChild(listItem);
-    });
-    popupOverlay.style.display = 'block';
-    popup.style.display = 'block';
-  });
-
-  popupOverlay.addEventListener('click', () => {
-    closePopup();
-  });
-
-  undoButton.addEventListener('click', () => {
-    closePopup();
-  });
-
-  confirmButton.addEventListener('click', () => {
-    document.getElementById('signoff-form').submit();
-  });
-
-  function closePopup() {
-    popupOverlay.style.display = 'none';
-    popup.style.display = 'none';
+    submitButton.style.display = checkedCheckboxes.length > 0 ? 'block' : 'none';
+    clearInputButton.style.display = checkedCheckboxes.length > 0 ? 'block' : 'none';
   }
-</script>
 
+  function clearSelection() {
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+    updateButtons();
+  }
+
+  updateButtons();
+});
+
+const popupOverlay = document.getElementById('popup-overlay');
+const popup = document.getElementById('popup');
+const popupList = document.getElementById('popup-list');
+const undoButton = document.getElementById('undo-button');
+const confirmButton = document.getElementById('confirm-button');
+
+const submitButton = document.getElementById('submit-button');
+const clearInputButton = document.getElementById('clearinput-button');
+
+submitButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+  popupList.innerHTML = '';
+  checkedCheckboxes.forEach((checkbox) => {
+    const row = checkbox.parentNode.parentNode; // Get the parent <tr> element
+    const deviceType = row.cells[0].textContent; // Retrieve device type from the first column of the row
+    const deviceID = row.cells[1].textContent; // Retrieve device ID from the second column of the row
+    const listItem = document.createElement('li');
+    const link = document.createElement('a');
+    link.href = `/rental-logs/${encodeURIComponent(deviceType)}/${encodeURIComponent(deviceID)}`; // Updated URL with device type and device ID
+    link.textContent = `${deviceType} ${deviceID}`; // Updated link text with device type and device ID
+    listItem.appendChild(link);
+    popupList.appendChild(listItem);
+  });
+  popupOverlay.style.display = 'block';
+  popup.style.display = 'block';
+});
+
+popupOverlay.addEventListener('click', () => {
+  closePopup();
+});
+
+undoButton.addEventListener('click', () => {
+  closePopup();
+});
+
+confirmButton.addEventListener('click', () => {
+  document.getElementById('signoff-form').submit();
+});
+
+function closePopup() {
+  popupOverlay.style.display = 'none';
+  popup.style.display = 'none';
+} 
+</script>

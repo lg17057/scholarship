@@ -13,6 +13,7 @@ import barcode
 import random
 import bcrypt
 import time
+import json
 import csv
 import re
 
@@ -20,8 +21,6 @@ import re
 app = Flask(__name__, static_url_path='/static')   
 #randomly generates secret key for sessions
 app.secret_key = 'ajnasdN&aslpo0912nlasiqwenz'
-
-
 
 
 #This class is used to open a database connection and automatically close it
@@ -54,27 +53,27 @@ def main():
         #fixes issues with keyError = none when program is first launched and certain pages are accessed
         if loginstatus is True:
             today = date.today()
-            formatted_date = today.strftime("%d-%m")
+            formatted_date = today.strftime("%d-%m-%Y %H:M")
             #SUBSTR date_borrowed, 1,5 takes the first 5 characters "dd-mm" from the date borrowed column
             #this ensures that formatted_date and formatted_yesterday will not take the time a device was rented
             #therefore ensuries that displayed data is from today
-            c.execute("SELECT COUNT(*) FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ?",(formatted_date,))
+            c.execute("SELECT COUNT(*) FROM device_logs WHERE SUBSTR(date_borrowed, 1, 8) = ?",(formatted_date,))
             row1_descriptor = c.fetchone()[0]
             #total rentals today
-            c.execute("SELECT COUNT(*) FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? AND period_returned NOT IN ('Not Returned')",(formatted_date,))
+            c.execute("SELECT COUNT(*) FROM device_logs WHERE SUBSTR(date_borrowed, 1, 8) = ? AND period_returned NOT IN ('Not Returned')",(formatted_date,))
             row2_descriptor = c.fetchone()[0]
             #devices returned today
-            c.execute("SELECT COUNT(*) FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? and teacher_signoff = ?",(formatted_date,"Confirmed"))
+            c.execute("SELECT COUNT(*) FROM device_logs WHERE SUBSTR(date_borrowed, 1, 8) = ? and teacher_signoff = ?",(formatted_date,"Confirmed"))
             row3_descriptor = c.fetchone()[0]
             #devices confirmed as returned today
             #takes the value of today any removes 1 day from it
             yesterday = date.today() - timedelta(days=1)
-            formatted_yesterday = yesterday.strftime("%d-%m")
+            formatted_yesterday = yesterday.strftime("%d-%m-%Y")
             #formates date to dd-mm format 
-            c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? AND SUBSTR(date_borrowed, 1, 5) < ? AND period_returned = 'Not Returned'", (formatted_yesterday, date.today()))
+            c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1, 8) = ? AND SUBSTR(date_borrowed, 1, 8) < ? AND period_returned = 'Not Returned'", (formatted_yesterday, date.today()))
             rows = c.fetchall()
             #selects all devices that are overdue (takes all values from date_borrowed value of formatted_yesterday and earlier)
-            c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? AND period_returned = ? AND teacher_signoff = ?", (formatted_date,"Not Returned","Unconfirmed"))
+            c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1, 8) = ? AND period_returned = ? AND teacher_signoff = ?", (formatted_date,"Not Returned","Unconfirmed"))
             row1 = c.fetchall()
             #selects all devices that have been rented today
             return render_template('/index.html', row1_descriptor=row1_descriptor, row2_descriptor=row2_descriptor, row3_descriptor=row3_descriptor, message="Index Page", loginstatus=loginstatus, rows=rows, row1=row1)
@@ -90,9 +89,8 @@ def device_logs():
     with opendb('logs.db') as c:
         status = session["logged_in"]
         if status is True:
-            c.execute("SELECT device_id, device_type, date_added, added_by, in_circulation, num_rentals, notes, last_rental FROM devices")
+            c.execute("SELECT device_id, device_type, date_added,last_change, added_by, in_circulation, num_rentals, notes, last_rental FROM devices")
             rows = c.fetchall()
-            loginstatus = session['logged_in']
             return render_template('/device_logs.html', rows=rows, loginstatus=status, message="Current devices", )
         else:
             message = "Please login to access this feature"
@@ -112,21 +110,59 @@ def get_barcode(device_type, device_id):
             return Response(barcode_data, mimetype='image/png')
         else:
             message = "Please login to access this feature"
-            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-        
+            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")     
+
 
 
 #Page dedicated for the ability to modify devices and relevant data
-@app.route('/modify-device')
-def modify_device():
-    status = session["logged_in"]
-    if status is True:
-        return render_template('modify_devices.html', loginstatus=status)
-    else:
-        message = "Please login to access this feature"
-        return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-    
+@app.route('/modify-device/<string:device_type>/<int:device_id>', methods=['POST','GET'])
+def modify_device_selected(device_type, device_id):
+    with opendb('logs.db') as c:
+        status = session['logged_in']
+        today = date.today()       
+        formatted_date = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
+        c.execute("SELECT device_id, device_type, date_added, added_by, in_circulation, notes, num_rentals, last_rental, last_change FROM devices where device_type = ? AND device_id = ?", (device_type, device_id))
+        data = c.fetchone()
+        if request.method == "POST":
+            form_type = request.form.get('form_type')
+            if form_type == 'device-select':
+                device_type_secondary = request.form.get('devicepicker')
+                device_id_secondary = request.form.get('idpicker')
+                return redirect('/modify-device/{}/{}'.format(device_type_secondary, device_id_secondary))
+            elif form_type == 'device-mod':
+                device_type_third = request.form.get('device_type')
+                device_id_third = request.form.get('device_id')
+                date_added = request.form.get('date_added')
+                added_by = request.form.get('added_by')
+                in_circulation = request.form.get('in_circulation')
+                notes = request.form.get('notes')
+                num = request.form.get('num_rentals')
+                last_rental = request.form.get('last_rental')
+                # Update devices table
+                c.execute("UPDATE devices SET device_id = ?, device_type = ?, date_added = ?, last_change = ?, added_by = ?, in_circulation = ?, notes = ?, num_rentals = ?, last_rental = ? WHERE device_id = ? AND device_type = ?",
+                (device_id_third, device_type_third, date_added, formatted_date, added_by, in_circulation, notes, num, last_rental, device_id, device_type))
+                message = "Device data successfully updated"
+                return render_template('message.html', message=message, loginstatus=status, message_btn="View_Devices", message_link="device-logs")
+        return render_template('modify_devices.html', modify_container_visible=True, id=data[0], type=data[1], added=data[2], added_by=data[3], circs=data[4], notes=data[5], num=data[6], last=data[7], last_change=data[8], loginstatus=status, message="Modifying {} {}".format(device_type, device_id))
 
+
+
+@app.route('/modify-device')
+@app.route('/modify-device', methods=['POST', 'GET'])
+def modify_device():
+    with opendb('logs.db') as c:
+        status = session["logged_in"]
+        if status is True:
+            if request.method == 'POST':
+                device_type = request.form.get('devicepicker')
+                device_id = request.form.get('idpicker')
+                return redirect('/modify-device/{}/{}'.format(device_type, device_id))
+            
+            return render_template('modify_devices.html',  loginstatus=status, message="Select Device: ",modify_container_visible=False)
+        else:
+            message = "Please login to access this feature"
+            return render_template('message.html', message=message,  loginstatus=status, message_btn="Login",message_link="login-page")
+    
 
 #page used to view current circulating devices that have NOT been returned
 @app.route('/circulations')
@@ -135,20 +171,20 @@ def circulations():
         status = session["logged_in"]
         if status is True:
             today = date.today()       
-            formatted_date = today.strftime("%d-%m")
+            formatted_date = today.strftime("%d-%m-%Y %H:M")
      
             ipads_circulating = 'None circulating'
             chromebooks_circulating = 'None circulating'
             laptops_circulating = 'None circulating'
             # Finding the number of each device type that is in circulation; key in_circulation Yes
-            c.execute("SELECT COUNT(*) FROM devices WHERE device_type='iPad' AND in_circulation='Yes' AND SUBSTR(last_rental, 1, 5) = ?", (formatted_date,))
+            c.execute("SELECT COUNT(*) FROM devices WHERE device_type='iPad' AND in_circulation='Yes' AND SUBSTR(last_rental, 1, 8) = ?", (formatted_date,))
             ipads_circulating = c.fetchone()[0]
-            c.execute("SELECT COUNT(*) FROM devices WHERE device_type='Chromebook' AND in_circulation='Yes' AND SUBSTR(last_rental, 1, 5) = ?", (formatted_date,))
+            c.execute("SELECT COUNT(*) FROM devices WHERE device_type='Chromebook' AND in_circulation='Yes' AND SUBSTR(last_rental, 1, 8) = ?", (formatted_date,))
             chromebooks_circulating = c.fetchone()[0]
-            c.execute("SELECT COUNT(*) FROM devices WHERE device_type='Laptop' AND in_circulation='Yes' AND SUBSTR(last_rental, 1, 5) = ?", (formatted_date,))
+            c.execute("SELECT COUNT(*) FROM devices WHERE device_type='Laptop' AND in_circulation='Yes' AND SUBSTR(last_rental, 1, 8) = ?", (formatted_date,))
             laptops_circulating = c.fetchone()[0]
             # Selecting only devices that are currently in circulation --> combines data from different
-            c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1, 5) = ? AND period_returned = ? AND teacher_signoff = ?", (formatted_date,"Not Returned","Unconfirmed"))
+            c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1, 8) = ? AND period_returned = ? AND teacher_signoff = ?", (formatted_date,"Not Returned","Unconfirmed"))
             circulating_data = c.fetchall()
             return render_template('circulations.html', ipads_c=ipads_circulating, chromebooks_c=chromebooks_circulating,
                                    laptops_c=laptops_circulating, rows=circulating_data, status=status)
@@ -159,16 +195,15 @@ def circulations():
        
 
 
-
 @app.route('/overdues')
 def overdue_rentals():
     with opendb('logs.db') as c:
         status = session["logged_in"]
         if status is True:    
-            formatted_date = date.today().strftime("%d-%m")
+            formatted_date = date.today().strftime("%d-%m-%Y %H:M")
             yesterday = date.today() - timedelta(days=1) #SUBSTR(date_borrowed, 1, 5) = ? AND SUBSTR(date_borrowed, 1, 5) < ? 
-            formatted_yesterday = yesterday.strftime("%d-%m")
-            c.execute("SELECT * FROM device_logs WHERE period_returned = 'Not Returned' AND teacher_signoff = 'Unconfirmed' AND SUBSTR(date_borrowed, 1, 5) < ?", (formatted_date,))
+            formatted_yesterday = yesterday.strftime("%d-%m-%Y %H:M")
+            c.execute("SELECT * FROM device_logs WHERE period_returned = 'Not Returned' AND teacher_signoff = 'Unconfirmed' AND SUBSTR(date_borrowed, 1, 8) < ?", (formatted_date,))
             rows = c.fetchall()
             print('datata')
             print(rows)
@@ -177,7 +212,6 @@ def overdue_rentals():
         else:
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-
 
 
 #Page designed for data on students
@@ -203,6 +237,61 @@ def student_data():
 
 
 
+@app.route('/rental-logs/', methods=['GET', 'POST'])
+def rental_logs():
+    with opendb('logs.db') as c:
+        status = session["logged_in"]
+        if status is True:
+            today = date.today()
+            formatted_date = today.strftime("%d-%m-%Y %H:M")
+            c.execute("SELECT * from device_logs")
+            logs = c.fetchall()
+            c.execute("SELECT DISTINCT date_borrowed FROM device_logs")
+            available_dates = [row[0] for row in c.fetchall()]
+
+
+            if request.method == 'POST':
+                device_type = request.form.get('devicepicker')
+                device_id = request.form.get('idpicker')
+                return redirect('/rental-logs/{}/{}'.format(device_type, device_id))
+            return render_template('rental_logs.html', rows=logs,available_dates=available_dates, message="Viewing all rental logs", formatted_date=formatted_date, loginstatus=status)
+        else:
+            message = "Please login to access this feature"
+            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
+        
+
+#page for user to view device specific rental logs 
+#example of route;  /rental-logs/2231
+@app.route('/rental-logs/<string:device_type>/<int:device_id>')
+def date_id_logs(device_type, device_id):
+    with opendb('logs.db') as c:
+        status = session["logged_in"]
+        if status is True:
+            c.execute("SELECT * from device_logs WHERE device_type = ? AND device_id = ?", (device_type, device_id,))
+            rows = c.fetchall()
+            loginstatus = session['logged_in']
+            message = "Viewing rental logs for {} ID {}".format(device_type, device_id)
+            return render_template('rental_logs.html', loginstatus=status, rows=rows, message=message)
+        else:
+            message = "Please login to access this feature"
+            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page") 
+
+
+#page or user to view device type specific rental logs without an ID
+@app.route('/rental-logs/<string:device_type>/')
+def device_type_logs(device_type):
+    with opendb('logs.db') as c:
+        status = session["logged_in"]
+        if status is True:
+            c.execute("SELECT * FROM device_logs WHERE device_type = ?",(device_type,))
+            rows = c.fetchall()
+            loginstatus = session['logged_in']
+            message = "Viewing rental logs for {}s".format(device_type)
+            return render_template('rental_logs.html', loginstatus=status, rows=rows, message=message)
+        else:
+            message = "Please login to access this feature"
+            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
+        
 #Displays all rental logs in a table 
 #user can select what data of rental logs to see;
 #example of date specific viewing; /rental-logs/11-04 
@@ -221,63 +310,6 @@ def rental_logs_date(date):
         else:
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-        
-
-
-@app.route('/rental-logs/', methods=['GET', 'POST'])
-def rental_logs():
-    with opendb('logs.db') as c:
-        status = session["logged_in"]
-        if status is True:
-            today = date.today()
-            formatted_date = today.strftime("%Y-%H-%m")
-            c.execute("SELECT * from device_logs")
-            logs = c.fetchall()
-            loginstatus = session['logged_in']
-            if request.method == 'POST':
-                device_type = request.form.get('devicepicker')
-                device_id = request.form.get('idpicker')
-                return redirect('/rental-logs/{}/{}'.format(device_type, device_id))
-            return render_template('rental_logs.html', rows=logs, message="Viewing all rental logs", formatted_date=formatted_date, loginstatus=status)
-        else:
-            message = "Please login to access this feature"
-            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-        
-
-
-#page for user to view device specific rental logs 
-#example of route;  /rental-logs/2231
-@app.route('/rental-logs/<string:device_type>/<int:device_id>')
-def date_id_logs(device_type, device_id):
-    with opendb('logs.db') as c:
-        status = session["logged_in"]
-        if status is True:
-            c.execute("SELECT * from device_logs WHERE device_type = ? AND device_id = ?", (device_type, device_id,))
-            rows = c.fetchall()
-            loginstatus = session['logged_in']
-            message = "Viewing rental logs for {} ID {}".format(device_type, device_id)
-            return render_template('rental_logs.html', loginstatus=status, rows=rows, message=message)
-        else:
-            message = "Please login to access this feature"
-            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-       
-
-
-#page or user to view device type specific rental logs without an ID
-@app.route('/rental-logs/<string:device_type>/')
-def device_type_logs(device_type):
-    with opendb('logs.db') as c:
-        status = session["logged_in"]
-        if status is True:
-            c.execute("SELECT * FROM device_logs WHERE device_type = ?",(device_type,))
-            rows = c.fetchall()
-            loginstatus = session['logged_in']
-            message = "Viewing rental logs for {}s".format(device_type)
-            return render_template('rental_logs.html', loginstatus=status, rows=rows, message=message)
-        else:
-            message = "Please login to access this feature"
-            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-        
 
 
 #used to check whether or not the data for a date works
@@ -293,7 +325,6 @@ def check_data_availability(date):
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
         
-
 
 #note for when device logs page is next developed
 #add device,student and admin download ability and buttons to html page
@@ -373,15 +404,13 @@ def sign_off():
         status = session["logged_in"]
         if status is True:
         #selects all data from rental logs where data is unconfirmed
-            c.execute("SELECT device_id, date_borrowed, submitted_under, student_name, homeroom, period_borrowed, reason_borrowed, period_returned, notes FROM device_logs WHERE teacher_signoff='Unconfirmed' AND period_returned IN (1, 2, 3, 4, 5, 6) AND period_returned != 'Not Returned'")
+            c.execute("SELECT device_type, device_id, date_borrowed, submitted_under, student_name, homeroom, period_borrowed, reason_borrowed, period_returned, notes FROM device_logs WHERE teacher_signoff='Unconfirmed' AND period_returned IN ('Homeroom', 1, 2, 3, 4, 5, 6) AND period_returned != 'Not Returned'")
             rows = c.fetchall()
-            loginstatus = session['logged_in']
             return render_template('sign_off.html', rows=rows, loginstatus=status, message="Viewing unconfirmed circulations")
         else:
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
             
-
 
 #Used to sign off a device based off of id; 
 #can be used to rectify an issue where a device is trying to be rented and has not been confirmed as returned
@@ -399,15 +428,14 @@ def sign_off_deviceid(device_type,device_id):
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
                 
 
-
 #Link that confirms entries after devices have been selected to sign off
 @app.route('/confirm-entries', methods=['POST'])
 def confirm_entries():
     with opendb('logs.db') as c:
+
         status = session["logged_in"]
         if status is True:
             device_ids = request.form.getlist('device_ids[]')
-            loginstatus = session['logged_in']
             if device_ids:
                 try:
                     c.execute('UPDATE device_logs SET teacher_signoff = "Confirmed" WHERE device_id IN ({})'.format(','.join('?' * len(device_ids))), device_ids)
@@ -424,12 +452,11 @@ def confirm_entries():
                 message = 'No entries selected for confirmation.'
                 message_type = 'info'
 
-            return render_template('message.html', message=message, loginstatus=status, message_btn="View_Circulations",message_link="circulations")
+            return render_template('message.html', message=message, loginstatus=status, message_btn="View_Circulations", message_link="circulations")
 
         else:
             message = "Please login to access this feature"
-            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-        
+            return render_template('message.html', message=message, loginstatus=status, message_btn="Login", message_link="login-page")
 
 
 @app.route('/new-log')
@@ -446,15 +473,15 @@ def new_log():
             form_type = request.form.get('form_type')
             device_type = request.form.get('device_type')
             # Retrieve form data
-            today = date.today()
-            formatted_date = today.strftime("%d-%m")
+            formatted_date = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
+
             student_name = request.form.get('student_name')
             student_id = request.form.get('student_id')
             homeroom = request.form.get('homeroom')
             device_id = request.form.get('device_id')
             submitted_under = session['user_id']
             teacher_signoff = "Unconfirmed"
-            current_date = date.today().strftime("%d-%m %H:%M")
+            current_date = date.today().strftime("%d-%m-%Y %H:%M")
             if form_type == "rent":
                 period_borrowed = request.form.get('period_borrowed')
                 reason_borrowed = request.form.get('reason_borrowed')
@@ -466,7 +493,7 @@ def new_log():
                 student_exists = c.fetchall()
                 if student_exists:
                     c.execute("UPDATE student_data SET last_rental = ?, device_type = ?, device_id = ?, outstanding_rental = ? WHERE student_name = ?",
-                    (current_date, device_type, device_id, "Yes", student_name))
+                    (formatted_date, device_type, device_id, "Yes", student_name))
                 else:
                     c.execute("INSERT INTO student_data(homeroom, student_name, num_rentals, last_rental, device_id, device_type, outstanding_rental, student_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                               (homeroom, student_name, 0, date, device_id, device_type, "Yes", student_id))
@@ -476,7 +503,7 @@ def new_log():
                 ("Yes", formatted_date, device_id, device_type))
                 # Update device logs table
                 c.execute("INSERT INTO device_logs (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (current_date, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, "Not Returned", "Unconfirmed", notes))
+                (formatted_date, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, "Not Returned", "Unconfirmed", notes))
                 return render_template('message.html', message="Successful Rental", loginstatus=status, message_btn="View_Rental_Logs", message_link="rental-logs")
             elif form_type == "rent_scan":
                 barcode_input = request.form.get('barcode_input')
@@ -565,7 +592,7 @@ def new_log():
                           (period_returned, notes, device_id, device_type))
                 return render_template('message.html', message="Device Returned", loginstatus=status, message_btn="View_Rental_Logs", message_link="rental-logs")
         else:
-            return render_template('new_log.html', status=status, available_devices=available_devices)
+            return render_template('new_log.html', loginstatus=status, available_devices=available_devices)
 
 
 #Used for creating a new device
@@ -597,7 +624,7 @@ def new_item():
                     barcode_image.write(barcode_buffer)
                     barcode_data = barcode_buffer.getvalue()
                     # insert device data into database
-                    c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes, barcode, num_rentals, last_rental) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device, barcode_data, 0, "Invalid"))
+                    c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes, barcode, num_rentals, last_rental) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device, barcode_data, 0, "None"))
                     return render_template('message.html', message="New device logged", loginstatus=status, message_btn="View_Devices",message_link="device-logs")
                 elif device_exists_check:
                     return render_template('message.html', message="Device already exists", loginstatus=status, message_btn="Try_Again",message_link="new-item")   
@@ -610,7 +637,6 @@ def new_item():
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
         
         
-
 #Temporary dev admin page used to display all possible links
 @app.route('/dev-admin', methods=['GET', 'POST'])
 def dev_admin():
@@ -628,7 +654,6 @@ def dev_admin():
         return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
     
 
-
 #Admin page
 @app.route('/admin')
 def admin():
@@ -639,7 +664,6 @@ def admin():
         message = "Please login to access this feature"
         return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
     
-
 
 #Used to log the user out
 @app.route('/logout', methods=["GET", "POST"])

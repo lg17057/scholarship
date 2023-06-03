@@ -1,0 +1,224 @@
+
+.idpicker {
+    width: 10%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: block;
+  margin: 0 auto;
+  border: none;
+  background: #f1f1f1;
+  }
+
+  .idpicker:focus {
+    background-color: #ddd;
+    outline: none;
+  }
+
+  
+
+  .select-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Styling the select element */
+  .select-container select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 120px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+  }
+  
+  /* Styling the arrow icon */
+  .select-container::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  /* Styling when select element is open */
+  .select-container.select-open select {
+    border-color: #888;
+  }
+  
+  /* Styling the dropdown options */
+  .select-container select option {
+    font-size: 14px;
+  }
+  
+  /* Styling when an option is selected */
+  .select-container.select-open select option:checked {
+    background-color: #f0f0f0;
+  }
+
+
+  .select-container {
+    position: relative;
+    top: -50px;
+    width: 120px;
+    z-index: 3;
+  }
+
+  
+  .idpicker {
+    position: relative;
+    top: -88px;
+    left: -550px;
+    height: 10px;
+    border-radius: 5px;
+    height:9px;
+    z-index: 3;
+    width: 120px;
+  }
+
+  #devicepicker {
+    width: 120px;
+    height: 38px;
+    border-radius: 5px;
+    background: #f1f1f1;
+  }
+
+  #devicepicker:select {
+    background-color: #ddd;
+  }
+
+.idpicker-container {
+  position: relative;
+
+}
+
+  
+#return-btn {
+    background-color: #ffffff;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 5px;
+    padding: 10px 20px;
+    position: relative;
+    left: 1230px;
+    z-index: 3;
+    top: -159px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  #return-btn:hover {
+    background-color: #008000;
+    border: #008000 1px solid;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  #refine-container {
+    position: relative;
+    top: -70px;
+  }
+
+
+
+    #modify-container {
+        position: relative;
+        top: -220px;
+    }
+
+
+
+
+
+
+
+
+    .input-field {
+        padding: 10px;
+        margin: 5px 0 18px 0;
+        margin: 0 auto;
+        width: 88%;
+        border: none;
+        border-radius: 2px;
+        background: #f1f1f1;
+        }
+        
+        .input-field:focus {
+          background-color: #ddd;
+          outline: none;
+        }
+
+
+
+
+
+
+    .devices-table {
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.9em;
+        font-family: sans-serif;
+        min-width: 400px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+      }
+      
+      .devices thead tr {
+        background-color: #009879;
+        color: #ffffff;
+        text-align: left;
+      }
+      
+      .devices th,
+      .devices td {
+          padding: 12px 15px;
+      }
+      
+      .devices tbody tr {
+        border-bottom: 1px solid #dddddd;
+      }
+      
+      .devices tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+      }
+      
+      .devices tbody tr:last-of-type {
+        border-bottom: 2px solid #009879;
+      }
+      
+      .devices tbody tr.active-row {
+        font-weight: bold;
+        color: #009879;
+      }
+
+      
+.submit-btn {
+    background-color: #ffffff;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 4px;
+    padding: 8px 16px;
+    position: relative;
+    left: 295px;
+    top:-128px;
+    height: 40px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .submit-btn:hover {
+    background-color: #008000;
+    border: #008000 1px solid;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 8px 16px;
+    
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }

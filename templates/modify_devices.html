@@ -14,6 +14,8 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/modify_devices.css') }}">
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
@@ -80,4 +82,139 @@
       </div>
 </html>
 <title>Modify Devices</title>
-<h1  class="main_title">Modify Devices</h1>
+<h1  class="main_title">{{message}}</h1>
+<div class="primary-container">
+  <div id="refine-container">
+    <div class="idpicker-container">
+      <form action="/modify-device" method="POST" >
+        <input type="hidden" name="form_type" value="device-select">
+
+        <div class="select-container" style="font-size:14px;">  
+          <select id="devicepicker" style="font-size: 14px;" name="devicepicker" placeholder="Device Type.." value="devicepicker">
+            <option value="">Device Type: </option>
+            <option value="Chromebook">Chromebook</option>
+            <option value="iPad">iPad</option>
+            <option value="Laptop">Laptop</option>
+          </select>
+
+        </div>
+
+        <input type=number class="idpicker"  oninput="validateInput(this)"   name="idpicker" placeholder="Enter Device ID.." value="idpicker"></input>
+        <input type="submit" class="submit-btn" id="submit-btn" value="Select">
+      </form>
+    </div>
+    <h3 id="messages-text" style="color: red;"></h3>
+  </div>
+  {% if modify_container_visible %}
+<div id="modify-container">
+  <button onclick="window.location.href='/rental-logs/'" id="devices-btn" class="devices-btn">View All Devices</button> 
+
+  <h2 id="header-primary-content">Current Device Data:</h2>
+  <form id="device-mod-form" method="POST">
+    <input type="hidden" name="form_type" value="device-mod">
+    <table id="devices-table" class="devices">
+      <thead>
+        <tr>
+          <th>Device Type:</th>
+          <th>Device ID:</th>
+          <th>Date Added:</th>
+          <th>Last Change:</th>
+          <th>Added By:</th>
+          <th>In Circulation:</th>
+          <th>Notes:</th>
+          <th>Num Rentals:</th>
+          <th>Last Rental:</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <input type="text" class="input-field" spellcheck="false" name="device_type" value="{{type}}">
+          </td>
+          <td>
+            <input type="text" class="input-field" spellcheck="false" name="device_id" value="{{id}}">
+          </td>
+          <td>
+            <input type="text" class="input-field" spellcheck="false" name="date_added" value="{{added}}">
+          </td>
+          <td>
+            <input type="text" class="input-field" spellcheck="false" name="last_change" value="{{last_change}}">
+          </td>
+          <td>
+            <input type="text" class="input-field" spellcheck="false" name="added_by" value="{{added_by}}">
+          </td>
+          <td>
+            <input type="text" class="input-field" spellcheck="false" name="in_circulation" value="{{circs}}">
+          </td>
+          <td>
+            <input type="text" class="input-field" spellcheck="true" name="notes" value="{{notes}}">
+          </td>
+          <td>
+            <input type="text" class="input-field" spellcheck="false" name="num_rentals" value="{{num}}">
+          </td>
+          <td>
+            <input type="text" class="input-field" spellcheck="false" name="last_rental" value="{{last}}">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <input type="submit" id="return-btn" value="Confirm Changes">
+  </form>
+</div>
+{% endif %}
+</div>
+
+<script>
+  function validateInput(input) {
+  input.value = input.value.replace(/[^0-9]/g, ''); // remove non-digit
+  input.value = input.value.slice(0, 4); // limit to 4 digits
+  if (input.value < 0) {
+    input.value = ''; // clear negative 
+  }
+}
+
+function submitForm() {
+  let devicepicker = document.getElementById('devicepicker');
+  let idpicker = document.querySelector('.idpicker');
+  if (devicepicker.value === "") {
+    alert("Please select a device type.");
+    return false; // prevent submission
+  }
+  if (idpicker.value !== "" && idpicker.value.length !== 4) {
+    alert("Please enter a four-digit ID.");
+    return false; // prevent submission
+  }
+}
+</script>
+<style>
+  
+
+.devices-btn {
+    background-color: #ffffff;
+    color: #0083c5;
+    border: #0083c5 1px solid;
+    border-radius: 4px;
+    padding: 8px 16px;
+    position: relative;
+    left:1385px;
+    top:64px;
+    height: 40px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .devices-btn:hover {
+    background-color: #0083c5;
+    border: #0083c5 1px solid;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 8px 16px;
+    
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  #header-primary-content {
+    position: relative;
+    top: 10px;
+  }
+</style>
