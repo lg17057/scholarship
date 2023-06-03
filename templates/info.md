@@ -225,5 +225,7 @@ user radio buttons for download buttons
 check if devices exists isnt working
 num rental isnt going up when renting
 
+`````````````````
 
-make sure that the h3 is in the right place
+check for whether or not the device type and id combination exists is now working
+as well as route check for if device exists is now working

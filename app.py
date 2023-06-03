@@ -113,7 +113,6 @@ def get_barcode(device_type, device_id):
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")     
 
 
-
 #Page dedicated for the ability to modify devices and relevant data
 @app.route('/modify-device/<string:device_type>/<int:device_id>', methods=['POST','GET'])
 def modify_device_selected(device_type, device_id):
@@ -160,7 +159,6 @@ def modify_device_selected(device_type, device_id):
         device_types = [device[1] for device in device_list]
         
         return render_template('modify_devices.html',modify_container_visible=True,id=data[0],type=data[1],added=data[2],added_by=data[3],circs=data[4],notes=data[5],num=data[6],last=data[7],last_change=data[8],loginstatus=status,message="Modifying {} {}".format(device_type, device_id),device_ids=device_ids,device_types=device_types)
-
 
 
 @app.route('/modify-device', methods=['POST', 'GET'])
@@ -799,36 +797,44 @@ def message():
 # Help page
 @app.route('/help')
 def help():
-    return render_template('help.html')
+    loginstatus = session['logged_in']
+    return render_template('help.html',loginstatus=loginstatus)
 #Handles 400 errors -
 @app.errorhandler(400)
 def bad_request_error(error):
-    return render_template('error_page.html',error_code="400", error_message="Bad Request"), 400
+    status = session['logged_in']
+    return render_template('error_page.html',error_code="400", error_message="Bad Request", loginstatus=status), 400
 #Handles 401 errors - 
 @app.errorhandler(401)
 def unauthorized_error(error):
-    return render_template('error_page.html',error_code="401", error_message="Unauthorized"), 401
+    status = session['logged_in']
+    return render_template('error_page.html',error_code="401", error_message="Unauthorized", loginstatus=status), 401
 #Handles 403 errors -
 @app.errorhandler(403)
 def forbidden_error(error):
-    return render_template('error_page.html',error_code="403", error_message="Forbidden"), 403
+    status = session['logged_in']
+    return render_template('error_page.html',error_code="403", error_message="Forbidden", loginstatus=status), 403
 #Handles 404 errors -
 @app.errorhandler(404)
 def page_not_found_error(error):
-    return render_template('error_page.html',error_code="404", error_message="Not Found"), 404
+    status = session['logged_in']
+    return render_template('error_page.html',error_code="404", error_message="Not Found", loginstatus=status), 404
 #Handles 405 errors -
 @app.errorhandler(405)
 def method_not_allowed_error(error):
-    return render_template('error_page.html',error_code="405", error_message="Method Not Allowed"), 405
+    status = session['logged_in']
+    return render_template('error_page.html',error_code="405", error_message="Method Not Allowed", loginstatus=status), 405
 #Handles 500 errors -
 @app.errorhandler(500)
 def internal_server_error(error):
     sql.session.rollback()
-    return render_template('error_page.html',error_code="500", error_message="Internal Server Error"), 500
+    status = session['logged_in']
+    return render_template('error_page.html',error_code="500", error_message="Internal Server Error", loginstatus=status), 500
 #Handles 503 errors -
 @app.errorhandler(503)
 def service_unavailable_error(error):
-    return render_template('error_page.html',error_code="503", error_message="Service Unavailable"), 503
+    status = session['logged_in']
+    return render_template('error_page.html',error_code="503", error_message="Service Unavailable", loginstatus=status), 503
 
 
 
