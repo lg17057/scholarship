@@ -123,12 +123,19 @@ def modify_device_selected(device_type, device_id):
         formatted_date = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
         c.execute("SELECT device_id, device_type, date_added, added_by, in_circulation, notes, num_rentals, last_rental, last_change FROM devices where device_type = ? AND device_id = ?", (device_type, device_id))
         data = c.fetchone()
+        
+        if data is None:
+            message = "Device not found"
+            return render_template('message.html', message=message, loginstatus=status, message_btn="View_Devices", message_link="device-logs")
+        
         if request.method == "POST":
             form_type = request.form.get('form_type')
+            
             if form_type == 'device-select':
                 device_type_secondary = request.form.get('devicepicker')
                 device_id_secondary = request.form.get('idpicker')
                 return redirect('/modify-device/{}/{}'.format(device_type_secondary, device_id_secondary))
+            
             elif form_type == 'device-mod':
                 device_type_third = request.form.get('device_type')
                 device_id_third = request.form.get('device_id')
@@ -138,16 +145,24 @@ def modify_device_selected(device_type, device_id):
                 notes = request.form.get('notes')
                 num = request.form.get('num_rentals')
                 last_rental = request.form.get('last_rental')
+                
                 # Update devices table
                 c.execute("UPDATE devices SET device_id = ?, device_type = ?, date_added = ?, last_change = ?, added_by = ?, in_circulation = ?, notes = ?, num_rentals = ?, last_rental = ? WHERE device_id = ? AND device_type = ?",
                 (device_id_third, device_type_third, date_added, formatted_date, added_by, in_circulation, notes, num, last_rental, device_id, device_type))
+                
                 message = "Device data successfully updated"
                 return render_template('message.html', message=message, loginstatus=status, message_btn="View_Devices", message_link="device-logs")
-        return render_template('modify_devices.html', modify_container_visible=True, id=data[0], type=data[1], added=data[2], added_by=data[3], circs=data[4], notes=data[5], num=data[6], last=data[7], last_change=data[8], loginstatus=status, message="Modifying {} {}".format(device_type, device_id))
+        
+        device_list_query = "SELECT device_id, device_type FROM devices"
+        c.execute(device_list_query)
+        device_list = c.fetchall()
+        device_ids = [device[0] for device in device_list]
+        device_types = [device[1] for device in device_list]
+        
+        return render_template('modify_devices.html',modify_container_visible=True,id=data[0],type=data[1],added=data[2],added_by=data[3],circs=data[4],notes=data[5],num=data[6],last=data[7],last_change=data[8],loginstatus=status,message="Modifying {} {}".format(device_type, device_id),device_ids=device_ids,device_types=device_types)
 
 
 
-@app.route('/modify-device')
 @app.route('/modify-device', methods=['POST', 'GET'])
 def modify_device():
     with opendb('logs.db') as c:
@@ -158,11 +173,17 @@ def modify_device():
                 device_id = request.form.get('idpicker')
                 return redirect('/modify-device/{}/{}'.format(device_type, device_id))
             
-            return render_template('modify_devices.html',  loginstatus=status, message="Select Device: ",modify_container_visible=False)
+            device_list_query = "SELECT device_id, device_type FROM devices"
+            c.execute(device_list_query)
+            device_list = c.fetchall()
+            device_ids = [device[0] for device in device_list]
+            device_types = [device[1] for device in device_list]
+            
+            return render_template('modify_devices.html', loginstatus=status, message="Select Device: ",modify_container_visible=False, device_ids=device_ids, device_types=device_types)
         else:
             message = "Please login to access this feature"
-            return render_template('message.html', message=message,  loginstatus=status, message_btn="Login",message_link="login-page")
-    
+            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
+
 
 #page used to view current circulating devices that have NOT been returned
 @app.route('/circulations')

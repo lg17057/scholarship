@@ -224,3 +224,6 @@ user radio buttons for download buttons
 
 check if devices exists isnt working
 num rental isnt going up when renting
+
+
+make sure that the h3 is in the right place

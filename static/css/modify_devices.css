@@ -1,3 +1,8 @@
+#messages-text {
+  position: relative;
+  top: -140px;
+}
+
 
 .idpicker {
     width: 10%;
@@ -129,8 +134,8 @@
 
 
     #modify-container {
-        position: relative;
-        top: -220px;
+        position: fixed;
+        top: 170px;
     }
 
 
@@ -207,6 +212,7 @@
     position: relative;
     left: 295px;
     top:-128px;
+    z-index: 100000;
     height: 40px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
