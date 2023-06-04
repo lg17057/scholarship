@@ -229,3 +229,17 @@ num rental isnt going up when renting
 
 check for whether or not the device type and id combination exists is now working
 as well as route check for if device exists is now working
+
+
+
+``````````````````````````````````````
+4-06
+
+moved rent/return fucntionality to index page
+fixed several different container not showing issues
+count succesfully added to index page using different method (len(rows))
+checkouts table working again
+overdues table working agani
+
+make all of these errors in the github
+make a thing at the bottom of the page showing how many overdue items there are  

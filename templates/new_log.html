@@ -432,71 +432,7 @@ window.addEventListener("click", (event) => {
     }
   }
 </script>
-<script>
-const barcodeInput = document.getElementById('barcode_input');
-const clearButtonRent = document.getElementById('clear-button-rent');
-const studentInput = document.getElementById('student-data-input');
-const clearButtonStudentRent = document.getElementById('clear-button-student-rent');
-const confirmButton = document.getElementById('confirm-button-left');
 
-clearButtonRent.addEventListener('click', function() {
-  if (clearButtonRent.textContent === 'Scan') {
-    if (clearButtonStudentRent.textContent === 'Clear') {
-      clearButtonStudentRent.textContent = 'Scan';
-      studentInput.readOnly = true;
-      studentInput.blur();
-    }
-
-    clearButtonRent.textContent = 'Clear';
-    barcodeInput.readOnly = false;
-    barcodeInput.focus();
-    barcodeInput.select();
-  } else {
-    clearButtonRent.textContent = 'Scan';
-    barcodeInput.value = '';
-    barcodeInput.readOnly = true;
-    barcodeInput.blur();
-  }
-});
-
-barcodeInput.addEventListener('input', function() {
-  if (barcodeInput.value.length > 0) {
-    confirmButton.disabled = false;
-  } else {
-    confirmButton.disabled = true;
-  }
-});
-
-clearButtonStudentRent.addEventListener('click', function() {
-  if (clearButtonStudentRent.textContent === 'Scan') {
-    if (clearButtonRent.textContent === 'Clear') {
-      clearButtonRent.textContent = 'Scan';
-      barcodeInput.readOnly = true;
-      barcodeInput.blur();
-    }
-
-    clearButtonStudentRent.textContent = 'Clear';
-    studentInput.readOnly = false;
-    studentInput.focus();
-    studentInput.select();
-  } else {
-    clearButtonStudentRent.textContent = 'Scan';
-    studentInput.value = '';
-    studentInput.readOnly = true;
-    studentInput.blur();
-  }
-});
-
-studentInput.addEventListener('input', function() {
-  if (studentInput.value.length > 0) {
-    confirmButton.disabled = false;
-  } else {
-    confirmButton.disabled = true;
-  }
-});
-
-
-</script>
 
 
 
