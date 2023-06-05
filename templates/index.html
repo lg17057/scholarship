@@ -14,6 +14,8 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/date_picker.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+
         <!--<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">-->
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -22,6 +24,8 @@
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
         <script src="{{ url_for('static', filename='js/open_nav.js') }}"></script>
         <script src="{{ url_for('static', filename='js/date_pickerjs') }}"></script>
+        <script src="{{ url_for('static', filename='js/type_id.js') }}"></script>
+
 
 
 
@@ -171,6 +175,10 @@
                       <h2 class="datacard-header" id="row3-header">Devices Confirmed:</h2>
                       <h2 class="datacard-header" id="row3-descriptor">{{row3_descriptor}}</h2>
                     </div>
+                    <div class="data-row" id="row4">
+                      <h2 class="datacard-header" id="row4-header">Overdue Devices:</h2>
+                      <h2 class="datacard-header" id="row4-descriptor">{{row4_descriptor}}</h2>
+                    </div>
                   </div>
                   <button id="view-rentals" onclick="window.location.href='/rental-logs'">View All Rentals</button>
 
@@ -189,7 +197,7 @@
                       <div class="modal-content">
                         <div id="form-content">
                           <!--This is the form used to rent a device-->
-                          <form method="POST" action="/">
+                          <form method="POST" action="/" id="manual_rent">
                             <input type="hidden" name="form_type" value="rent">
                           
                             <!-- Form fields -->
@@ -208,18 +216,18 @@
                             </div>
                             <label for="device_id" id="labeldeviceid">Device Data:</label><br>
                             <div class="select-container">
-                              <select id="device_type" name="device_type" required>
+                              <select id="devicepicker" name="device_type" required>
                                 <option selected value="">Device Type:</option>
                                 <option value="iPad">iPad</option>
                                 <option value="Laptop">Laptop</option>
                                 <option value="Chromebook">Chromebook</option>
                               </select>
                             </div>
-                            <input  required type="number"  oninput="validateInput(this)"   id="device_id" class="input-field" name="device_id" placeholder="Device ID">
+                            <input  required type="number"  oninput="validateInput(this)"   id="idpicker" class="input-field idpicker" name="device_id" placeholder="Device ID">
                             <br>
                             <div id="reason_borrowed-div-rental">
                                <label for="reason_borrowed">Reason Borrowed:</label><br>
-                              <input type="text" id="reason_borrowed" name="reason_borrowed" placeholder="Reason..." class="input-field"><br>
+                              <input type="text" required id="reason_borrowed" name="reason_borrowed" placeholder="Reason..." class="input-field"><br>
                               <br>
                             </div>
                              <div id="period_borrowed-div-rental">
@@ -228,16 +236,17 @@
                                 <select id="period_borrowed" name="period_borrowed">
                                   <option selected value="Homeroom">Homeroom</option>
                                   <option value="1">1</option>
-                                   <option value="2">2</option>
+                                  <option value="2">2</option>
                                   <option value="3">3</option>
-                                   <option value="4">4</option>
-                                   <option value="5">5</option>
-                                   <option value="6">6</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                                  <option value="6">6</option>
                                  </select>
                                </div>
                             </div>
                             <input type="submit" class="button" id="confirm-button-left2" value="Confirm" title="Confirm Selection">
                           </form>
+                          <h3 id="messages-text"></h3>
                         </div>
                       </div>
                     </div>
@@ -252,7 +261,7 @@
                       </div>
                       <div id="form-content">
                         <!--THis is the form used to return a device-->
-                        <form method="POST" action="/">
+                        <form method="POST" action="/" id="manual_return">
                           <input type="hidden" name="form_type" value="return">
                         
                           <!-- Form fields -->
@@ -271,14 +280,14 @@
                           </div>
                           <label for="device_id" id="labeldeviceid">Device Data:</label><br>
                           <div class="select-container">
-                            <select id="device_type" name="device_type" required>
+                            <select id="device_type_return" name="device_type" required>
                               <option selected value="">Device Type:</option>
                               <option value="iPad">iPad</option>
                               <option value="Laptop">Laptop</option>
                               <option value="Chromebook">Chromebook</option>
                             </select>
                           </div>
-                          <input  required type="number"  oninput="validateInput(this)"   id="device_id" class="input-field" name="device_id" placeholder="Device ID">
+                          <input  required type="number"  oninput="validateInput(this)"   id="device_id_return" class="input-field idpicker" name="device_id" placeholder="Device ID">
                           <b></b>
                           <div id="period_returned-div-rental">
                             <label for="period_returned">Period Returned:</label><br>
@@ -296,6 +305,7 @@
                           </div>
                           <input type="submit" class="button" id="confirm-button-right2" value="Confirm" title="Confirm Selection">
                         </form>
+                        <h3 id="messages-text1"></h3>
                       </div>
                     </div>
               <!------------------------------------------------------------------------------------------------------------------------>
@@ -417,6 +427,243 @@
         </div>
     </body>
 </html>
+
+
+<!-- Return form  js-->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var devicepicker = document.getElementById("device_type_return");
+    var idpicker = document.getElementById("device_id_return");
+    var messagesText = document.getElementById("messages-text1");
+    var submitButton = document.getElementById("confirm-button-right2");
+
+    function validateInput(input) {
+      input.value = input.value.replace(/[^0-9]/g, ''); // remove non-digit
+      input.value = input.value.slice(0, 4); // limit to 4 digits
+      if (input.value < 0) {
+        input.value = ''; // clear negative 
+      }
+      updateMessage();
+      updateSubmitButton();
+    }
+
+    function updateMessage() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (enteredDeviceId !== "" && matchingDeviceIds.indexOf(enteredDeviceId) === -1) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+      } else {
+        messagesText.style.color = "green";
+        messagesText.textContent = enteredDeviceId !== "" ? "Valid Type and ID" : "";
+      }
+    }
+
+    function updateSubmitButton() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        submitButton.disabled = true;
+        submitButton.style.cursor = "disabled";
+      } else {
+        submitButton.disabled = false;
+        submitButton.style.cursor = "pointer";
+      }
+    }
+
+    function submitForm(event) {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+        event.preventDefault(); // Prevent form submission
+      }
+    }
+
+    devicepicker.addEventListener("change", function() {
+      updateMessage();
+      updateSubmitButton();
+    });
+
+    idpicker.addEventListener("input", function() {
+      validateInput(this);
+    });
+
+    document.getElementById("manual_return").addEventListener("submit", function(event) {
+      submitForm(event);
+    });
+  });
+</script>
+<!-- STYLE-->
+<style>
+  
+#messages-text {
+  color: red;
+  font-weight: 300;
+  z-index: 100;
+  position: fixed;
+  top: 560px;
+}
+
+#messages-text1 {
+  color: red;
+  position: relative;
+  font-weight: 300;
+  position:relative;
+  top: -50px;
+  
+}
+</style>
+<!--Rent form js-->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var devicepicker = document.getElementById("devicepicker");
+    var idpicker = document.querySelector(".idpicker");
+    var messagesText = document.getElementById("messages-text");
+    var submitButton = document.getElementById("confirm-button-left2");
+
+    function validateInput(input) {
+      input.value = input.value.replace(/[^0-9]/g, ''); // remove non-digit
+      input.value = input.value.slice(0, 4); // limit to 4 digits
+      if (input.value < 0) {
+        input.value = ''; // clear negative 
+      }
+      updateMessage();
+      updateSubmitButton();
+    }
+
+    function updateMessage() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (enteredDeviceId !== "" && matchingDeviceIds.indexOf(enteredDeviceId) === -1) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+      } else {
+        messagesText.style.color = "green";
+        messagesText.textContent = enteredDeviceId !== "" ? "Valid Type and ID" : "";
+      }
+    }
+
+    function updateSubmitButton() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        submitButton.disabled = true;
+        submitButton.style.cursor = "disabled";
+      } else {
+        submitButton.disabled = false;
+        submitButton.style.cursor = "pointer";
+      }
+    }
+
+    function submitForm(event) {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+        event.preventDefault(); // Prevent form submission
+      }
+    }
+
+    devicepicker.addEventListener("change", function() {
+      updateMessage();
+      updateSubmitButton();
+    });
+
+    idpicker.addEventListener("input", function() {
+      validateInput(this);
+    });
+
+    document.getElementById("manual_rent").addEventListener("submit", function(event) {
+      submitForm(event);
+    });
+  });
+</script>
+<!-- Table JS-->
 <script>
   $(document).ready(function() {
   $('#overdue-table').DataTable({
@@ -438,6 +685,7 @@
   });
 });
 </script>
+<!-- Table JS-->
 <script>
   $(document).ready(function() {
   $('#checkouts-table').DataTable({
@@ -459,6 +707,7 @@
   });
 });
 </script>
+<!--Barcode JS-->
 <script>
 const barcodeInput = document.getElementById('barcode_input');
 const clearButtonRent = document.getElementById('clear-button-rent');
@@ -524,6 +773,7 @@ studentInput.addEventListener('input', function() {
 
 
 </script>
+<!-- Modal JS-->
 <script>
   const leftButton = document.getElementById("left-button");
   const rightButton = document.getElementById("right-button");
@@ -608,969 +858,4 @@ studentInput.addEventListener('input', function() {
   
   
 </script>  
-<script>
-    function validateInput(input) {
-      input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
-      input.value = input.value.slice(0, 4); // Limit to 4 digits
-      if (input.value < 0) {
-        input.value = ''; // Clear negative values
-      }
-    }
-</script>
-<script>
-    function validateID(input) {
-      input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-digit characters
-      input.value = input.value.slice(0, 5); // Limit to 4 digits
-      if (input.value < 0) {
-        input.value = ''; // Clear negative values
-      }
-    }
-</script>
-<style>
-body {
-    overflow-x: hidden;
-    overflow-y: hidden;
-    background-color: #f0eded;
-  }
 
-
-
-#modal-container-left,
-#modal-container-right {
-  z-index: 100;
-}
-
-
-.primary-container {
-  position: relative;
-  top: -90px;
-}
-
-#homeroom-div-rent-scan {
-  position: relative;
-  top: -5px;
-}
-
-#homeroom-div-rent-scan1 {
-  position: relative;
-  top: 9px;
-}
-
-
-
-  .content {
-  position: relative;
-}
-
-#overdue-card,
-#data-card {
-  position: relative;
-}
-
-
-/* Width and height of the scrollbar */
-::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #b8afaf;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #cebebe;
-  }
-  
-  .openbtn {
-    background-color: #f0eded;
-  }
-
-  .card {
-    width: 682px;
-    height: 281px;
-    background-color:#ffffff;
-    border: 1px solid rgb(251, 251, 251);
-    border-radius: 3px;
-  }
-  
-  .header {
-    height: 41px;
-    width: 680px;
-    background-color: #ffffff;
-  }
-  
-  .title {
-    color: black;
-  }
-  
-  .content {
-    height: 219px;
-  }
-
-  #checkout-card {
-    position: relative;
-    top: -120px;
-    left: 50px;
-    
-  }
-
-  #checkout-title {
-    color: black;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
-    font-weight:300;
-    position: relative;
-    left: 15px;
-    top: -5px;
-  }
-
-  #checkout-header {
-    border-bottom: 1px solid #ccc;
-  }
-
-  #overdue-card {
-    position: relative;
-    top: -402.5px;
-    left: 760px;
-  }
- 
-
-  #overdue-title {
-    color: black;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
-    font-weight:300;
-    position: relative;
-    left: 10px;
-    top: -5px;
-  }
-
-  #overdue-header {
-    border-bottom: 1px solid #ccc;
-  }
-
-
-
-  #viewlogs {
-    background-color: #ffffff;
-    color: #008000;
-    border: #008000 1px solid;
-    border-radius: 4px;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  #viewlogs:hover {
-    background-color: #008000;
-    border: #008000 1px solid;
-    color: #ffffff;
-    border-radius: 4px;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-  }
-
-
-  .main_title {
-    left: 50px;
-  }
-
-  
-  #data-card {
-    position: relative;
-    top: -380px;
-    left: 50px;
-    width: 1392px;
-    height: 215px;
-    background-color:#ffffff;
-    border: 1px solid rgb(251, 251, 251);
-    border-radius: 3px;
-  }
-
-  #data-title {
-    color: black;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
-    font-weight:300;
-    position: relative;
-    left: 10px;
-    top: -5px;
-  }
-
-  #data-header {
-    border-bottom: 1px solid #2f2d2d;
-    height: 41px;
-    width: 1193px;
-    background-color: #ffffff;
-  }
-
-  .data-row {
-    height: 40px;
-  }
-
-  #row1 {
-    background-color: #f1f1f1;
-    position: relative;
-    top: -20px;
-  }
-
-  #row2 {
-    background-color: #ffffff;
-    position: relative;
-    top: -20px;
-  }
- 
-  #row3 {
-    background-color: #f1f1f1;
-    position: relative;
-    top: -50px;
-  }
-
-  #row4 {
-    background-color: #ffffff;
-    position: relative;
-  }
-
-  #row5 {
-    background-color: #f1f1f1;
-    position: relative;
-  }
-
-  #viewlogs {
-    position: relative;
-    top: -45px;
-    left: 1050px;
-  }
-
-  .datacard-header {
-    font-weight:300;
-    font-size: 19px;
-  }
-
-  #row1-header {
-    position: relative;
-    top: 5px;
-    left: 5px;
-  }
-
-  #row1-descriptor {
-    position: relative;
-    font-weight: 400;
-    top: -35px;
-    left: 170px;
-  }
-
-  #row2-header {
-    position: relative;
-    top: -10px;
-    left: 5px;
-  }
-
-  #row2-descriptor {
-    position: relative;
-    font-weight: 400;
-    top: -50px;
-    left: 160px;
-  }
-
-  #row3-header {
-    position: relative;
-    top: 5px;
-    left: 5px;
-  }
-
-  #row3-descriptor {
-    position: relative;
-    font-weight: 400;
-    top: -35px;
-    left: 170px;
-  }
-  
-  #overdue-table,
-  #checkouts-table {
-    table-layout: fixed;
-    width: 100%;
-  }
-
-
-  .table-container,
-  .table-container-checkout {
-    position: relative;
-    top: 0px;
-    height: 200px;
-    overflow-y: auto;
-  }
-  
-  .table-container table,
-  .table-container-checkout table {
-    table-layout: fixed;
-    width: 100%;
-  }
-  
-  .table-container thead,
-  .table-container-checkout thead {
-    position: sticky;
-    top: 0;
-    background-color: #ffffff;
-  }
-  
-  
-  
-  #new-checkouts, #view-checkouts,
-  #view-overdues, #view-rentals {
-    z-index: 100;
-  background-color: #ffffff;
-  color: #008000;
-  border: #008000 1px solid;
-  border-radius: 4px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  pointer-events: auto;
-}
-
-#new-checkouts:hover, #view-checkouts:hover,
-#view-overdues:hover, #view-rentals:hover {
-  background-color: #008000;
-  border: #008000 1px solid;
-  color: #ffffff;
-  border-radius: 4px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-  
-  
-#view-checkouts {
-  position: relative;
-  top: -250px;
-  left: 455px;
-}
-
-#new-checkouts {
-  position: relative;
-  top: -250px;
-  left: 450px;
-}
-
-
-#view-overdues {
-  position: relative;
-  top: -250px;
-  left: 550px;
-}
-
-#view-rentals {
-  position: relative;
-  top: -220px;
-  left: 1250px;
-}
-
-.button-container {
-  display: flex;
-}
-
-
-
-#right-button {
-  display: flex;
-  background-color: #ffffff;
-  color: #008000;
-  border: #008000 1px solid;
-  border-radius: 5px;
-  padding: 10px 20px;
-  position: relative;
-  z-index: 10;
-  top: -69px;
-  left: 620px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-#right-button:hover {
-  background-color: #008000;
-  border: #008000 1px solid;
-  color: #ffffff;
-  border-radius: 5px;
-  padding: 10px 20px;
-  
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-
-
-
-#left-button {
-  display: flex;
-  background-color: #ffffff;
-  color: #008000;
-  border: #008000 1px solid;
-  border-radius: 5px;
-  padding: 10px 20px;
-  position: relative;
-  z-index: 3;
-  top: -30px;
-  left: 515px;
-
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-#left-button:hover {
-  background-color: #008000;
-  border: #008000 1px solid;
-  color: #ffffff;
-  border-radius: 5px;
-  padding: 10px 20px;
-  
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.modal-container {
-  display: none;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-.modal {
-  position: relative;
-  top: 120px;
-  margin: auto;
-  padding: 20px;
-  width: 500px;
-  height: 500px;
-  background-color: white;
-  border-radius: 10px;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  position: relative;
-  top: -20px;
-}
-
-.modal-header h3 {
-  margin: 0;
-}
-
-.modal-content {
-  color: black;
-}
-
-.modal-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
-  font-size: 30px;
-color: #007bff;
-cursor: pointer;
-border: none;
-background-color: transparent;
-}
-
-.modal-close:hover {
-  color: red;
-}
-
-.newlog-container {
-  position: relative;
-  top: 20px;
-}
-
-#confirm-button-left,
-#confirm-button-right,
-#confirm-button-left2,
-#confirm-button-right2{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 200px;
-  height: 50px;
-  border: 2px solid;
-  border-radius: 5px;
-  font-size: 18px;
-  font-weight: bold;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background-color 0.2s ease-out, color 0.2s ease-out;
-  background-color: #fff;
-  color: #00a8e0;
-}
-
-#confirm-button-left:hover,
-#confirm-button-right:hover {
-  background-color: #00a8e0;
-  color: #fff;
-}
-
-.modal-container-confirm,
-.modal-container-return {
-  display: none;
-  position: fixed;
-    left: 0;
-  top: 0;
-  z-index: 10000;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-}
-
-
-.modal-confirm,
-.modal-return {
-  display: none;
-  position: relative;
-  top: 140px;
-  margin: auto;
-  padding: 20px;
-  width: 400px;
-  height: auto;
-  max-height: 80%;
-  background-color: white;
-  border-radius: 10px;
-  overflow-y: auto;
-}
-
-#close-button-confirm,
-#close-button-return {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 30px;
-  color: #007bff;
-  cursor: pointer;
-  border: none;
-  background-color: transparent;
-}
-
-
-
-#confirm-button-right,
-#confirm-button-left,
-#confirm-button-left2,
-#confirm-button-right2 {
-  background-color: #ffffff;
-  z-index: 100;
-  color: #008000;
-  border: #008000 1px solid;
-  border-radius: 5px;
-  padding: 10px 20px;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-#confirm-button-right:hover,
-#confirm-button-left:hover,
-#confirm-button-left2:hover,
-#confirm-button-right2:hover {
-  background-color: #008000;
-  border: #008000 1px solid;
-  color: #ffffff;
-  border-radius: 5px;
-  padding: 10px 20px;
-  
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-#confirm-button-right {
-  top: 115px;
-  left: 155px;
-}
-
-#confirm-button-left {
-  top: 45px;
-  left: 160px;
-}
-
-#confirm-button-right2 {
-  top: 50px;
-  left: 150px;
-}
-
-#confirm-button-left2 {
-  top: -35px;
-  left: 160px;
-}
-
-#not-working-rent, 
-#not-working-return {
-  font-size: 15px;
-  height: 29px;
-  width: 200px;
-  padding: 4px 8px 4px 8px;
-  color: #6c757D;
-  z-index: 100;
-  transition: color 0.15s ease-in-out 0s;
-  background-color: transparent;
-  border: none;
-  vertical-align: middle;
-  min-height: auto;
-  min-width: auto;
-  text-decoration: none;
-  text-align: center;
-  border-bottom: 1px solid transparent;
-  cursor: pointer;
-  position: fixed;
-  }
-  
-#not-working-return:hover,
-#not-working-rent:hover {
-color: #6c757D;
-background-color: transparent;
-border-bottom: 1px solid transparent;
-text-decoration: underline;
-
-}
-
-
-#not-working-return {
-  top: 620px;
-  left: 470px;
-}
-
-#not-working-rent {
-  top: 620px;
-  left: 470px;
-}
-
-#modal-title-left {
-  position: fixed;
-  top: 110px;
-}
-
-#modal-title-right {
-  position: fixed;
-  top: 130px;
-} 
-
-
-.input-field {
-padding: 15px;
-width: 30%;
-margin: 5px 0 22px 0;
-margin: 0 auto;
-border: none;
-border-radius: 2px;
-background: #f1f1f1;
-}
-
-.input-field:focus {
-  background-color: #ddd;
-  outline: none;
-}
-
-
-
-
-.select-container {
-  position: relative;
-  display: inline-block;
-  top:-70px;
-  width: 200px;
-  left: 1px;
-  font-size: 14px;
-}
-
-/* Styling the select element */
-.select-container select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 180px;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-}
-
-/* Styling the arrow icon */
-.select-container::after {
-  content: '\25BC';
-  position: absolute;
-  top: 50%;
-  left:155px;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-/* Styling when select element is open */
-.select-container.select-open select {
-  border-color: #888;
-}
-
-/* Styling the dropdown options */
-.select-container select option {
-  font-size: 16px;
-}
-
-/* Styling when an option is selected */
-.select-container.select-open select option:checked {
-  background-color: #f0f0f0;
-}
-
-
-
-
-.select-container1 {
-  position: relative;
-  display: inline-block;
-  top:0px;
-  left: -1px;
-  font-size: 14px;
-}
-
-/* Styling the select element */
-.select-container1 select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 180px;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-}
-
-/* Styling the arrow icon */
-.select-container1::after {
-  content: '\25BC';
-  position: absolute;
-  top: 50%;
-  left:155px;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-/* Styling when select element is open */
-.select-container1.select-open select {
-  border-color: #888;
-}
-
-/* Styling the dropdown options */
-.select-container1 select option {
-  font-size: 16px;
-}
-
-/* Styling when an option is selected */
-.select-container1.select-open select option:checked {
-  background-color: #f0f0f0;
-}
-
-#form-content {
-  position: relative;
-  top: -50px;
-}
-
-#form-content-manual {
-  position: relative;
-  top: 40px;
-}
-
-#student-name {
-  width: 22%;
-}
-
-#student_id {
-  width: 20%;
-}
-
-#student-id-div-rent {
-  position: relative;
-  top: -70px;
-  left: 200px;
-}
-
-#homeroom-div-rent {
-  position: relative;
-  top: -85px;
-}
-
-
-#device_id {
-  position: relative;
-  top: -70px;
-  left: 0px;
-}
-
-#labeldeviceid {
-  position: relative;
-  top: -75px;
-}
-
-#reason_borrowed-div-rental {
-  position: relative;
-  top: -60px;
-}
-
-#period_borrowed-div-rental {
-  position: relative;
-  top: -75px;
-}
-
-#period_returned-div-rental {
-  position: relative;
-  top: -60px;
-}
-
-#period_returned-div-rental-scan {
-  position: relative;
-  top: 5px;
-}
-
-#clear-button-rent {
-  background-color: #ffffff;
-  color: #008000;
-  border: #008000 1px solid;
-  border-radius: 5px;
-  padding: 10px 20px;
-  position: relative;
-    height: 45px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-#clear-button-rent:hover {
-  background-color: #008000;
-  border: #008000 1px solid;
-  color: #ffffff;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.newlog-container-scan {
-  position: relative;
-  top: 40px;
-}
-
-
-.select-container1-scan {
-  position: relative;
-  display: inline-block;
-  top:0px;
-  left: -1px;
-  font-size: 14px;
-}
-
-/* Styling the select element */
-.select-container1-scan select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 180px;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-}
-
-/* Styling the arrow icon */
-.select-container1-scan::after {
-  content: '\25BC';
-  position: absolute;
-  top: 50%;
-  z-index: 100;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-/* Styling when select element is open */
-.select-container1-scan.select-open select {
-  border-color: #888;
-}
-
-/* Styling the dropdown options */
-.select-container1-scan select option {
-  font-size: 16px;
-}
-
-/* Styling when an option is selected */
-.select-container1-scan.select-open select option:checked {
-  background-color: #f0f0f0;
-}
-
-.barcode-input-container {
-  position: relative;
-  top: 0px;
-}
-
-
-#reason_borrowed-div-rental-scan {
-  position: relative;
-  top: 20px;
-}
-
-
-#period_borrowed-div-rental-scan {
-  position: relative;
-  top: 10px;
-}
-
-
-#clear-button-student-rent {
-  background-color: #ffffff;
-  color: #008000;
-  border: #008000 1px solid;
-  border-radius: 5px;
-  padding: 10px 20px;
-  position: relative;
-  height: 45px;
-  cursor: pointer;
-  z-index: 100;
-  transition: all 0.2s ease-in-out;
-}
-
-#clear-button-student-rent:hover {
-  background-color: #008000;
-  border: #008000 1px solid;
-  color: #ffffff;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-#student-data-input-container {
-  position: relative;
-  top: 5px;
-}
-
-.modal-container {
-  display: none;
-  position: fixed;
-  z-index: 10000000000000000000000000000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-
-.main_title {
-    left: 50px;
-  }
-</style>

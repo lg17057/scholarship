@@ -177,43 +177,46 @@ def main():
                     c.execute("UPDATE device_logs SET period_returned = ?, notes = ? WHERE device_id = ? AND device_type = ?",
                               (period_returned, notes, device_id, device_type))
                     return render_template('message.html', message="Device Returned", loginstatus=status, message_btn="View_Rental_Logs", message_link="rental-logs")
-            else:
-                today = date.today()
-                formatted_date = today.strftime("%d-%m-%Y")
-                #SUBSTR date_borrowed, 1,5 takes the first 5 characters "dd-mm" from the date borrowed column
-                #this ensures that formatted_date and formatted_yesterday will not take the time a device was rented
-                #therefore ensuries that displayed data is from today
-                c.execute("SELECT date_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1,10) = ?", (formatted_date,))
-                rows = c.fetchall()
-                row1_descriptor = len(rows)
-                #total rentals today
-                c.execute("SELECT date_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1,10) = ? AND period_returned != 'Not Returned'", (formatted_date,))
-                rows = c.fetchall()
-                row2_descriptor = len(rows)
-                #devices returned today
-                c.execute("SELECT date_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1,10) = ? AND teacher_signoff = 'Confirmed'", (formatted_date,))
-                rows = c.fetchall()
-                row3_descriptor = len(rows)
-                #devices confirmed as returned today
-                #takes the value of today any removes 1 day from it
-                yesterday = date.today() - timedelta(days=1)
-                formatted_yesterday = yesterday.strftime("%d-%m-%Y")
-
-
-                # Convert the current date to the desired format
-                dates = datetime.datetime.now().date().strftime("%d")
-
-                c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE date_borrowed <= ? AND teacher_signoff != ? AND SUBSTR(date_borrowed,1,2) != ?", (yesterday, "Confirmed", dates))
-                rows = c.fetchall()
-                
-                #selects all devices that are overdue (takes all values from date_borrowed value of formatted_yesterday and earlier)
-
-
-
-                c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1,10) = ? AND period_returned = ? AND teacher_signoff = ?", (formatted_date,"Not Returned","Unconfirmed"))
-                row1 = c.fetchall()
-                #selects all devices that have been rented today
-                return render_template('/index.html', row1_descriptor=row1_descriptor, row2_descriptor=row2_descriptor, row3_descriptor=row3_descriptor, message="Index Page", loginstatus=loginstatus, rows=rows, row1=row1)
+            
+            today = date.today()
+            formatted_date = today.strftime("%d-%m-%Y")
+            dates = datetime.datetime.now().date().strftime("%d-%m")
+            yesterday = date.today() - timedelta(days=1)
+            formatted_yesterday = yesterday.strftime("%d-%m-%Y")
+            #SUBSTR date_borrowed, 1,5 takes the first 5 characters "dd-mm" from the date borrowed column
+            #this ensures that formatted_date and formatted_yesterday will not take the time a device was rented
+            #therefore ensuries that displayed data is from today
+            c.execute("SELECT date_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1,10) = ?", (formatted_date,))
+            rows = c.fetchall()
+            row1_descriptor = len(rows)
+            #total rentals today
+            c.execute("SELECT date_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1,10) = ? AND period_returned != 'Not Returned'", (formatted_date,))
+            rows = c.fetchall()
+            row2_descriptor = len(rows)
+            #devices returned today
+            c.execute("SELECT date_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1,10) = ? AND teacher_signoff = 'Confirmed'", (formatted_date,))
+            rows = c.fetchall()
+            row3_descriptor = len(rows)
+            c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE date_borrowed <= ? AND teacher_signoff != ? AND SUBSTR(date_borrowed,1,5) != ?", (yesterday, "Confirmed", dates))
+            rows = c.fetchall()
+            row4_descriptor = len(rows)
+            #devices confirmed as returned today
+            #takes the value of today any removes 1 day from it
+            
+            device_list_query = "SELECT device_id, device_type FROM devices"
+            c.execute(device_list_query)
+            device_list = c.fetchall()
+            device_ids = [device[0] for device in device_list]
+            device_types = [device[1] for device in device_list]
+            # Convert the current date to the desired format
+            c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE date_borrowed <= ? AND teacher_signoff != ? AND SUBSTR(date_borrowed,1,5) != ?", (yesterday, "Confirmed", dates))
+            rows = c.fetchall()
+            
+            #selects all devices that are overdue (takes all values from date_borrowed value of formatted_yesterday and earlier)
+            c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1,10) = ? AND period_returned = ? AND teacher_signoff = ?", (formatted_date,"Not Returned","Unconfirmed"))
+            row1 = c.fetchall()
+            #selects all devices that have been rented today
+            return render_template('/index.html', row1_descriptor=row1_descriptor, row2_descriptor=row2_descriptor, row3_descriptor=row3_descriptor, row4_descriptor=row4_descriptor, message="Index Page", loginstatus=loginstatus, rows=rows, row1=row1, device_ids=device_ids, device_types=device_types)
         else:
             session['logged_in'] = False
             session['user_id'] = "Invalid"
