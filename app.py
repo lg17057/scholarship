@@ -39,6 +39,15 @@ class opendb():
         self.obj.commit()
         self.obj.close()
 
+def valid_device_data(device_ids,device_types):
+    with opendb('logs.db') as c:
+        device_list_query = "SELECT device_id, device_type FROM devices WHERE in_circulation = 'No'"
+        c.execute(device_list_query)
+        device_list = c.fetchall()
+        device_ids = [device[0] for device in device_list]
+        device_types = [device[1] for device in device_list]
+        return device_ids, device_types
+
 
 # Home page
 @app.route('/')
@@ -311,7 +320,7 @@ def modify_device():
                 device_id = request.form.get('idpicker')
                 return redirect('/modify-device/{}/{}'.format(device_type, device_id))
             
-            device_list_query = "SELECT device_id, device_type FROM devices"
+            device_list_query = "SELECT device_id, device_type FROM devices WHERE in_circulation = 'No'"
             c.execute(device_list_query)
             device_list = c.fetchall()
             device_ids = [device[0] for device in device_list]
@@ -413,7 +422,14 @@ def rental_logs():
                 device_type = request.form.get('devicepicker')
                 device_id = request.form.get('idpicker')
                 return redirect('/rental-logs/{}/{}'.format(device_type, device_id))
-            return render_template('rental_logs.html', rows=logs,available_dates=available_dates, message="Viewing all rental logs", formatted_date=formatted_date, loginstatus=status)
+            device_list_query = "SELECT device_id, device_type FROM devices"
+            c.execute(device_list_query)
+            device_list = c.fetchall()
+            device_ids = [device[0] for device in device_list]
+            device_types = [device[1] for device in device_list]
+
+
+            return render_template('rental_logs.html',device_ids=device_ids,device_types=device_types, rows=logs,available_dates=available_dates, message="Viewing all rental logs", formatted_date=formatted_date, loginstatus=status)
         else:
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
@@ -430,26 +446,37 @@ def date_id_logs(device_type, device_id):
             rows = c.fetchall()
             loginstatus = session['logged_in']
             message = "Viewing rental logs for {} ID {}".format(device_type, device_id)
-            return render_template('rental_logs.html', loginstatus=status, rows=rows, message=message)
+            device_list_query = "SELECT device_id, device_type FROM devices"
+            c.execute(device_list_query)
+            device_list = c.fetchall()
+            device_ids = [device[0] for device in device_list]
+            device_types = [device[1] for device in device_list]
+            return render_template('rental_logs.html', loginstatus=status, rows=rows, message=message, device_ids=device_ids, device_types=device_types)
         else:
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page") 
 
 
 #page or user to view device type specific rental logs without an ID
-@app.route('/rental-logs/<string:device_type>/')
-def device_type_logs(device_type):
-    with opendb('logs.db') as c:
-        status = session["logged_in"]
-        if status is True:
-            c.execute("SELECT * FROM device_logs WHERE device_type = ?",(device_type,))
-            rows = c.fetchall()
-            loginstatus = session['logged_in']
-            message = "Viewing rental logs for {}s".format(device_type)
-            return render_template('rental_logs.html', loginstatus=status, rows=rows, message=message)
-        else:
-            message = "Please login to access this feature"
-            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
+#removed this route because of new form type and the user can sort the table anyways
+#@app.route('/rental-logs/<string:device_type>/')
+#def device_type_logs(device_type):
+#    with opendb('logs.db') as c:
+#        status = session["logged_in"]
+#        if status is True:
+#            c.execute("SELECT * FROM device_logs WHERE device_type = ?",(device_type,))
+#            rows = c.fetchall()
+#            loginstatus = session['logged_in']
+#            message = "Viewing rental logs for {}s".format(device_type)
+#            device_list_query = "SELECT device_id, device_type FROM devices WHERE in_circulation = 'No'"
+#            c.execute(device_list_query)
+#            device_list = c.fetchall()
+#            device_ids = [device[0] for device in device_list]
+#            device_types = [device[1] for device in device_list]
+#            return render_template('rental_logs.html', loginstatus=status, rows=rows, message=message,device_ids=device_ids, device_types=device_types)
+#        else:
+#            message = "Please login to access this feature"
+#            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
         
 #Displays all rental logs in a table 
 #user can select what data of rental logs to see;
@@ -465,7 +492,12 @@ def rental_logs_date(date):
             if not re.match(r'\d{2}-\d{2}', date):
                 # checks for any invalid date format
                 return render_template('rental_logs.html',rows=rows, message="Invalid date format. Please use dd-mm format.", loginstatus=status )
-            return render_template('rental_logs.html', rows=rows, message="Viewing rental logs for {}".format(date), loginstatus=status)
+            device_list_query = "SELECT device_id, device_type FROM devices"
+            c.execute(device_list_query)
+            device_list = c.fetchall()
+            device_ids = [device[0] for device in device_list]
+            device_types = [device[1] for device in device_list]
+            return render_template('rental_logs.html', rows=rows, message="Viewing rental logs for {}".format(date), loginstatus=status, device_ids=device_ids, device_types=device_types)
         else:
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")

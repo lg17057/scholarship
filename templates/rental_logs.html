@@ -82,9 +82,9 @@
 <div class="primary-container">
   <hr id="rentalhr">
   <div class="idpicker-container">
-    <form action="/rental-logs/" method="POST">
+    <form action="/rental-logs/" method="POST" id="device_choice">
       <div class="select-container" style="font-size:14px;">  
-        <select id="devicepicker" style="font-size: 14px;" name="devicepicker" placeholder="Device Type.." value="devicepicker">
+        <select id="device_picker_type" style="font-size: 14px;" name="devicepicker" placeholder="Device Type.." value="devicepicker">
           <option value="">Device Type: </option>
           <option value="Chromebook">Chromebook</option>
           <option value="iPad">iPad</option>
@@ -93,7 +93,7 @@
         
       </div>
 
-      <input type=number class="idpicker"  oninput="validateInput(this)"   name="idpicker" placeholder="Enter Device ID.." value="idpicker"></input>
+      <input  required type="number"  oninput="validateInput(this)"  name="idpicker" id="idpicker" class="input-field idpicker" name="device_id" placeholder="Device ID">
       <input type="submit" class="submit-btn" onclick="submitForm()" id="submit-btn" value="Select">
     </form>
     <button onclick="window.location.href='/rental-logs/'" id="return-btn" class="return-btn">View All Logs</button> 
@@ -171,17 +171,124 @@
     </div>
   </div>
 </div>
+<h3 id="messages-text" ></h3>
+
 </html>
+<style>
+  #messages-text {
+    position: fixed;
+    top: 190px;
+    color: red;
+    font-weight: 300;
+    z-index: 100;
+  }
+</style>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var devicepicker = document.getElementById("device_picker_type");
+    var idpicker = document.getElementById("idpicker");
+    var messagesText = document.getElementById("messages-text");
+    var submitButton = document.getElementById("submit-btn");
 
+    function validateInput(input) {
+      input.value = input.value.replace(/[^0-9]/g, ''); // remove non-digit
+      input.value = input.value.slice(0, 4); // limit to 4 digits
+      if (input.value < 0) {
+        input.value = ''; // clear negative 
+      }
+      updateMessage();
+      updateSubmitButton();
+    }
 
+    function updateMessage() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
 
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
 
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
 
+      if (enteredDeviceId !== "" && matchingDeviceIds.indexOf(enteredDeviceId) === -1) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+      } else {
+        messagesText.style.color = "green";
+        messagesText.textContent = enteredDeviceId !== "" ? "Valid Type and ID" : "";
+      }
+    }
 
+    function updateSubmitButton() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
 
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
 
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
 
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        submitButton.disabled = true;
+        submitButton.style.cursor = "disabled";
+      } else {
+        submitButton.disabled = false;
+        submitButton.style.cursor = "pointer";
+      }
+    }
 
+    function submitForm(event) {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+        event.preventDefault(); // Prevent form submission
+      }
+    }
+
+    devicepicker.addEventListener("change", function() {
+      updateMessage();
+      updateSubmitButton();
+    });
+
+    idpicker.addEventListener("input", function() {
+      validateInput(this);
+    });
+
+    document.getElementById("device_choice").addEventListener("submit", function(event) {
+      submitForm(event);
+    });
+  });
+</script>
 
 <style>
   .main_title {
@@ -207,7 +314,7 @@ left: -7px;
 
 .download-btn {
   position: relative;
-  top: -150px;
+  top: -140px;
 }
 
 </style>
@@ -240,18 +347,7 @@ left: -7px;
     input.value = ''; // clear negative 
   }
 }
-function submitForm() {
-  let devicepicker = document.getElementById('devicepicker');
-  let idpicker = document.querySelector('.idpicker');
-  if (devicepicker.value === "") {
-    alert("Please select a device type.");
-    return false; // prevent submission
-  }
-  if (idpicker.value !== "" && idpicker.value.length !== 4) {
-    alert("Please enter a four-digit ID.");
-    return false; // prevent submission
-  }
-}
+
   function filterTable() {
     let datepicker = document.getElementById("datepicker");
     let date = datepicker.value;

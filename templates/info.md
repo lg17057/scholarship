@@ -242,4 +242,12 @@ checkouts table working again
 overdues table working agani
 
 make all of these errors in the github
-make a thing at the bottom of the page showing how many overdue items there are  
+make a thing at the bottom of the page showing how many overdue items there are 
+
+
+device type and id valid for rental page
+removed one of the rental logs routes
+
+-removed in_circulation = no from rental logs valid device types and ids query so that only the devices that dont exist are not allowed to be    submitted instead of ones that arent in circulation
+
+fixed issue when submitting the device type and id and the device id is NONE. name="device_id" had to be bet into device Id form
