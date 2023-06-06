@@ -628,6 +628,22 @@ def generate_pdf(rows):
     return pdf_content
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #page used to sign off circulations that have been returned
 @app.route('/sign-off')
 def sign_off():

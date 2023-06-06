@@ -82,144 +82,148 @@
 </html>
 <title>Rental Log - Dash</title>
 <div class="primary-container">
-    <h1 class="main_title">{{message}}</h1>
-    <div class="middle-container">
-        <div class="download-content0">
-          <h1 class="originaldivtitle">Select data type:</h1>
-          <br><br><hr>
-            <button id="download-content-btn1" class="download-content-btn1">Rental Data</button>
-            <br>
-            <button id="download-content-btn2" class="download-content-btn2">Device Data</button>
-            <br>
-            <button id="download-content-btn3" class="download-content-btn3">Student Data</button>
-            <br>
-            <button id="download-content-btn4" class="download-content-btn4">User Data</button>
-            <hr>
+  <h1 class="main_title">{{message}}</h1>
+  <div class="download-container">
+    <div class="modal-return">
+      <div class="bar" >
+        <div class="header" onclick="toggleBar(1)">Bar 1 <span class="arrow">&#8595;</span></div>
+        <div class="content">
+          <br><br>
+          <br><br>
+          <br><br>
+          <br><br>
+          <br><br>
+          <br><br>
+          <br><br>
+          <br><br>
+          <br>
+      
+          <button class="confirm-button">Confirm </button>
         </div>
-        <div class="download-content1">
-          <button class="back-btn" id="back-btn-div1">Back</button>
-          <form action="/download-logs/" method="POST" value="download-content1">
-            <h1 class="middle-title" id="firstdivtitle">Rental Logs:</h1>
-              <hr class="middle-hr">
-              <div class="select-container">  
-                  <label for="formatpicker" id="formatpickerlabel">Select Format: </label>
-                  <select id="formatpicker" name="formatpicker" placeholder="Choose Format.." value="formatpicker">
-                    <option select value="CSV">CSV</option>
-                    <option value="PDF">PDF</option>
-                  </select>
-              </div>
-              <br><br><br><br><br>
-              <div class="select-container1">
-                <label for="devicepicker">Device Type:</label>
-                <select id="devicepicker" style="font-size: 14px;" name="devicepicker" placeholder="Device Type.." value="devicepicker">
-                  <option value="">Device Type: </option>
-                  <option value="Chromebook">Chromebook</option>
-                  <option value="iPad">iPad</option>
-                  <option value="Laptop">Laptop</option>
-                </select>
-              </div>
-              <br><br><br><br><br>
-              <label id="labelidpicker" for="idpicker">Device ID:</label><br>
-              <input type=number id="idpicker"  oninput="validateInput(this)"  name="idpicker" placeholder="Device ID.." value="idpicker"></input>
-              <br><br>
-              <p>Or</p>
-              <div class="datepicker-container-download">
-                  <label for="datepicker">Date:</label>
-                  <div class="datepicker-download">
-                    <input type="date" min="2023-01-01" max="2023-25-12" name="datepicker" id="datepicker">
-                    <br>
-                  </div>
-              </div>
-            <button id="confirm-btn-download" >Confirm</button>
-         </form>      
+      </div>
+      <div class="bar">
+        <div class="header" onclick="toggleBar(2)">Bar 2 <span class="arrow">&#8595;</span></div>
+        <div class="content">
+          <br><br>
+          <br><br>
+          <br><br>
+          <br><br>
+          <br><br>
+          <br><br>
+          <br><br>
+          <button class="confirm-button">Confirm </button>
         </div>
-        <div class="download-content2">
-          <h1 id="seconddivtitle">Device Logs</h1>
-          <button class="back-btn" id="back-btn-div2">Back</button>
+      </div>
+      <div class="bar" >
+        <div class="header" onclick="toggleBar(3)">Bar 3 <span class="arrow">&#8595;</span></div>
+        <div class="content">
+          <br><br>
+          <br><br>
+          <br><br>
+          <br><br>
+          <br><br>
+          <br><br>
+          <br><br>
+          <button class="confirm-button">Confirm </button>
         </div>
-        <div class="download-content3">
-          <h1 id="seconddivtitle">Student Data</h1>
-          <button class="back-btn" id="back-btn-div3" >Back</button>
-        </div>
-        <div class="download-content4">
-          <h1 id="fourthdivtitle">User Data</h1>
-          <button class="back-btn " id="back-btn-div4">Back</button>
-        </div>
+      </div>
+      
+      
     </div>
+    
+     
+
   </div>
+ </div>
+
 <script>
-// Get the login buttons
-var primarydiv = document.querySelector('.download-content0');
-var button1 = document.querySelector('.download-content-btn1');
-var button2 = document.querySelector('.download-content-btn2');
-var button3 = document.querySelector('.download-content-btn3');
-var button4 = document.querySelector('.download-content-btn4');
+function toggleBar(barNumber) {
+  const modalReturn = document.querySelector('.modal-return');
+  const bars = modalReturn.querySelectorAll('.bar');
+  
+  bars.forEach((bar, index) => {
+    const header = bar.querySelector('.header');
+    const content = bar.querySelector('.content');
+    const arrow = bar.querySelector('.arrow');
+    
+    if (index + 1 === barNumber) {
+      // Toggle the clicked bar
+      if (bar.classList.contains('open')) {
+        // Close the bar
+        bar.classList.remove('open');
+        content.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+      } else {
+        // Open the bar
+        bar.classList.add('open');
+        content.style.display = 'block';
+        arrow.style.transform = 'rotate(180deg)';
+        expandBar(barNumber);
+      }
+    } else {
+      // Close other bars
+      bar.classList.remove('open');
+      content.style.display = 'none';
+      arrow.style.transform = 'rotate(0deg)';
+    }
+  });
+}
+// Rest of the code remains the same
 
-// Get the student and staff login divs
-var div1 = document.querySelector('.download-content1');
-var div2 = document.querySelector('.download-content2');
-var div3 = document.querySelector('.download-content3');
-var div4 = document.querySelector('.download-content4');
+function expandBar(barNumber) {
+  const modalReturn = document.querySelector('.modal-return');
+  const bars = modalReturn.querySelectorAll('.bar');
 
-// Get the "Back" buttons
-var back_btn1 = document.querySelector('.download-content1 .back-btn');
-var back_btn2 = document.querySelector('.download-content2 .back-btn');
-var back_btn3 = document.querySelector('.download-content3 .back-btn');
-var back_btn4 = document.querySelector('.download-content4 .back-btn');
+  bars.forEach((bar, index) => {
+    if (index !== barNumber - 1) {
+      bar.style.animation = 'slideDown 0.7s, slideDownPosition 0.7s ';
+    }
+  });
 
-button1.addEventListener('click', function() {
-  div1.style.display = 'block';
-  primarydiv.style.display = 'none';
-  div2.style.display = 'none';
-  div3.style.display = 'none';
-  div4.style.display = 'none';
-});
+  setTimeout(() => {
+    bars.forEach((bar, index) => {
+      if (index !== barNumber - 1) {
+        bar.style.opacity = '1';
+        bar.style.transform = 'translateY(0)';
+      }
+    });
+  }, 500);
+}
 
-button2.addEventListener('click', function() {
-  div2.style.display = 'block';
-  primarydiv.style.display = 'none';
-  div1.style.display = 'none';
-  div3.style.display = 'none';
-  div4.style.display = 'none';
-});
+function resetBars() {
+  const modalReturn = document.querySelector('.modal-return');
+  const bars = modalReturn.querySelectorAll('.bar');
 
-button3.addEventListener('click', function() {
-  div3.style.display = 'block';
-  primarydiv.style.display = 'none';
-  div1.style.display = 'none';
-  div2.style.display = 'none';
-  div4.style.display = 'none';
-});
+  bars.forEach((bar) => {
+    bar.style.animation = 'slideDown 5s ease, slideDownPosition 5s ease';
+    bar.style.display = 'block';
+  });
+}
 
-button4.addEventListener('click', function() {
-  div4.style.display = 'block';
-  primarydiv.style.display = 'none';
-  div1.style.display = 'none';
-  div2.style.display = 'none';
-  div3.style.display = 'none';
-});
 
-// Hide the student login div when the "Back" button is clicked
-back_btn1.addEventListener('click', function() {
-  div1.style.display = 'none';
-  primarydiv.style.display = 'block';
-});
-
-back_btn2.addEventListener('click', function() {
-  div2.style.display = 'none';
-  primarydiv.style.display = 'block';
-});
-
-back_btn3.addEventListener('click', function() {
-  div3.style.display = 'none';
-  primarydiv.style.display = 'block';
-});
-
-back_btn4.addEventListener('click', function() {
-  div4.style.display = 'none';
-  primarydiv.style.display = 'block';
-});
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style>
   .main_title {
   position: relative;

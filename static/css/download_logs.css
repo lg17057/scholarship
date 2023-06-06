@@ -1,330 +1,153 @@
-#back-btn-div2 {  
-    position: fixed;
-    top: 10px;
-    left: 350px;
-  }
-  #back-btn-div3 {  
-    position: fixed;
-    top: 10px;
-    left: 350px;
-  }
-  #back-btn-div4 {  
-    position: fixed;
-    top: 10px;
-    left: 350px;
-  }
+
 
 .originaldivtitle {
   position: fixed;
   top:-15px;
 }
 
-#firstdivtitle {
-  position: fixed;
-  top:-15px;
+body {
+  background-color: #f1f1f1;
 }
 
-#seconddivtitle {
-  position: fixed;
-  top:-15px;
+.modal-return {
+  position: relative;
+  top: 100px;
+  left: 200px;
+  transform: translate(-50%, -50%);
+  margin: auto;
+  padding: 20px;
+  width: 400px;
+  height: auto;
+  max-height: 80%;
+  background-color: white;
+  border-radius: 10px;
+  overflow-y: auto;
 }
 
-#thirddivtitle { 
-  position:fixed;
-  top: -15px;
-}
-
-#fourthdivtitle {
-  position: fixed;
-  top:-15px;
-}
-
-  #back-btn-div1 {  
-    position: fixed;
-    top: 10px;
-    left: 350px;
-  }
-
-  #back-btn-div1:hover {
-    background-color: #008000;
-  border: #008000 1px solid;
-  color: #ffffff;
+.header {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f1f1f1;
   border-radius: 5px;
-  padding: 10px 20px;
-  
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.header:hover {
+  background-color: #e1e1e1;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+}
+
+.content {
+  display: none;
+  margin-top: 10px;
+}
+.bar {
+  margin-bottom: 10px;
+}
+.confirm-button {
+  position: absolute;
+  margin-top: 20px;
+  bottom: 3px;
+  left: 10%;
+  font-size: 12px;
+  background-color: #ffffff;
+  border: none;
+  color: #008000;
+  border: #008000 1px solid;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+  padding: 6px 12px;
+
+  transform: translateX(-50%);
+}
+
+.confirm-button:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #ffffff;
+
+  background-color: #008000;
+  border: #008000 1px solid;
+}
+
+
+
+
+
+#viewlogs {
+  background-color: #ffffff;
+  color: #008000;
+  border: #008000 1px solid;
+  padding: 8px 16px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  }
-
-  .datepicker-container-download {
-    position: relative;
-    top: -10px;
-    left: 0%;
-  }
-  
-  .datepicker-download {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  #datepicker {
-    font-size: 15px;
-    padding: 5px;
-    background-color: #f1f1f1;
-    border-radius:5px;
-    border: none;
-    height: 30px;
-
-  }
-  
-
-  #confirm-btn-download {
-    background-color: #ffffff;
-    color: #008000;
-    border: #008000 1px solid;
-    border-radius: 4px;
-    padding: 8px 16px;
-    position: relative;
-    left: 0px;
-    top: 90px;
-    height: 39px;
-    width: 100%;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  #confirm-btn-download:hover {
-    background-color: #008000;
-    border: #008000 1px solid;
-    color: #ffffff;
-    border-radius: 4px;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  
-  #idpicker {
-    width: 20.5%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  display: block;
-  top: 260px;
-  margin: 0 auto;
-  border: none;
-  position: fixed;
-    height: 10px;
-    border-radius: 5px;
-    z-index: 3;
-  background: #f1f1f1;
-  }
-
-
-  #idpicker:focus {
-    background-color: #ddd;
-    outline: none;
-  }
-
-
-
-  .select-container {
-    position: relative;
-    display: inline-block;
-  }
-  
-  /* Styling the select element */
-  .select-container select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 120px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-  }
-  
-  /* Styling the arrow icon */
-  .select-container::after {
-    content: '\25BC';
-    position: absolute;
-    top: 70%;
-    right: 10px;
-    transform: translateY(-50%);
-    pointer-events: none;
-  }
-  
-  /* Styling when select element is open */
-  .select-container.select-open select {
-    border-color: #888;
-  }
-  
-  /* Styling the dropdown options */
-  .select-container select option {
-    font-size: 16px;
-  }
-  
-  /* Styling when an option is selected */
-  .select-container.select-open select option:checked {
-    background-color: #f0f0f0;
-  }
-
-  .select-container {
-    position: fixed;
-    top: 70px;
-    left:20px;
-    width: 120px;
-    z-index: 3;
-    font-size: 16px;
-  }
-
-  #formatpicker {
-    width: 120px;
-    background: #f1f1f1;
-    font-size: 13px;
-  }
-
-  #formatpicker:select {
-    background-color: #ddd;
-
-  }
-  .download-content0 {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    height: 370px;
-    width: 400px;
-    transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    z-index: 10000;
-  }
-
-  .download-content1, .download-content2, .download-content3, .download-content4 {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    height: 370px;
-    width: 400px;
-    transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    z-index: 10000;
-    display: none;
-  }
-
-  body { 
-    background-color: #f1f1f1;
-  }
-
-  .middle-hr {
-    position: fixed;
-    top: 40px;
-  }
-
-.download-content-btn1 ,
-.download-content-btn2,
-.download-content-btn3,
-.download-content-btn4 {
-  display: block;
-  width: 130px;
-  height: 50px;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #f0f0f0;
-  border: none;
-  border-radius: 4px;
-  color: #333;
-  font-size: 16px;
-  cursor: pointer;
 }
 
-.back-btn {
-  z-index: 1000000;
-  background-color: #ffffff;
-    color: #008000;
-    border: #008000 1px solid;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-}
-
-
-.back-btn:hover {
+#viewlogs:hover {
   background-color: #008000;
   border: #008000 1px solid;
   color: #ffffff;
-  border-radius: 5px;
-  padding: 10px 20px;
-  
+  border-radius: 4px;
+  padding: 8px 16px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
 
-.select-container1 {
-  position: relative;
-  display: inline-block;
+
+
+
+
+
+@keyframes slideUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(-10%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
 }
 
-/* Styling the select element */
-.select-container1 select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 120px;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
+@keyframes slideDownPosition {
+  0% {
+    transform: translateY(-150%);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
-/* Styling the arrow icon */
-.select-container1::after {
-  content: '\25BC';
-  position: absolute;
-  top: 70%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
+@keyframes slideUpPosition {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-150%);
+  }
 }
 
-/* Styling when select element is open */
-.select-container1.select-open select {
-  border-color: #888;
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-150%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Styling the dropdown options */
-.select-container1 select option {
-  font-size: 16px;
-}
-
-/* Styling when an option is selected */
-.select-container1.select-open select option:checked {
-  background-color: #f0f0f0;
-}
-
-.select-container1 {
-  position: fixed;
-  top: 150px;
-  left:20px;
-  width: 120px;
-  z-index: 3;
-  font-size: 16px;
-}
-
-#devicepicker {
-  width: 120px;
-  background: #f1f1f1;
-  font-size: 13px;
-}
-
-#devicepicker:select {
-  background-color: #ddd;
-
-}
