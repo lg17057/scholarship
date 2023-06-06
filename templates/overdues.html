@@ -81,10 +81,6 @@
 <title>Rental Log - Dash</title>
 <div class="primary-container">
   <hr id="rentalhr">
-    
-
-    
-  
   
   <h1 class="main_title">{{message}}</h1>
   
@@ -149,33 +145,166 @@
     </div>
   </div>
 </div>
+<div id="download-container" class="download-container" style="position: relative;top: -125px;">
+  <a href="/download-logs/" id="downloadbtn" class="download-btn">Download Data</a>
+</div>
+<div class="idpicker-container">
+  <form action="/overdues" method="POST" id="device_choice">
+    <div class="select-container" style="font-size:14px;">  
+      <select id="device_picker_type" style="font-size: 14px;" name="devicepicker" placeholder="Device Type.." value="devicepicker">
+        <option value="">Device Type: </option>
+        <option value="Chromebook">Chromebook</option>
+        <option value="iPad">iPad</option>
+        <option value="Laptop">Laptop</option>
+      </select>
+      
+    </div>
+
+    <input  required type="number"  oninput="validateInput(this)"  name="idpicker" id="idpicker" class="input-field idpicker" name="device_id" placeholder="Device ID">
+    <input type="submit" class="submit-btn" onclick="submitForm()" id="submit-btn" value="Select">
+  </form>
+  <h3 id="messages-text" >.</h3>
+
+</div>
+
+<style>
+  .secondary-container {
+    position: relative;
+    top: 100px;
+  }
+
+  #downloadbtn {
+    position: relative;
+    top: -125px;
+  }
+
+  .main_title {
+    position: relative;
+    top: 100px;
+  }
+
+  .idpicker-container {
+    position: relative;
+    top: -290px;
+    z-index: 100000;
+  }
+  #messages-text {
+    position: relative;
+    top: -140px;
+    color: red;
+    font-weight: 300;
+    z-index: 100;
+  }
+</style>
 </html>
 
 
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var devicepicker = document.getElementById("device_picker_type");
+    var idpicker = document.getElementById("idpicker");
+    var messagesText = document.getElementById("messages-text");
+    var submitButton = document.getElementById("submit-btn");
 
+    function validateInput(input) {
+      input.value = input.value.replace(/[^0-9]/g, ''); // remove non-digit
+      input.value = input.value.slice(0, 4); // limit to 4 digits
+      if (input.value < 0) {
+        input.value = ''; // clear negative 
+      }
+      updateMessage();
+      updateSubmitButton();
+    }
 
+    function updateMessage() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
 
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
 
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
 
+      if (enteredDeviceId !== "" && matchingDeviceIds.indexOf(enteredDeviceId) === -1) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+      } else {
+        messagesText.style.color = "green";
+        messagesText.textContent = enteredDeviceId !== "" ? "Valid Type and ID" : "";
+      }
+    }
 
+    function updateSubmitButton() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
 
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
 
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
 
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        submitButton.disabled = true;
+        submitButton.style.cursor = "disabled";
+      } else {
+        submitButton.disabled = false;
+        submitButton.style.cursor = "pointer";
+      }
+    }
 
+    function submitForm(event) {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
 
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
 
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
 
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+        event.preventDefault(); // Prevent form submission
+      }
+    }
 
+    devicepicker.addEventListener("change", function() {
+      updateMessage();
+      updateSubmitButton();
+    });
 
+    idpicker.addEventListener("input", function() {
+      validateInput(this);
+    });
 
-
-
-
-
-
-
-
-
+    document.getElementById("device_choice").addEventListener("submit", function(event) {
+      submitForm(event);
+    });
+  });
+</script>
 <style>
   .main_title {
   position: relative;
@@ -183,6 +312,12 @@
   right: -50px;
   z-index: 2;
 }
+
+#rentalhr {
+  position: relative;
+  top: -70px;
+}
+
 
 .openbtn {
 background-color: #ffffff;

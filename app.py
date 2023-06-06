@@ -39,6 +39,7 @@ class opendb():
         self.obj.commit()
         self.obj.close()
 
+
 def valid_device_data(device_ids,device_types):
     with opendb('logs.db') as c:
         device_list_query = "SELECT device_id, device_type FROM devices WHERE in_circulation = 'No'"
@@ -229,7 +230,12 @@ def main():
         else:
             session['logged_in'] = False
             session['user_id'] = "Invalid"
-            return render_template('/index.html', message="Index Page. Please login to access data", loginstatus=loginstatus)
+            device_list_query = "SELECT device_id, device_type FROM devices"
+            c.execute(device_list_query)
+            device_list = c.fetchall()
+            device_ids = [device[0] for device in device_list]
+            device_types = [device[1] for device in device_list]
+            return render_template('/index.html', message="Index Page. Please login to access data", loginstatus=loginstatus, device_ids=device_ids, device_types=device_types)
 
 
 #device log page
@@ -363,7 +369,7 @@ def circulations():
        
 
 
-@app.route('/overdues')
+@app.route('/overdues', methods=['POST','GET'])
 def overdue_rentals():
     with opendb('logs.db') as c:
         status = session["logged_in"]
@@ -373,9 +379,43 @@ def overdue_rentals():
             formatted_yesterday = yesterday.strftime("%d-%m-%Y %H:M")
             c.execute("SELECT * FROM device_logs WHERE period_returned = 'Not Returned' AND teacher_signoff = 'Unconfirmed' AND SUBSTR(date_borrowed, 1, 8) < ?", (formatted_date,))
             rows = c.fetchall()
-            print('datata')
-            print(rows)
-            return render_template('overdues.html', loginstatus=status, rows=rows, message="Viewing Overdue Rentals")
+
+            if request.method == 'POST':
+                device_type = request.form.get('devicepicker')
+                device_id = request.form.get('idpicker')
+                return redirect('/overdues/{}/{}'.format(device_type, device_id))
+
+
+            device_list_query = "SELECT device_id, device_type FROM devices"
+            c.execute(device_list_query)
+            device_list = c.fetchall()
+            device_ids = [device[0] for device in device_list]
+            device_types = [device[1] for device in device_list]
+
+            return render_template('overdues.html', loginstatus=status,device_ids=device_ids,device_types=device_types, rows=rows, message="Viewing Overdue Rentals")
+
+        else:
+            message = "Please login to access this feature"
+            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
+
+
+@app.route('/overdues/<string:device_type>/<int:device_id>')
+def overdue_rentals_devicespecific(device_type,device_id):
+     with opendb('logs.db') as c:
+        status = session["logged_in"]
+        if status is True:    
+            formatted_date = date.today().strftime("%d-%m-%Y %H:M")
+            yesterday = date.today() - timedelta(days=1) #SUBSTR(date_borrowed, 1, 5) = ? AND SUBSTR(date_borrowed, 1, 5) < ? 
+            formatted_yesterday = yesterday.strftime("%d-%m-%Y %H:M")
+            c.execute("SELECT * FROM device_logs WHERE period_returned = 'Not Returned' AND teacher_signoff = 'Unconfirmed' AND SUBSTR(date_borrowed, 1, 8) < ? AND device_type = ? AND device_id = ?", (formatted_date,device_type,device_id,))
+            rows = c.fetchall()
+            device_list_query = "SELECT device_id, device_type FROM devices"
+            c.execute(device_list_query)
+            device_list = c.fetchall()
+            device_ids = [device[0] for device in device_list]
+            device_types = [device[1] for device in device_list]
+
+            return render_template('overdues.html', loginstatus=status,device_ids=device_ids,device_types=device_types, rows=rows, message="Viewing Overdue Rentals")
 
         else:
             message = "Please login to access this feature"
@@ -388,7 +428,7 @@ def student_data():
     with opendb('logs.db') as c:
         status = session["logged_in"]
         if status is True:    
-
+            loginstatus = session['logged_in']
             student_total = c.execute("SELECT COUNT(*) FROM student_data")
             student_total = c.fetchone()
             student_total = str(student_total).strip("[]''()'',")
@@ -397,7 +437,7 @@ def student_data():
             rows = c.execute("SELECT * FROM student_data")
             rows = c.fetchall()
 
-            return render_template('students.html', loginstatus=status, students_total=student_total, rows=rows)
+            return render_template('students.html', loginstatus=loginstatus, students_total=student_total, rows=rows)
 
         else:
             message = "Please login to access this feature"

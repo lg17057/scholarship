@@ -246,8 +246,15 @@ make a thing at the bottom of the page showing how many overdue items there are
 
 
 device type and id valid for rental page
+added to overdues
 removed one of the rental logs routes
 
 -removed in_circulation = no from rental logs valid device types and ids query so that only the devices that dont exist are not allowed to be    submitted instead of ones that arent in circulation
 
 fixed issue when submitting the device type and id and the device id is NONE. name="device_id" had to be bet into device Id form
+
+make comments on issues closed recently
+
+name for date picker on download page had not been set - fixes None issue when downloading
+
+making mockup for the download page
