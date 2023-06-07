@@ -258,3 +258,7 @@ make comments on issues closed recently
 name for date picker on download page had not been set - fixes None issue when downloading
 
 making mockup for the download page
+
+sliding bars and confirm button js/css working
+
+fixed issue of confirm button being wrong place when bar 1 is first opened
