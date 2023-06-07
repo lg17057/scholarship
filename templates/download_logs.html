@@ -85,89 +85,186 @@
   <h1 class="main_title">{{message}}</h1>
   <div class="download-container">
     <div class="modal-return">
-      <div class="bar" >
-        <div class="header" onclick="toggleBar(1)">Bar 1 <span class="arrow">&#8595;</span></div>
-        <div class="content">
-          <br><br>
-          <br><br>
-          <br><br>
-          <br><br>
-          <br><br>
-          <br><br>
-          <br><br>
-          <br><br>
-          <br>
-      
-          <button class="confirm-button">Confirm </button>
+      <div class="bar">
+        <div class="header" onclick="toggleBar(1)">Rental Data<span class="arrow">&#8595;</span></div>
+        <div class="content" id="content-bar1">
+          <h2>Select Constraints;</h2>
+          <form id="content-bar1-form" name="content-bar1-form" method="POST">
+            <input type="hidden" name="form_type" value="content-bar1">
+            <ul>
+              <li>
+                <div id="type-picker-container-bar1">
+                  <input type="checkbox" id="checkbox-bar1-1" class="checkbox-bar" name="checkbox-bar1-1">
+                  <div class="select-container-bar1">
+                    <select id="device-picker-bar1" name="device-picker-bar1" >
+                      <option selected value="">Device Type:</option>
+                      <option value="iPad">iPad</option>
+                      <option value="Laptop">Laptop</option>
+                      <option value="Chromebook">Chromebook</option>
+                    </select>
+                  </div>
+                  
+                </div>
+              </li>
+              <li>
+                <div id="id-picker-container-bar1">
+                  <input type="checkbox" id="checkbox-bar1-2" class="checkbox-bar"  name="checkbox-bar1-2">
+                  <input type="number" id="idpicker-bar1" class="input-field idpicker-bar1" name="device-id-bar1" placeholder="Device ID">
+                </div>
+              </li>
+              <li>
+                
+                <div id="date-picker-container-num1-bar1">
+                  <input type="checkbox" id="checkbox-bar1-3" class="checkbox-bar"  name="checkbox-bar1-3">
+                    <div class="datepicker">
+                      <input type="date" id="date-picker-bar1-1" class="date-picker">
+                    </div>
+                </div>
+              </li>
+              
+              <li>
+                <div id="date-picker-container-num2-bar1">
+                  <input type="checkbox" id="checkbox-bar1-4"class="checkbox-bar"  name="checkbox-bar1-4">
+                    <div class="datepicker">
+                      <input type="date" id="date-picker-bar1-2" class="date-picker">
+                    </div>
+                </div>
+              </li>
+              <li id="checkboxlist1">
+                <input type="checkbox" id="checkbox-bar1-5" class="checkbox-bar"  name="exclude-overdues-bar1"><p class="checkbox-label" id="overdues-bar1">Exclude Overdues</p>
+              </li>
+              <li id="checkboxlist2">
+                <input type="checkbox" id="checkbox-bar1-6" class="checkbox-bar"  name="exclude-confirmed-bar1"><p class="checkbox-label" id="confirmed-bar1">Exclude Confirmed</p>
+              </li>
+              <li id="checkboxlist3">
+                <input type="checkbox" id="checkbox-bar1-7" class="checkbox-bar"  name="exclude-unreturned-bar1"><p class="checkbox-label" id="unreturned-bar1">Exclude Un-returned</p>
+              </li>
+              <p id="to-bar1">To</p>
+              <p  id="error-message-bar1" class="error-message"></p>
+            </ul>        
+                
+            <button class="confirm-button" id="bar1-confirm">Confirm</button>
+          </form>
+          
         </div>
       </div>
       <div class="bar">
-        <div class="header" onclick="toggleBar(2)">Bar 2 <span class="arrow">&#8595;</span></div>
-        <div class="content">
-          <br><br>
-          <br><br>
-          <br><br>
-          <br><br>
-          <br><br>
-          <br><br>
-          <br><br>
-          <button class="confirm-button">Confirm </button>
+        <div class="header" onclick="toggleBar(2)">Device Data<span class="arrow">&#8595;</span></div>
+        <div class="content" id="content-bar2">
+          <h2>Select Constraints;</h2>
+          <form id="content-bar2-form" name="content-bar2-form" method="POST">
+            <input type="hidden" name="form_type" value="content-bar2">
+            <ul>
+              <li>
+                <div id="type-picker-container-bar2">
+                  <input type="checkbox" id="checkbox-bar2-1" class="checkbox-bar"  name="checkbox-bar2-1">
+                </div>
+              </li>
+              <li>
+                <div id="id-picker-container-bar2">
+                  <input type="checkbox" id="checkbox-bar2-2" class="checkbox-bar"  name="checkbox-bar2-2">
+                </div>
+              </li>
+              <li>
+                <div id="date-picker-container-num1-bar2">
+                  <input type="checkbox" id="checkbox-bar2-3" class="checkbox-bar"  name="checkbox-bar2-3">
+                </div>
+              </li>
+              <li>
+                <div id="date-picker-container-num2-bar2">
+                  <input type="checkbox" id="checkbox-bar2-4" class="checkbox-bar"  name="checkbox-bar2-4">
+                </div>
+              </li>
+              <li>
+                <div>
+                  <input type="checkbox" id="checkbox-bar2-5" class="checkbox-bar"  name="checkbox-bar2-5">
+                </div>
+              </li>
+            </ul>
+          </form>
+          <br>
+          <button class="confirm-button">Confirm</button>
         </div>
       </div>
-      <div class="bar" >
-        <div class="header" onclick="toggleBar(3)">Bar 3 <span class="arrow">&#8595;</span></div>
-        <div class="content">
-          <br><br>
-          <br><br>
-          <br><br>
-          <br><br>
-          <br><br>
-          <br><br>
-          <br><br>
-          <button class="confirm-button">Confirm </button>
+      <div class="bar">
+        <div class="header" onclick="toggleBar(3)">Student Data<span class="arrow">&#8595;</span></div>
+        <div class="content" id="content-bar3">
+          <h2>Select Constraints;</h2>
+          <form id="content-bar3-form" name="content-bar3-form" method="POST">
+            <input type="hidden" name="form_type" value="content-bar3">
+            <ul>
+              <li>
+                <div id="type-picker-container-bar3">
+                  <input type="checkbox" id="checkbox-bar3-1" class="checkbox-bar"  name="checkbox-bar3-1">
+                </div>
+              </li>
+              <li>
+                <div id="id-picker-container-bar3">
+                  <input type="checkbox" id="checkbox-bar3-2" class="checkbox-bar"  name="checkbox-bar3-2">
+                </div>
+              </li>
+              <li>
+                <div id="date-picker-container-num1-bar3">
+                  <input type="checkbox" id="checkbox-bar3-3" class="checkbox-bar"  name="checkbox-bar3-3">
+                </div>
+              </li>
+              <li>
+                <div id="date-picker-container-num2-bar3">
+                  <input type="checkbox" id="checkbox-bar3-4"class="checkbox-bar"  name="checkbox-bar3-4">
+                </div>
+              </li>
+              <li>
+                <div>
+                  <input type="checkbox" id="checkbox-bar3-5" class="checkbox-bar"  name="checkbox-bar3-5">
+                </div>
+              </li>
+            </ul>
+          </form>
+          <br>
+          <button class="confirm-button">Confirm</button>
         </div>
       </div>
-      
-      
     </div>
-    
-     
-
   </div>
- </div>
-
+</div>
+<!--SLIDING/HIDING the main bars -->
 <script>
 function toggleBar(barNumber) {
-  const modalReturn = document.querySelector('.modal-return');
-  const bars = modalReturn.querySelectorAll('.bar');
-  
-  bars.forEach((bar, index) => {
-    const header = bar.querySelector('.header');
-    const content = bar.querySelector('.content');
-    const arrow = bar.querySelector('.arrow');
-    
-    if (index + 1 === barNumber) {
-      // Toggle the clicked bar
-      if (bar.classList.contains('open')) {
-        // Close the bar
+    const modalReturn = document.querySelector('.modal-return');
+    const bars = modalReturn.querySelectorAll('.bar');
+    const contentBars = modalReturn.querySelectorAll('.content');
+
+    bars.forEach((bar, index) => {
+      const header = bar.querySelector('.header');
+      const content = bar.querySelector('.content');
+      const arrow = bar.querySelector('.arrow');
+
+      if (index + 1 === barNumber) {
+        // Toggle the clicked bar
+        if (bar.classList.contains('open')) {
+          // Close the bar
+          bar.classList.remove('open');
+          content.style.display = 'none';
+          arrow.style.transform = 'rotate(0deg)';
+          modalReturn.classList.remove(`bar${barNumber}`);
+        } else {
+          // Open the bar
+          bar.classList.add('open');
+          content.style.display = 'block';
+          arrow.style.transform = 'rotate(180deg)';
+          expandBar(barNumber);
+
+          modalReturn.classList.remove('bar1', 'bar2', 'bar3'); // Remove all bar-specific classes
+          modalReturn.classList.add(`bar${barNumber}`); // Apply the appropriate class based on the opened bar
+        }
+      } else {
+        // Close other bars
         bar.classList.remove('open');
         content.style.display = 'none';
         arrow.style.transform = 'rotate(0deg)';
-      } else {
-        // Open the bar
-        bar.classList.add('open');
-        content.style.display = 'block';
-        arrow.style.transform = 'rotate(180deg)';
-        expandBar(barNumber);
       }
-    } else {
-      // Close other bars
-      bar.classList.remove('open');
-      content.style.display = 'none';
-      arrow.style.transform = 'rotate(0deg)';
-    }
-  });
-}
+    });
+  }
 // Rest of the code remains the same
 
 function expandBar(barNumber) {
@@ -202,13 +299,103 @@ function resetBars() {
 
 
 </script>
+<!--CHECKBOX DATE THING; if the first one is checked/unchecked the second appears/disappears-->
+<!--SLIDING ANIMATIon-->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var dateCheckbox1 = document.getElementById('checkbox-bar1-3');
+    var dateContainer2 = document.getElementById('date-picker-container-num2-bar1');
 
+    function toggleDate2() {
+      if (dateCheckbox1.checked) {
+        dateContainer2.classList.add('show-datepicker');
+        dateContainer2.classList.remove('hide-datepicker');
+      } else {
+        dateContainer2.classList.remove('show-datepicker');
+        dateContainer2.classList.add('hide-datepicker');
+      }
+    }
 
+    dateCheckbox1.addEventListener('change', toggleDate2);
+  });
+</script>
+<script>
+  // Get the checkbox elements
+  const checkbox1 = document.getElementById('checkbox-bar1-3');
+  const checkbox2 = document.getElementById('checkbox-bar1-4');
+  const container2 = document.getElementById('date-picker-container-num2-bar1');
+  const tobar = document.getElementById('to-bar1');
+  // Hide the container initially
+  container2.style.display = 'none';
+  tobar.style.display = 'none';
 
+  // Add event listener to checkbox1
+  checkbox1.addEventListener('change', function() {
+    if (checkbox1.checked) {
+      container2.style.display = 'block';
+      tobar.style.display = 'block'
 
+    } else {
+      container2.style.display = 'none';
+      tobar.style.display = 'none';
 
+      checkbox2.checked = false; // Uncheck checkbox2 if it was checked
+    }
+  });
+</script>
+<!-- IF CHECKBOX IS CHECKED THEN INPUT IS SET TO REQUIRED-->
+<script>
+  // Get the checkbox and input elements for content-bar1
+  const checkboxes = document.querySelectorAll('#content-bar1 .checkbox-bar');
+  const inputs = document.querySelectorAll('#content-bar1 input[type="text"], #content-bar1 input[type="number"], #content-bar1 select, input[type="date"]');
 
+  // Add event listeners to checkboxes
+  checkboxes.forEach(function(checkbox) {
+    checkbox.addEventListener('change', function() {
+      const inputContainer = checkbox.closest('.checkbox-bar').nextElementSibling;
+      const input = inputContainer.querySelector('input, select');
+      
+      if (checkbox.checked) {
+        input.required = true;
+      } else {
+        input.required = false;
+      }
+    });
+  });
+</script>
+<!-- DATE 2 CANNOT BE LESS THAN DATE 1 -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var date1Input = document.getElementById('date-picker-bar1-1');
+    var date2Input = document.getElementById('date-picker-bar1-2');
+    var date1Checkbox = document.getElementById('checkbox-bar1-3');
+    var date2Checkbox = document.getElementById('checkbox-bar1-4');
+    var errorElement = document.getElementById('error-message-bar1');
 
+    function validateDates() {
+      var date1 = date1Input.value;
+      var date2 = date2Input.value;
+
+      if (date2Checkbox.checked && date1 && date2 && date2 < date1) {
+        errorElement.textContent = 'End Date cannot be earlier than Start Date.';
+        return false;
+      }
+
+      if (!date1Checkbox.checked) {
+        errorElement.textContent = '';
+        return true;
+      }
+
+      errorElement.textContent = '';
+      return true;
+    }
+
+    date1Input.addEventListener('input', validateDates);
+    date2Input.addEventListener('input', validateDates);
+    date1Checkbox.addEventListener('change', validateDates);
+    date2Checkbox.addEventListener('change', validateDates);
+  });
+</script>
 
 
 

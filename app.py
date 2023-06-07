@@ -566,31 +566,66 @@ def download_logs():
     with opendb('logs.db') as c:
         status = session["logged_in"]
         if status is True:
-            loginstatus = session['logged_in']
             if request.method == 'POST':
-                        device_type = request.form.get('devicepicker')
-                        device_id = request.form.get('idpicker')
-                        date_picker = request.form.get('datepicker')
-                        rows = fetch_rows(device_type, device_id, date_picker)
-                        if rows:
-                            format_picker = request.form.get('formatpicker')
-                            if format_picker == 'CSV':
-                                csv_data = generate_csv(rows)
-                                response = make_response(csv_data)
-                                response.headers['Content-Disposition'] = 'attachment; filename=RentalLogs_{}_{}_{}.csv'.format(device_type, device_id, date_picker)
-                                response.headers['Content-Type'] = 'text/csv'
-                                return response
-                            elif format_picker == 'PDF':
-                                pdf_data = generate_pdf(rows)
-                                response = make_response(pdf_data)
-                                response.headers['Content-Disposition'] = 'attachment; filename=RentalLogs_{}_{}_{}.pdf'.format(device_type, device_id, date_picker)
-                                response.headers['Content-Type'] = 'application/pdf'
-                                return response
-                            else: 
-                                pass
-                        else:
-                            message = 'No data found for the specified criteria.'
-                            return render_template('download_logs.html', loginstatus=status, message=message)
+                form_type = request.form.get('form_type')
+                if form_type == "content-bar1": #rentals
+                    filter_data = {
+                        'device_type': request.form.get('device-picker-bar1') if 'checkbox-bar1-1' in request.form else None,
+                        'device_id': request.form.get('device-id-bar1') if 'checkbox-bar1-2' in request.form else None,
+                        'start_date': request.form.get('date-picker-bar1-1') if 'checkbox-bar1-3' in request.form else None,
+                        'end_date': request.form.get('date-picker-bar1-2') if 'checkbox-bar1-4' in request.form else None,
+                        'exclude_overdues': 'exclude-overdues-bar1' in request.form,
+                        'exclude_confirmed': 'exclude-confirmed-bar1' in request.form,
+                        'exclude_unreturned': 'exclude-unreturned-bar1' in request.form
+                    }
+
+                    # Perform database query based on the filter data
+                    query = "SELECT * FROM device_logs"
+                    conditions = []
+
+                    if filter_data['device_type']:
+                        conditions.append(f"device_type = '{filter_data['device_type']}'")
+                    if filter_data['device_id']:
+                        conditions.append(f"device_id = {filter_data['device_id']}")
+                    if filter_data['start_date']:
+                        conditions.append(f"date_borrowed >= '{filter_data['start_date']}'")
+                    if filter_data['end_date']:
+                        conditions.append(f"date_borrowed <= '{filter_data['end_date']}'")
+                    if filter_data['exclude_overdues']:
+                        conditions.append(f"period_returned != 'Returned'")
+                    if filter_data['exclude_confirmed']:
+                        conditions.append(f"teacher_signoff != 'Confirmed'")
+                    if filter_data['exclude_unreturned']:
+                        conditions.append(f"period_returned != 'Returned'")
+
+                    if conditions:
+                        query += " WHERE " + " AND ".join(conditions)
+
+                    c.execute(query)
+                    rows = c.fetchall()
+
+                    # Generate CSV file for download
+                    filename = "device_logs.csv"
+                    headers = ["Date Borrowed", "Submitted Under", "Student Name", "Homeroom", "Device Type",
+                               "Device ID", "Period Borrowed", "Reason Borrowed", "Period Returned",
+                               "Teacher Sign-Off", "Notes"]
+
+                    with open(filename, 'w', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow(headers)
+                        writer.writerows(rows)
+            
+                    # Prepare the response with the CSV file as an attachment
+                    response = make_response(send_file(filename, mimetype='text/csv', as_attachment=True))
+                    response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+                    return response
+
+
+                elif form_type == "content-bar2":#devices
+                    pass
+                elif form_type =="content-bar3":#users
+                    pass
+
             else:        
                 return render_template('/download_logs.html', loginstatus=status, message="Download Data" )
             return render_template('/download_logs.html', loginstatus=status, message="Download Data" )

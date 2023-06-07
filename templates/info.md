@@ -256,9 +256,15 @@ fixed issue when submitting the device type and id and the device id is NONE. na
 make comments on issues closed recently
 
 name for date picker on download page had not been set - fixes None issue when downloading
-
+``````````````````````````````````````````````````````````
+DOWNLOAD PAGE
 making mockup for the download page
 
 sliding bars and confirm button js/css working
 
 fixed issue of confirm button being wrong place when bar 1 is first opened
+
+fixed issue where date 1 < date 2 message would show when date 1 was selected but 2 wasnt
+made it so that date 1 < date 2 message wouldnt show when date 1 is not selected
+
+slide in animation for date 2 working, slide out not

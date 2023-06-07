@@ -1,12 +1,12 @@
-
-
 .originaldivtitle {
   position: fixed;
-  top:-15px;
+  top: -15px;
 }
 
 body {
   background-color: #f1f1f1;
+  margin: 0;
+  padding: 0;
 }
 
 .modal-return {
@@ -18,10 +18,40 @@ body {
   padding: 20px;
   width: 400px;
   height: auto;
-  max-height: 80%;
   background-color: white;
   border-radius: 10px;
-  overflow-y: auto;
+  overflow-y: none;
+  overflow-x: hidden;
+}
+
+.modal-return.bar1,
+.modal-return.bar2,
+.modal-return.bar3 {
+  position: relative;
+  top: 100px;
+  left: 200px;
+  transform: translate(-50%, -50%);
+  margin: auto;
+  padding: 20px;
+  width: 400px;
+  background-color: white;
+  border-radius: 10px;
+  overflow-y: none;
+  overflow-x: none;
+}
+
+.modal-return.bar1 {
+  position: relative;
+  top: 120px;
+  height: 545px;
+}
+
+.modal-return.bar2 {
+  height: 450px;
+}
+
+.modal-return.bar3 {
+  height: 450px;
 }
 
 .header {
@@ -50,56 +80,10 @@ body {
   display: none;
   margin-top: 10px;
 }
-.bar {
-  margin-bottom: 10px;
-}
-.confirm-button {
-  position: absolute;
-  margin-top: 20px;
-  bottom: 3px;
-  left: 10%;
-  font-size: 12px;
-  background-color: #ffffff;
-  border: none;
-  color: #008000;
-  border: #008000 1px solid;
-  border-radius: 4px;
-  transition: all 0.2s ease-in-out;
-  padding: 6px 12px;
-
-  transform: translateX(-50%);
-}
-
-.confirm-button:hover {
-  text-decoration: underline;
-  cursor: pointer;
-  color: #ffffff;
-
-  background-color: #008000;
-  border: #008000 1px solid;
-}
 
 
-
-
-
-#viewlogs {
-  background-color: #ffffff;
-  color: #008000;
-  border: #008000 1px solid;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-#viewlogs:hover {
-  background-color: #008000;
-  border: #008000 1px solid;
-  color: #ffffff;
-  border-radius: 4px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+#content-bar1 {
+  height: 350px;
 }
 
 
@@ -118,7 +102,7 @@ body {
   }
   100% {
     opacity: 0;
-    transform: translateY(-100%);
+    transform: translateY(0%);
   }
 }
 
@@ -151,3 +135,268 @@ body {
   }
 }
 
+
+
+/* NEW STYLES FOR THE BARS */
+
+
+ul {
+  list-style-type: none; /* Remove the bullet points */
+}
+
+
+.checkbox-bar {
+  position: relative;
+  left: -40px;
+}
+
+.checkbox-label {
+  position: relative;
+  left: -20px;
+  top: -39px;
+}
+
+
+
+/* BAR 1 */
+
+
+.select-container-bar1 {
+  position: relative;
+  display: inline-block;
+  top:0px;
+  width: 120px;
+  left: -45px;
+  font-size: 14px;
+  }
+  
+  /* Styling the select element */
+  .select-container-bar1 select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 140px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  }
+  
+  /* Styling the arrow icon */
+  .select-container-bar1::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  left:120px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  }
+  
+  /* Styling when select element is open */
+  .select-container-bar1.select-open select {
+  border-color: #888;
+  }
+  
+  /* Styling the dropdown options */
+  .select-container-bar1 select option {
+  font-size: 16px;
+  }
+  
+  /* Styling when an option is selected */
+  .select-container-bar1.select-open select option:checked {
+  background-color: #f0f0f0;
+  }
+#idpicker-bar1 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  height: 5px;
+  position: relative;
+  left: -45px;
+}
+  
+.input-field {
+  padding: 15px;
+  width: 30%;
+  margin: 5px 0 22px 0;
+  margin: 0 auto;
+  border: none;
+  border-radius: 2px;
+  background: #f1f1f1;
+  }
+  
+  .input-field:focus {
+  background-color: #ddd;
+  outline: none;
+  }
+
+  #date-picker-bar1-1 {
+    font-size: 14px;
+    padding: 5px;
+    background-color: #f1f1f1;
+    border: none;
+    height: 20px;
+    border-radius: 2px;
+    width: 130px;
+    position: relative;
+    left: -20px;
+    top: -23px;
+
+  }
+  #date-picker-bar1-2 {
+    font-size: 14px;
+    padding: 5px;
+    background-color: #f1f1f1;
+    border: none;
+    height: 20px;
+    border-radius: 2px;
+    width: 130px;
+    position: relative;
+    left: -20px;
+    top: -23px;
+    animation-duration: 1s;
+    animation-name: slide-in;
+    animation-fill-mode: forwards;
+  }
+  
+  
+  @keyframes slide-in {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+
+
+  #type-picker-container-bar1,
+  #id-picker-container-bar1 {
+    margin-bottom: 7px;
+  }
+
+  #date-picker-container-num2-bar1 {
+    position: relative;
+    top: -10px;
+  }
+
+  .error-message {
+    color: red;
+  }
+  #error-message-bar1 {
+    position: relative;
+    top: -285px;
+    left: -20px;
+    font-size: 13px;
+  }
+
+  #to-bar1 {
+    font-size: 13px;
+    position: relative;
+    top: -305px;
+    left: 125px;
+  }
+
+
+  #exclude-overdues-bar1-label {
+    position: relative;
+    top: -21px;
+    left: 20px;
+  }
+  #exclude-overdues-bar1 {
+    position: relative;
+    top: -20px;
+    left: -130px;
+  }
+  #checkboxlist1 {
+    position: relative;
+    top: 5px
+  }
+
+
+  #checkboxlist2 {
+    position: relative;
+    top: -45px;
+  }
+
+  #checkboxlist3 {
+    position: relative;
+    top: -95px;
+  }
+
+  #bar1-confirm {
+    position: absolute;
+    bottom: 20px;
+    left: 90%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    background-color: #ffffff;
+    border: none;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 4px;
+    transition: all 0.2s ease-in-out;
+    padding: 6px 12px;
+  }
+  
+  
+  #bar1-confirm:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: #ffffff;
+  
+    background-color: #008000;
+    border: #008000 1px solid;
+  }
+ 
+  
+ #bar2-confirm {
+  position: relative;
+  top: -120px;
+    /* Removed 'bottom' and 'left' properties */
+    font-size: 12px;
+    background-color: #ffffff;
+    border: none;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 4px;
+    transition: all 0.2s ease-in-out;
+    padding: 6px 12px;
+  
+    /* Removed 'transform' property */
+  }
+  
+  
+  #bar2-confirm:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: #ffffff;
+  
+    background-color: #008000;
+    border: #008000 1px solid;
+  }
+ 
+  
+ #bar3-confirm {
+  position: relative;
+  top: -120px;
+    /* Removed 'bottom' and 'left' properties */
+    font-size: 12px;
+    background-color: #ffffff;
+    border: none;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 4px;
+    transition: all 0.2s ease-in-out;
+    padding: 6px 12px;
+  
+    /* Removed 'transform' property */
+  }
+  
+  
+  #bar3-confirm:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: #ffffff;
+  
+    background-color: #008000;
+    border: #008000 1px solid;
+  }
+ 
