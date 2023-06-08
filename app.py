@@ -39,6 +39,7 @@ class opendb():
         self.obj.commit()
         self.obj.close()
 
+
 def valid_device_data(device_ids,device_types):
     with opendb('logs.db') as c:
         device_list_query = "SELECT device_id, device_type FROM devices WHERE in_circulation = 'No'"
@@ -189,7 +190,7 @@ def main():
             
             today = date.today()
             formatted_date = today.strftime("%d-%m-%Y")
-            dates = datetime.datetime.now().date().strftime("%d-%m")
+            dates = datetime.datetime.now().date().strftime("%d-%m-%yyyy")
             yesterday = date.today() - timedelta(days=1)
             formatted_yesterday = yesterday.strftime("%d-%m-%Y")
             #SUBSTR date_borrowed, 1,5 takes the first 5 characters "dd-mm" from the date borrowed column
@@ -229,7 +230,12 @@ def main():
         else:
             session['logged_in'] = False
             session['user_id'] = "Invalid"
-            return render_template('/index.html', message="Index Page. Please login to access data", loginstatus=loginstatus)
+            device_list_query = "SELECT device_id, device_type FROM devices"
+            c.execute(device_list_query)
+            device_list = c.fetchall()
+            device_ids = [device[0] for device in device_list]
+            device_types = [device[1] for device in device_list]
+            return render_template('/index.html', message="Index Page. Please login to access data", loginstatus=loginstatus, device_ids=device_ids, device_types=device_types)
 
 
 #device log page
@@ -363,7 +369,7 @@ def circulations():
        
 
 
-@app.route('/overdues')
+@app.route('/overdues', methods=['POST','GET'])
 def overdue_rentals():
     with opendb('logs.db') as c:
         status = session["logged_in"]
@@ -373,9 +379,43 @@ def overdue_rentals():
             formatted_yesterday = yesterday.strftime("%d-%m-%Y %H:M")
             c.execute("SELECT * FROM device_logs WHERE period_returned = 'Not Returned' AND teacher_signoff = 'Unconfirmed' AND SUBSTR(date_borrowed, 1, 8) < ?", (formatted_date,))
             rows = c.fetchall()
-            print('datata')
-            print(rows)
-            return render_template('overdues.html', loginstatus=status, rows=rows, message="Viewing Overdue Rentals")
+
+            if request.method == 'POST':
+                device_type = request.form.get('devicepicker')
+                device_id = request.form.get('idpicker')
+                return redirect('/overdues/{}/{}'.format(device_type, device_id))
+
+
+            device_list_query = "SELECT device_id, device_type FROM devices"
+            c.execute(device_list_query)
+            device_list = c.fetchall()
+            device_ids = [device[0] for device in device_list]
+            device_types = [device[1] for device in device_list]
+
+            return render_template('overdues.html', loginstatus=status,device_ids=device_ids,device_types=device_types, rows=rows, message="Viewing Overdue Rentals")
+
+        else:
+            message = "Please login to access this feature"
+            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
+
+
+@app.route('/overdues/<string:device_type>/<int:device_id>')
+def overdue_rentals_devicespecific(device_type,device_id):
+     with opendb('logs.db') as c:
+        status = session["logged_in"]
+        if status is True:    
+            formatted_date = date.today().strftime("%d-%m-%Y %H:M")
+            yesterday = date.today() - timedelta(days=1) #SUBSTR(date_borrowed, 1, 5) = ? AND SUBSTR(date_borrowed, 1, 5) < ? 
+            formatted_yesterday = yesterday.strftime("%d-%m-%Y %H:M")
+            c.execute("SELECT * FROM device_logs WHERE period_returned = 'Not Returned' AND teacher_signoff = 'Unconfirmed' AND SUBSTR(date_borrowed, 1, 8) < ? AND device_type = ? AND device_id = ?", (formatted_date,device_type,device_id,))
+            rows = c.fetchall()
+            device_list_query = "SELECT device_id, device_type FROM devices"
+            c.execute(device_list_query)
+            device_list = c.fetchall()
+            device_ids = [device[0] for device in device_list]
+            device_types = [device[1] for device in device_list]
+
+            return render_template('overdues.html', loginstatus=status,device_ids=device_ids,device_types=device_types, rows=rows, message="Viewing Overdue Rentals")
 
         else:
             message = "Please login to access this feature"
@@ -388,7 +428,7 @@ def student_data():
     with opendb('logs.db') as c:
         status = session["logged_in"]
         if status is True:    
-
+            loginstatus = session['logged_in']
             student_total = c.execute("SELECT COUNT(*) FROM student_data")
             student_total = c.fetchone()
             student_total = str(student_total).strip("[]''()'',")
@@ -397,7 +437,7 @@ def student_data():
             rows = c.execute("SELECT * FROM student_data")
             rows = c.fetchall()
 
-            return render_template('students.html', loginstatus=status, students_total=student_total, rows=rows)
+            return render_template('students.html', loginstatus=loginstatus, students_total=student_total, rows=rows)
 
         else:
             message = "Please login to access this feature"
@@ -521,44 +561,112 @@ def check_data_availability(date):
 #add device,student and admin download ability and buttons to html page
 #make it so that the date is actually properly sent to the python file instead of being saved as None in the file name
 #let user save data from _date_ to _date_
-@app.route('/download-logs/', methods=['GET','POST'])
+
+@app.route('/download-logs/', methods=['GET', 'POST'])
 def download_logs():
     with opendb('logs.db') as c:
         status = session["logged_in"]
         if status is True:
-            loginstatus = session['logged_in']
             if request.method == 'POST':
-                        device_type = request.form.get('devicepicker')
-                        device_id = request.form.get('idpicker')
-                        date_picker = request.form.get('datepicker')
-                        rows = fetch_rows(device_type, device_id, date_picker)
-                        if rows:
-                            format_picker = request.form.get('formatpicker')
-                            if format_picker == 'CSV':
-                                csv_data = generate_csv(rows)
-                                response = make_response(csv_data)
-                                response.headers['Content-Disposition'] = 'attachment; filename=RentalLogs_{}_{}_{}.csv'.format(device_type, device_id, date_picker)
-                                response.headers['Content-Type'] = 'text/csv'
-                                return response
-                            elif format_picker == 'PDF':
-                                pdf_data = generate_pdf(rows)
-                                response = make_response(pdf_data)
-                                response.headers['Content-Disposition'] = 'attachment; filename=RentalLogs_{}_{}_{}.pdf'.format(device_type, device_id, date_picker)
-                                response.headers['Content-Type'] = 'application/pdf'
-                                return response
-                            else: 
-                                pass
-                        else:
-                            message = 'No data found for the specified criteria.'
-                            return render_template('download_logs.html', loginstatus=status, message=message)
-            else:        
-                return render_template('/download_logs.html', loginstatus=status, message="Download Data" )
-            return render_template('/download_logs.html', loginstatus=status, message="Download Data" )
+                form_type = request.form.get('form_type')
+                if form_type == "content-bar1":  # rentals
+                    filter_data = {
+                        'device_type': request.form.get('device-picker-bar1') if 'checkbox-bar1-1' in request.form else None,
+                        'device_id': request.form.get('device-id-bar1') if 'checkbox-bar1-2' in request.form else None,
+                        'start_date': request.form.get('date-picker-bar1-1') if 'checkbox-bar1-3' in request.form else None,
+                        'end_date': request.form.get('date-picker-bar1-2') if 'checkbox-bar1-4' in request.form else None,
+                        'exclude_overdues': 'exclude-overdues-bar1' in request.form,
+                        'exclude_confirmed': 'exclude-confirmed-bar1' in request.form,
+                        'exclude_unreturned': 'exclude-unreturned-bar1' in request.form
+                    }
+                    today = date.today()
+                    formatted_date = today.strftime("%d-%m-%Y")
+                    query = "SELECT * FROM device_logs WHERE 1=1"  
+                    params = []
+                    print(filter_data)
+
+                    if filter_data['device_type']:
+                        query += " AND device_type = ?"
+                        params.append(filter_data['device_type'])
+                        print("sorting by device type")
+
+                    if filter_data['device_id']:
+                        query += " AND device_id = ?"
+                        params.append(filter_data['device_id'])
+                        print("sorting by device id")
+
+                    if filter_data['start_date'] and filter_data['end_date']:
+                        start_date = filter_data['start_date']
+                        end_date = filter_data['end_date']
+                        year, month, day = start_date.split('-')
+                        formatted_start = f"{day}-{month}-{year}"
+                        year, month, day = end_date.split('-')
+                        formatted_end = f"{day}-{month}-{year}"
+                        query += " AND date_borrowed >= ? AND date_borrowed <= ?"  
+                        params.append(formatted_start)  
+                        params.append(formatted_end)  
+                        print("sorting by date to date")
+
+
+                    elif filter_data['start_date']:
+                        start_date = filter_data['start_date'] 
+                        year, month, day = start_date.split('-')
+                        formatted_date = f"{day}-{month}-{year}"
+                        query += " AND SUBSTR(date_borrowed, 1, 10) = ?"
+                        params.append(formatted_date)  
+                        print("sorting by date")
+                       
+
+                    if filter_data['exclude_overdues']:
+                        query += " AND SUBSTR(date_borrowed, 1, 10) != ? AND SUBSTR(date_borrowed, 1, 10) < ?"
+                        params.append(formatted_date)  
+                        params.append(formatted_date) 
+                        print("excluding overdues")
+
+                    if filter_data['exclude_confirmed']:
+                        query += " AND teacher_signoff != ?"
+                        params.append("Confirmed")
+                        print("excluding unconfirmed")
+
+                    if filter_data['exclude_unreturned']:
+                        query += " AND period_returned != ?"
+                        params.append('Not Returned')
+                        print("excluding unreturned")
+
+                   
+                    c.execute(query, params)
+                    rows = c.fetchall()
+
+                    
+                    filename = "device_logs.csv"
+                    headers = ["Date Borrowed", "Submitted Under", "Student Name", "Homeroom", "Device Type",
+                               "Device ID", "Period Borrowed", "Reason Borrowed", "Period Returned",
+                               "Teacher Sign-Off", "Notes"]
+
+                    with open(filename, 'w', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow(headers)
+                        writer.writerows(rows)
+
+                    response = make_response(send_file(filename, mimetype='text/csv', as_attachment=True))
+                    response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+                    return response
+
+                elif form_type == "content-bar2":  # devices
+                    pass
+                elif form_type == "content-bar3":  # users
+                    pass
+
+            else:
+                return render_template('/download_logs.html', loginstatus=status, message="Download Data")
+            return render_template('/download_logs.html', loginstatus=status, message="Download Data")
 
         else:
             message = "Please login to access this feature"
-            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-        
+            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",
+                                   message_link="login-page")
+
+
 
 def fetch_rows(device_type, device_id, date_picker):
     with opendb('logs.db') as c:
@@ -581,11 +689,9 @@ def generate_csv(rows):
 
 
 def generate_pdf(rows):
-    # Implement the logic to generate PDF data from the fetched rows
-    # Return the PDF content as bytes
     pdf_content = b''
-    # ... Your PDF generation logic here ...
     return pdf_content
+
 
 
 #page used to sign off circulations that have been returned

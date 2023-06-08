@@ -246,8 +246,47 @@ make a thing at the bottom of the page showing how many overdue items there are
 
 
 device type and id valid for rental page
+added to overdues
 removed one of the rental logs routes
 
 -removed in_circulation = no from rental logs valid device types and ids query so that only the devices that dont exist are not allowed to be    submitted instead of ones that arent in circulation
 
 fixed issue when submitting the device type and id and the device id is NONE. name="device_id" had to be bet into device Id form
+
+make comments on issues closed recently
+
+name for date picker on download page had not been set - fixes None issue when downloading
+``````````````````````````````````````````````````````````
+DOWNLOAD PAGE
+making mockup for the download page
+
+sliding bars and confirm button js/css working
+
+fixed issue of confirm button being wrong place when bar 1 is first opened
+
+fixed issue where date 1 < date 2 message would show when date 1 was selected but 2 wasnt
+made it so that date 1 < date 2 message wouldnt show when date 1 is not selected
+
+slide in animation for date 2 working, slide out not
+
+`` 
+intital download working
+date selection not working
+need to make it if nothing selected cant submit
+make it so if they select an id they have to select a type
+
+
+
+testing diffferent download types
+
+just ipads works
+ipad and ipad id works
+just one date works
+from date to date works
+exclude unconfirmed works
+exclude unreturned works
+exclude overdues works
+
+rental log download data working now
+fixed date issues because date inputs had no name set so was null
+fixed date format not using strptime, using an extraction of each year, month and date value, and then putting it back into the query as formatted
