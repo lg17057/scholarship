@@ -190,7 +190,7 @@ def main():
             
             today = date.today()
             formatted_date = today.strftime("%d-%m-%Y")
-            dates = datetime.datetime.now().date().strftime("%d-%m")
+            dates = datetime.datetime.now().date().strftime("%d-%m-%yyyy")
             yesterday = date.today() - timedelta(days=1)
             formatted_yesterday = yesterday.strftime("%d-%m-%Y")
             #SUBSTR date_borrowed, 1,5 takes the first 5 characters "dd-mm" from the date borrowed column
@@ -561,14 +561,15 @@ def check_data_availability(date):
 #add device,student and admin download ability and buttons to html page
 #make it so that the date is actually properly sent to the python file instead of being saved as None in the file name
 #let user save data from _date_ to _date_
-@app.route('/download-logs/', methods=['GET','POST'])
+
+@app.route('/download-logs/', methods=['GET', 'POST'])
 def download_logs():
     with opendb('logs.db') as c:
         status = session["logged_in"]
         if status is True:
             if request.method == 'POST':
                 form_type = request.form.get('form_type')
-                if form_type == "content-bar1": #rentals
+                if form_type == "content-bar1":  # rentals
                     filter_data = {
                         'device_type': request.form.get('device-picker-bar1') if 'checkbox-bar1-1' in request.form else None,
                         'device_id': request.form.get('device-id-bar1') if 'checkbox-bar1-2' in request.form else None,
@@ -578,33 +579,65 @@ def download_logs():
                         'exclude_confirmed': 'exclude-confirmed-bar1' in request.form,
                         'exclude_unreturned': 'exclude-unreturned-bar1' in request.form
                     }
-
-                    # Perform database query based on the filter data
-                    query = "SELECT * FROM device_logs"
-                    conditions = []
+                    today = date.today()
+                    formatted_date = today.strftime("%d-%m-%Y")
+                    query = "SELECT * FROM device_logs WHERE 1=1"  
+                    params = []
+                    print(filter_data)
 
                     if filter_data['device_type']:
-                        conditions.append(f"device_type = '{filter_data['device_type']}'")
+                        query += " AND device_type = ?"
+                        params.append(filter_data['device_type'])
+                        print("sorting by device type")
+
                     if filter_data['device_id']:
-                        conditions.append(f"device_id = {filter_data['device_id']}")
-                    if filter_data['start_date']:
-                        conditions.append(f"date_borrowed >= '{filter_data['start_date']}'")
-                    if filter_data['end_date']:
-                        conditions.append(f"date_borrowed <= '{filter_data['end_date']}'")
+                        query += " AND device_id = ?"
+                        params.append(filter_data['device_id'])
+                        print("sorting by device id")
+
+                    if filter_data['start_date'] and filter_data['end_date']:
+                        start_date = filter_data['start_date']
+                        end_date = filter_data['end_date']
+                        year, month, day = start_date.split('-')
+                        formatted_start = f"{day}-{month}-{year}"
+                        year, month, day = end_date.split('-')
+                        formatted_end = f"{day}-{month}-{year}"
+                        query += " AND date_borrowed >= ? AND date_borrowed <= ?"  
+                        params.append(formatted_start)  
+                        params.append(formatted_end)  
+                        print("sorting by date to date")
+
+
+                    elif filter_data['start_date']:
+                        start_date = filter_data['start_date'] 
+                        year, month, day = start_date.split('-')
+                        formatted_date = f"{day}-{month}-{year}"
+                        query += " AND SUBSTR(date_borrowed, 1, 10) = ?"
+                        params.append(formatted_date)  
+                        print("sorting by date")
+                       
+
                     if filter_data['exclude_overdues']:
-                        conditions.append(f"period_returned != 'Returned'")
+                        query += " AND SUBSTR(date_borrowed, 1, 10) != ? AND SUBSTR(date_borrowed, 1, 10) < ?"
+                        params.append(formatted_date)  
+                        params.append(formatted_date) 
+                        print("excluding overdues")
+
                     if filter_data['exclude_confirmed']:
-                        conditions.append(f"teacher_signoff != 'Confirmed'")
+                        query += " AND teacher_signoff != ?"
+                        params.append("Confirmed")
+                        print("excluding unconfirmed")
+
                     if filter_data['exclude_unreturned']:
-                        conditions.append(f"period_returned != 'Returned'")
+                        query += " AND period_returned != ?"
+                        params.append('Not Returned')
+                        print("excluding unreturned")
 
-                    if conditions:
-                        query += " WHERE " + " AND ".join(conditions)
-
-                    c.execute(query)
+                   
+                    c.execute(query, params)
                     rows = c.fetchall()
 
-                    # Generate CSV file for download
+                    
                     filename = "device_logs.csv"
                     headers = ["Date Borrowed", "Submitted Under", "Student Name", "Homeroom", "Device Type",
                                "Device ID", "Period Borrowed", "Reason Borrowed", "Period Returned",
@@ -614,26 +647,26 @@ def download_logs():
                         writer = csv.writer(file)
                         writer.writerow(headers)
                         writer.writerows(rows)
-            
-                    # Prepare the response with the CSV file as an attachment
+
                     response = make_response(send_file(filename, mimetype='text/csv', as_attachment=True))
                     response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
                     return response
 
-
-                elif form_type == "content-bar2":#devices
+                elif form_type == "content-bar2":  # devices
                     pass
-                elif form_type =="content-bar3":#users
+                elif form_type == "content-bar3":  # users
                     pass
 
-            else:        
-                return render_template('/download_logs.html', loginstatus=status, message="Download Data" )
-            return render_template('/download_logs.html', loginstatus=status, message="Download Data" )
+            else:
+                return render_template('/download_logs.html', loginstatus=status, message="Download Data")
+            return render_template('/download_logs.html', loginstatus=status, message="Download Data")
 
         else:
             message = "Please login to access this feature"
-            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-        
+            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",
+                                   message_link="login-page")
+
+
 
 def fetch_rows(device_type, device_id, date_picker):
     with opendb('logs.db') as c:
@@ -656,26 +689,8 @@ def generate_csv(rows):
 
 
 def generate_pdf(rows):
-    # Implement the logic to generate PDF data from the fetched rows
-    # Return the PDF content as bytes
     pdf_content = b''
-    # ... Your PDF generation logic here ...
     return pdf_content
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
