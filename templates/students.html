@@ -84,7 +84,7 @@
 <div class="circulation-content">
   <button type="submit" id="submit-button" >See Overview</button>
 
-  <table id="devices-tables" class="devices">
+  <table id="devices-tabless" class="devices">
     <thead>
       <th>
         Homeroom
@@ -138,8 +138,9 @@
     <h2 class="popup-title">Data Overview:</h2>
     <ul class="popup-list" id="popup-list">
       <li># of Students: {{students_total}}</li>
-      <li>Chromebooks: {{chromebooks_c}}</li>
-      <li>Laptops: {{laptops_c}}</li>
+      <li>Most Rentals/Student: {{student_most}}</li>
+      <li>Most Rentals/Year: {{year_most}}</li>
+      <li>Most Rentals/Homeroom: {{year_most}}</li>
 
     </ul>
     <div class="popup-buttons">
@@ -178,7 +179,7 @@
 </script>
 <script>
   $(document).ready(function() {
-  $('#devices-table').DataTable({
+  $('#devices-tabless').DataTable({
     paging: true,
     pageLength: 20, // num of rows / page
     lengthMenu: [10, 20, 50, 100], 

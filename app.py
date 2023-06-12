@@ -16,6 +16,12 @@ import time
 import json
 import csv
 import re
+############ PDF IMPORTS
+from fpdf import FPDF
+
+
+
+
 
 #defines static file path
 app = Flask(__name__, static_url_path='/static')   
@@ -40,15 +46,22 @@ class opendb():
         self.obj.close()
 
 
-def valid_device_data(device_ids,device_types):
-    with opendb('logs.db') as c:
-        device_list_query = "SELECT device_id, device_type FROM devices WHERE in_circulation = 'No'"
-        c.execute(device_list_query)
-        device_list = c.fetchall()
-        device_ids = [device[0] for device in device_list]
-        device_types = [device[1] for device in device_list]
-        return device_ids, device_types
 
+def get_device_list(c):
+    device_list_query = "SELECT device_id, device_type FROM devices"
+    c.execute(device_list_query)
+    device_list = c.fetchall()
+    device_ids = [device[0] for device in device_list]
+    device_types = [device[1] for device in device_list]
+    return device_ids, device_types
+
+def get_uncirc_device_list(c):
+    device_list_query = "SELECT device_id, device_type FROM devices WHERE in_circulation = 'No'"
+    c.execute(device_list_query)
+    device_list = c.fetchall()
+    device_ids = [device[0] for device in device_list]
+    device_types = [device[1] for device in device_list]
+    return device_ids, device_types
 
 # Home page
 @app.route('/')
@@ -213,11 +226,7 @@ def main():
             #devices confirmed as returned today
             #takes the value of today any removes 1 day from it
             
-            device_list_query = "SELECT device_id, device_type FROM devices"
-            c.execute(device_list_query)
-            device_list = c.fetchall()
-            device_ids = [device[0] for device in device_list]
-            device_types = [device[1] for device in device_list]
+            device_ids, device_types = get_uncirc_device_list(c)
             # Convert the current date to the desired format
             c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE date_borrowed <= ? AND teacher_signoff != ? AND SUBSTR(date_borrowed,1,5) != ?", (yesterday, "Confirmed", dates))
             rows = c.fetchall()
@@ -230,12 +239,9 @@ def main():
         else:
             session['logged_in'] = False
             session['user_id'] = "Invalid"
-            device_list_query = "SELECT device_id, device_type FROM devices"
-            c.execute(device_list_query)
-            device_list = c.fetchall()
-            device_ids = [device[0] for device in device_list]
-            device_types = [device[1] for device in device_list]
+            device_ids, device_types = get_device_list(c)
             return render_template('/index.html', message="Index Page. Please login to access data", loginstatus=loginstatus, device_ids=device_ids, device_types=device_types)
+
 
 
 #device log page
@@ -307,11 +313,7 @@ def modify_device_selected(device_type, device_id):
                 message = "Device data successfully updated"
                 return render_template('message.html', message=message, loginstatus=status, message_btn="View_Devices", message_link="device-logs")
         
-        device_list_query = "SELECT device_id, device_type FROM devices"
-        c.execute(device_list_query)
-        device_list = c.fetchall()
-        device_ids = [device[0] for device in device_list]
-        device_types = [device[1] for device in device_list]
+        device_ids, device_types = get_device_list(c)
         
         return render_template('modify_devices.html',modify_container_visible=True,id=data[0],type=data[1],added=data[2],added_by=data[3],circs=data[4],notes=data[5],num=data[6],last=data[7],last_change=data[8],loginstatus=status,message="Modifying {} {}".format(device_type, device_id),device_ids=device_ids,device_types=device_types)
 
@@ -326,11 +328,7 @@ def modify_device():
                 device_id = request.form.get('idpicker')
                 return redirect('/modify-device/{}/{}'.format(device_type, device_id))
             
-            device_list_query = "SELECT device_id, device_type FROM devices WHERE in_circulation = 'No'"
-            c.execute(device_list_query)
-            device_list = c.fetchall()
-            device_ids = [device[0] for device in device_list]
-            device_types = [device[1] for device in device_list]
+            device_ids, device_types = get_device_list(c)
             
             return render_template('modify_devices.html', loginstatus=status, message="Select Device: ",modify_container_visible=False, device_ids=device_ids, device_types=device_types)
         else:
@@ -368,7 +366,6 @@ def circulations():
         # The below section is proof of concept. The ipads, chromebooks, and laptops_circulating variables will become dynamic
        
 
-
 @app.route('/overdues', methods=['POST','GET'])
 def overdue_rentals():
     with opendb('logs.db') as c:
@@ -386,11 +383,7 @@ def overdue_rentals():
                 return redirect('/overdues/{}/{}'.format(device_type, device_id))
 
 
-            device_list_query = "SELECT device_id, device_type FROM devices"
-            c.execute(device_list_query)
-            device_list = c.fetchall()
-            device_ids = [device[0] for device in device_list]
-            device_types = [device[1] for device in device_list]
+            device_ids, device_types = get_device_list(c)
 
             return render_template('overdues.html', loginstatus=status,device_ids=device_ids,device_types=device_types, rows=rows, message="Viewing Overdue Rentals")
 
@@ -409,11 +402,7 @@ def overdue_rentals_devicespecific(device_type,device_id):
             formatted_yesterday = yesterday.strftime("%d-%m-%Y %H:M")
             c.execute("SELECT * FROM device_logs WHERE period_returned = 'Not Returned' AND teacher_signoff = 'Unconfirmed' AND SUBSTR(date_borrowed, 1, 8) < ? AND device_type = ? AND device_id = ?", (formatted_date,device_type,device_id,))
             rows = c.fetchall()
-            device_list_query = "SELECT device_id, device_type FROM devices"
-            c.execute(device_list_query)
-            device_list = c.fetchall()
-            device_ids = [device[0] for device in device_list]
-            device_types = [device[1] for device in device_list]
+            device_ids, device_types = get_device_list(c)
 
             return render_template('overdues.html', loginstatus=status,device_ids=device_ids,device_types=device_types, rows=rows, message="Viewing Overdue Rentals")
 
@@ -444,7 +433,6 @@ def student_data():
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
 
 
-
 @app.route('/rental-logs/', methods=['GET', 'POST'])
 def rental_logs():
     with opendb('logs.db') as c:
@@ -462,11 +450,7 @@ def rental_logs():
                 device_type = request.form.get('devicepicker')
                 device_id = request.form.get('idpicker')
                 return redirect('/rental-logs/{}/{}'.format(device_type, device_id))
-            device_list_query = "SELECT device_id, device_type FROM devices"
-            c.execute(device_list_query)
-            device_list = c.fetchall()
-            device_ids = [device[0] for device in device_list]
-            device_types = [device[1] for device in device_list]
+            device_ids, device_types = get_device_list(c)
 
 
             return render_template('rental_logs.html',device_ids=device_ids,device_types=device_types, rows=logs,available_dates=available_dates, message="Viewing all rental logs", formatted_date=formatted_date, loginstatus=status)
@@ -486,11 +470,7 @@ def date_id_logs(device_type, device_id):
             rows = c.fetchall()
             loginstatus = session['logged_in']
             message = "Viewing rental logs for {} ID {}".format(device_type, device_id)
-            device_list_query = "SELECT device_id, device_type FROM devices"
-            c.execute(device_list_query)
-            device_list = c.fetchall()
-            device_ids = [device[0] for device in device_list]
-            device_types = [device[1] for device in device_list]
+            device_ids, device_types = get_device_list(c)
             return render_template('rental_logs.html', loginstatus=status, rows=rows, message=message, device_ids=device_ids, device_types=device_types)
         else:
             message = "Please login to access this feature"
@@ -532,11 +512,7 @@ def rental_logs_date(date):
             if not re.match(r'\d{2}-\d{2}', date):
                 # checks for any invalid date format
                 return render_template('rental_logs.html',rows=rows, message="Invalid date format. Please use dd-mm format.", loginstatus=status )
-            device_list_query = "SELECT device_id, device_type FROM devices"
-            c.execute(device_list_query)
-            device_list = c.fetchall()
-            device_ids = [device[0] for device in device_list]
-            device_types = [device[1] for device in device_list]
+            device_ids, device_types = get_device_list(c)
             return render_template('rental_logs.html', rows=rows, message="Viewing rental logs for {}".format(date), loginstatus=status, device_ids=device_ids, device_types=device_types)
         else:
             message = "Please login to access this feature"
@@ -566,9 +542,17 @@ def check_data_availability(date):
 def download_logs():
     with opendb('logs.db') as c:
         status = session["logged_in"]
+        user = session["user_id"]
+        create_date = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
         if status is True:
             if request.method == 'POST':
                 form_type = request.form.get('form_type')
+                data_format = request.form.get('data_format')
+                custom_filename = request.form.get('custom_filename')
+                print("form type: {}".format(form_type))
+                print("data format: {}".format(data_format))
+                print("custom filename: {}".format(custom_filename))
+                ################################################################################################################
                 if form_type == "content-bar1":  # rentals
                     filter_data = {
                         'device_type': request.form.get('device-picker-bar1') if 'checkbox-bar1-1' in request.form else None,
@@ -577,90 +561,201 @@ def download_logs():
                         'end_date': request.form.get('date-picker-bar1-2') if 'checkbox-bar1-4' in request.form else None,
                         'exclude_overdues': 'exclude-overdues-bar1' in request.form,
                         'exclude_confirmed': 'exclude-confirmed-bar1' in request.form,
-                        'exclude_unreturned': 'exclude-unreturned-bar1' in request.form
+                        'exclude_unreturned': 'exclude-unreturned-bar1' in request.form,
+                        'select_all_logs': 'select-all-bar1' in request.form
                     }
                     today = date.today()
                     formatted_date = today.strftime("%d-%m-%Y")
-                    query = "SELECT * FROM device_logs WHERE 1=1"  
+                    query = "SELECT * FROM device_logs WHERE 1=1"
                     params = []
                     print(filter_data)
-
+                    filter_string = ""
                     if filter_data['device_type']:
                         query += " AND device_type = ?"
                         params.append(filter_data['device_type'])
-                        print("sorting by device type")
-
+                        filter_string += f"Device Type: {filter_data['device_type']}, "
                     if filter_data['device_id']:
                         query += " AND device_id = ?"
                         params.append(filter_data['device_id'])
-                        print("sorting by device id")
-
+                        filter_string += f"Device ID: {filter_data['device_id']}, "
                     if filter_data['start_date'] and filter_data['end_date']:
                         start_date = filter_data['start_date']
                         end_date = filter_data['end_date']
-                        year, month, day = start_date.split('-')
-                        formatted_start = f"{day}-{month}-{year}"
-                        year, month, day = end_date.split('-')
-                        formatted_end = f"{day}-{month}-{year}"
-                        query += " AND date_borrowed >= ? AND date_borrowed <= ?"  
-                        params.append(formatted_start)  
-                        params.append(formatted_end)  
-                        print("sorting by date to date")
-
-
+                        formatted_start = datetime.strptime(start_date, "%Y-%m-%d").strftime("%d-%m-%Y")
+                        formatted_end = datetime.strptime(end_date, "%Y-%m-%d").strftime("%d-%m-%Y")
+                        query += " AND date_borrowed >= ? AND date_borrowed <= ?"
+                        params.append(formatted_start)
+                        params.append(formatted_end)
+                        filter_string += f"Start Date: {filter_data['start_date']}, "
+                        filter_string += f"End Date: {filter_data['end_date']}, "
                     elif filter_data['start_date']:
-                        start_date = filter_data['start_date'] 
-                        year, month, day = start_date.split('-')
-                        formatted_date = f"{day}-{month}-{year}"
+                        start_date = filter_data['start_date']
+                        formatted_date = datetime.strptime(start_date, "%Y-%m-%d").strftime("%d-%m-%Y")
                         query += " AND SUBSTR(date_borrowed, 1, 10) = ?"
-                        params.append(formatted_date)  
-                        print("sorting by date")
-                       
-
+                        params.append(formatted_date)
+                        filter_string += f"Start Date: {filter_data['start_Date']}, "
                     if filter_data['exclude_overdues']:
                         query += " AND SUBSTR(date_borrowed, 1, 10) != ? AND SUBSTR(date_borrowed, 1, 10) < ?"
-                        params.append(formatted_date)  
-                        params.append(formatted_date) 
-                        print("excluding overdues")
-
+                        params.append(formatted_date)
+                        params.append(formatted_date)
+                        filter_string += "Exclude Overdues, "
                     if filter_data['exclude_confirmed']:
                         query += " AND teacher_signoff != ?"
                         params.append("Confirmed")
-                        print("excluding unconfirmed")
-
+                        filter_string += "Exclude Confirmed, "
                     if filter_data['exclude_unreturned']:
                         query += " AND period_returned != ?"
                         params.append('Not Returned')
-                        print("excluding unreturned")
+                        filter_string += "Exclude Unreturned, "
+                    if filter_data['select_all_logs']:
+                        query = "SELECT * FROM device_logs"
+                        params.clear()
+                        filter_string += "Select All Logs"
+                    #####################################################################################
+                    rows = fetch_rows(c, query, params)
+                    num_rows = len(rows)
+                    constraints = filter_string
+                    data_type = "Rental Logs"
+                    file = "File Should Be Here"
+                    rows = fetch_rows(c, query, params)
+                    if data_format == "CSV":
+                        if custom_filename:
+                            filename = "{}.csv".format(custom_filename)
+                        elif custom_filename is None:
+                            filename = "device_logs.csv"
 
-                   
-                    c.execute(query, params)
-                    rows = c.fetchall()
+                        headers = ["Date Borrowed", "Submitted Under", "Student Name", "Homeroom", "Device Type",
+                                   "Device ID", "Period Borrowed", "Reason Borrowed", "Period Returned",
+                                   "Teacher Sign-Off", "Notes"]
 
+                        generate_csv(filename, headers, rows)
+
+                        response = make_response(send_file(filename, mimetype='text/csv', as_attachment=True))
+                        response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+                        c.execute("INSERT INTO download_logs (file_name, data_type, data_format, constraints, num_rows, created_by, created_date, file)VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (filename, data_type, data_format, constraints, num_rows, user, create_date, file))
+
+                        return response
+
+                    elif data_format == "PDF":
+                        if custom_filename:
+                            filename = "{}.pdf".format(custom_filename)
+                        elif custom_filename is None:
+                            filename = "device_logs.pdf"
+
+                        headers = ["Date Borrowed", "Submitted Under", "Student Name", "Homeroom", "Device Type",
+                                   "Device ID", "Period Borrowed", "Reason Borrowed", "Period Returned",
+                                   "Confirmed", "Notes"]
+
+                        # Generate the PDF file
+                        generate_pdf(filename, headers, rows, constraints, user)
+
+                        # Return the PDF file as a response
+                        response = make_response(send_file(filename, mimetype='application/pdf', as_attachment=True))
+                        response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+                        # Insert the download_logs entry into the database
+                        c.execute("INSERT INTO download_logs (file_name, data_type, data_format, constraints, num_rows, created_by, created_date, file)VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                                  (filename, data_type, data_format, constraints, num_rows, user, create_date, file))
+
+                        return response
                     
-                    filename = "device_logs.csv"
-                    headers = ["Date Borrowed", "Submitted Under", "Student Name", "Homeroom", "Device Type",
-                               "Device ID", "Period Borrowed", "Reason Borrowed", "Period Returned",
-                               "Teacher Sign-Off", "Notes"]
 
-                    with open(filename, 'w', newline='') as file:
-                        writer = csv.writer(file)
-                        writer.writerow(headers)
-                        writer.writerows(rows)
-
-                    response = make_response(send_file(filename, mimetype='text/csv', as_attachment=True))
-                    response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
-                    return response
-
+                ################################################################################################################    
                 elif form_type == "content-bar2":  # devices
-                    pass
+                    filter_data = {
+                        'device_type': request.form.get('device-picker-bar2') if 'checkbox-bar2-1' in request.form else None,
+                        'device_id': request.form.get('device-id-bar2') if 'checkbox-bar2-2' in request.form else None,
+                        'start_date': request.form.get('date-picker-bar2-1') if 'checkbox-bar2-3' in request.form else None,
+                        'end_date': request.form.get('date-picker-bar2-2') if 'checkbox-bar2-4' in request.form else None,
+                        'exclude_in_circulation': 'in-circulation-bar2' in request.form,
+                        'select_all': 'select-all-bar2' in request.form
+                    }
+                    formatted_date = date.today().strftime("%d-%m-%Y")
+                    query = "SELECT device_id, device_type, date_added, last_change, added_by, in_circulation, notes, num_rentals, last_rental FROM devices WHERE 1=1"
+                    params = []
+                    filter_string = ""
+                    if filter_data['device_type']:
+                        query += " AND device_type = ?"
+                        params.append(filter_data['device_type'])
+                        filter_string += f"Device Type: {filter_data['device_type']}, "
+                    if filter_data['device_id']:
+                        query += " AND device_id = ?"
+                        params.append(filter_data['device_id'])
+                        filter_string += f"Device ID: {filter_data['device_id']}, "
+                    if filter_data['start_date'] and filter_data['end_date']:
+                        start_date = filter_data['start_date']
+                        end_date = filter_data['end_date']
+                        formatted_start = datetime.strptime(start_date, "%Y-%m-%d").strftime("%d-%m-%Y")
+                        formatted_end = datetime.strptime(end_date, "%Y-%m-%d").strftime("%d-%m-%Y")
+                        query += " AND last_rental >= ? AND last_rental <= ?"
+                        params.append(formatted_start)
+                        params.append(formatted_end)
+                        filter_string += f"Start Date: {filter_data['start_date']}, "
+                        filter_string += f"End Date: {filter_data['end_date']}, "
+                    elif filter_data['start_date']:
+                        start_date = filter_data['start_date']
+                        formatted_date = datetime.strptime(start_date, "%Y-%m-%d").strftime("%d-%m-%Y")
+                        query += " AND SUBSTR(last_rental, 1, 10) = ?"
+                        params.append(formatted_date)
+                        filter_string += f"Start Date: {filter_data['start_date']}, "
+                    if filter_data['exclude_in_circulation']:
+                        query += " AND in_circulation != ?"
+                        params.append("Yes")
+                        filter_string += "Exclude In Circulation"
+                    if filter_data['select_all']:
+                        query = "SELECT * FROM devices"
+                        params.clear()
+                        filter_string += "Select All Devices"
+                    #####################################################################3
+                    rows = fetch_rows(c, query, params)
+                    num_rows = len(rows)
+                    constraints = filter_string
+                    file = "File Should Be Here"
+                    data_type = "Device Data"
+                    if data_format == "CSV":
+                        if custom_filename:
+                            filename = "{}.csv".format(custom_filename)
+                        elif custom_filename is None:
+                            filename = "device_data.csv"
+
+                        headers = ["Device ID", "Device Type", "Date Added", "Last Change", "Added By",
+                                   "In Circulation", "Notes", "Num# Rentals",
+                                   "Last Rental"]
+
+                        generate_csv(filename, headers, rows)
+
+                        response = make_response(send_file(filename, mimetype='text/csv', as_attachment=True))
+                        response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+                        c.execute("INSERT INTO download_logs (file_name, data_type, data_format, constraints, num_rows, created_by, created_date, file)VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (filename, data_type, data_format, constraints, num_rows, user, create_date, file))
+                        return response
+                    
+                    elif data_format == "PDF":
+                        if custom_filename:
+                            filename = custom_filename
+                        elif custom_filename is None:
+                            filename = "device_data.csv"
+
+                        headers = ["Device ID", "Device Type", "Date Added", "Last Change", "Added By",
+                                   "In Circulation", "Notes", "Barcode", "Num# Rentals",
+                                   "Last Rental"]
+
+                        generate_csv(filename, headers, rows)
+
+                        response = make_response(send_file(filename, mimetype='text/csv', as_attachment=True))
+                        response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+                        return response
+                ################################################################################################################
                 elif form_type == "content-bar3":  # users
                     pass
 
             else:
-                return render_template('/download_logs.html', loginstatus=status, message="Download Data")
-            return render_template('/download_logs.html', loginstatus=status, message="Download Data")
-
+                device_ids, device_types = get_device_list(c)
+                return render_template('/download_logs.html', loginstatus=status, message="Download Data",
+                                       device_ids=device_ids, device_types=device_types)
+            device_ids, device_types = get_device_list(c)
+            return render_template('/download_logs.html', loginstatus=status, message="Download Data",
+                                   device_ids=device_ids, device_types=device_types)
         else:
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",
@@ -668,29 +763,177 @@ def download_logs():
 
 
 
-def fetch_rows(device_type, device_id, date_picker):
+def generate_csv(filename, headers, rows):
+    with open(filename, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(headers)
+        writer.writerows(rows)
+
+def fetch_rows(c, query, params):
+    c.execute(query, params)
+    return c.fetchall()
+
+
+def generate_pdf(filename, headers, rows, constraints, user):
+    class PDF(FPDF):
+        def header(self):
+            # Set header font and size
+            self.set_font('Arial', '', 10)  # Remove 'B' to make it not bold
+
+            # Calculate header width and height
+            header_width = self.w - 2 * self.l_margin
+            header_height = 5
+
+            # Check if it's the first page
+            if self.page_no() == 1:
+                # Print main header in the top left corner
+                self.set_fill_color(255)  # Set background color to white
+                self.set_text_color(0)  # Set text color to black
+                self.set_font('Arial', '', 12)
+                self.cell(header_width, header_height, filename, 0, 0, 'L', fill=True)
+                self.set_x((self.w - self.get_string_width(f"Downloaded By: {user}")) / 2-110)  # Move the current position to the center
+                self.cell(0, header_height, f"Downloaded By: {user}", 0, 0, 'C')  # Print "Downloaded By" header in the center
+                self.cell(0, header_height, f"Date Downloaded: {datetime.datetime.now().strftime('%d-%m-%Y %H:%M')}", 0, 0, 'R')  # Print "Date Downloaded" header on the right
+                self.ln(header_height)  # Move to the next line
+            else:
+                # Print an empty header for other pages
+                self.cell(header_width, header_height, "", 0, 0, 'L', fill=False)
+
+            # Add extra space below header
+            self.ln(5)
+
+
+
+
+
+        def footer(self):
+            # Set footer font and size
+            self.set_font('Arial', 'I', 8)
+
+            # Set footer text color to gray
+            self.set_text_color(128)
+
+            # Calculate footer width and height
+            footer_width = self.w - 2 * self.l_margin
+            footer_height = 10
+
+            # Get current page number
+            page_number = self.page_no()
+
+            # Print footer
+            self.cell(footer_width, footer_height, f"Page {page_number}", 0, 0, 'C')
+
+        
+        def table(self, headers, data):
+            # Set table font and size
+            self.set_font('Arial', '', 8)  # Set the font to 'Arial'
+        
+            # Calculate effective page width (epw)
+            page_width = self.w - 2 * self.l_margin
+            num_columns = len(headers)
+            column_width = page_width / num_columns
+            column_widths = [column_width] * num_columns
+        
+            # Adjust column widths with custom widths
+            column_widths = [column_widths[i] for i in range(len(column_widths))]
+        
+            # Set table body styling properties
+            self.set_fill_color(243)  # Set table body background color
+            self.set_text_color(0)  # Set table body text color
+            self.set_font('Arial', '', 10)  # Set the font to 'Arial'
+        
+            # Calculate row height
+            row_height = self.font_size + 4
+        
+            # Print headers on the first page
+            self.set_fill_color(0, 152, 121)  # Set header background color
+            self.set_text_color(255)  # Set header text color
+            self.set_font('Arial', 'B', 8)  # Set the font to 'Arial' and bold
+        
+            for i, header in enumerate(headers):
+                self.cell(column_widths[i], row_height, str(header), 1, 0, 'C', True)
+            self.ln()
+        
+            # Keep track of the row number for alternating row colors
+            row_number = 1
+        
+            for row in data:
+                # Check if a new page is needed
+                if self.y + row_height > self.page_break_trigger:
+                    self.add_page()
+        
+                    # Print headers on new pages
+                    self.set_fill_color(0, 152, 121)  # Set header background color
+                    self.set_text_color(255)  # Set header text color
+                    self.set_font('Arial', 'B', 8)  # Set the font to 'Arial' and bold
+        
+                    for i, header in enumerate(headers):
+                        self.cell(column_widths[i], row_height, str(header), 1, 0, 'C', True)
+                    self.ln()
+        
+                # Set row colors
+                if row_number % 2 == 0:
+                    self.set_fill_color(255)  # Light grey for even rows
+                else:
+                    self.set_fill_color(255, 255, 255)  # White for odd rows
+        
+                # Print row data
+                self.set_fill_color(255)  # Set the cell fill color for row data
+                self.set_text_color(0)  # Set the cell text color for row data
+                self.set_font('Arial', '', 8)  # Set the font to 'Arial' for row data
+        
+                for i, column in enumerate(row):
+                    self.cell(column_widths[i], row_height, str(column), 1, 0, 'L', fill=True)
+                self.ln()
+        
+                # Increment row number
+                row_number += 1
+        
+            # Add extra space after the table
+            self.ln(10)
+
+
+
+
+    pdf = PDF(orientation='L')
+
+    # Remove margin for table and its headers
+    pdf.set_auto_page_break(auto=True, margin=0)
+    pdf.l_margin = 0
+    pdf.r_margin = 0
+    pdf.t_margin = 0
+    pdf.b_margin = 0
+
+    # Generate the table headers at the top of each new page
+    pdf.add_page()
+
+    # Generate the constraints text on the first page
+    if constraints:
+        pdf.set_font('Arial', 'B', 12)
+        pdf.cell(0, 10, "Select Constraints:", 0, 1, 'L')
+        pdf.set_font('Arial', '', 12)
+        pdf.multi_cell(0, 10, constraints.strip(), 0, 'L')
+        pdf.ln(10)
+
+    # Generate the table
+    pdf.table(headers, rows)
+
+    # Save the PDF
+    pdf.output(filename)
+
+
+
+
+# page used to see previous downloads
+@app.route('/previous-downloads/')
+def prev_downloads():
     with opendb('logs.db') as c:
-        print(device_type)
-        print(device_id)
-        print(date_picker)
-        query = "SELECT * FROM device_logs WHERE device_type=? AND device_id=?"
-        rows = c.execute(query, (device_type, device_id)).fetchall()
-        return rows
-
-
-def generate_csv(rows):
-    headers = ["Date Borrowed", "Submitted Under", "Student Name", "Homeroom", "Device Type",
-               "Device ID", "Period Borrowed", "Reason Borrowed", "Period Returned",
-               "Teacher Sign-Off", "Notes"]
-    csv_content = ','.join(headers) + '\n'
-    for row in rows:
-        csv_content += ','.join(str(value) for value in row) + '\n'
-    return csv_content
-
-
-def generate_pdf(rows):
-    pdf_content = b''
-    return pdf_content
+        status = session['logged_in']
+        if status is True:
+            return render_template('previous_downloads.html', loginstatus=status)
+        else:
+            message = "Please login to access this feature"
+            return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
 
 
 

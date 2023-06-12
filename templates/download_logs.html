@@ -81,6 +81,25 @@
       </div>
 </html>
 <title>Rental Log - Dash</title>
+<div class="other-options-container">
+  <div class="content-options-ctnr">
+    <h2 id="other-options-title">Other Options;</h2>
+    <form  id="other-options-form" name="other-options-form" method="POST">
+      <div class="select-container-other-optns">
+        <select required id="format-picker-other-optns" name="format-picker-other-optns" >
+          <option selected value="">Data Format:</option>
+          <option value="CSV">CSV</option>
+          <option value="PDF">PDF</option>
+        </select>
+      </div>
+      <input type="text" id="set-filename" class="input-field" placeholder="Set Custom Filename">
+    </form>
+    <hr style="width: 60%; position: relative; top:-30px; left: -40px;">
+    <button onclick="window.location.href='/previous-downloads/'" id="view-downloads-button">Previous Downloads</button>
+    <button  id="view-barcodes-button">View Barcodes</button>
+
+  </div>
+</div>
 <div class="primary-container">
   <h1 class="main_title">{{message}}</h1>
   <div class="download-container">
@@ -94,7 +113,7 @@
             <ul>
               <li>
                 <div id="type-picker-container-bar1">
-                  <input type="checkbox" id="checkbox-bar1-1" class="checkbox-bar" name="checkbox-bar1-1">
+                  <input type="checkbox" id="checkbox-bar1-1" class="checkbox-bar1 clearchecks" name="checkbox-bar1-1">
                   <div class="select-container-bar1">
                     <select id="device-picker-bar1" name="device-picker-bar1" >
                       <option selected value="">Device Type:</option>
@@ -108,43 +127,45 @@
               </li>
               <li>
                 <div id="id-picker-container-bar1">
-                  <input type="checkbox" id="checkbox-bar1-2" class="checkbox-bar"  name="checkbox-bar1-2">
+                  <input type="checkbox" id="checkbox-bar1-2" class="checkbox-bar1 clearchecks"  name="checkbox-bar1-2">
                   <input type="number" id="idpicker-bar1" class="input-field idpicker-bar1" name="device-id-bar1" placeholder="Device ID">
                 </div>
               </li>
               <li>
-                
                 <div id="date-picker-container-num1-bar1">
-                  <input type="checkbox" id="checkbox-bar1-3" class="checkbox-bar"  name="checkbox-bar1-3">
+                  <input type="checkbox" id="checkbox-bar1-3" class="checkbox-bar1 clearchecks"  name="checkbox-bar1-3">
                     <div class="datepicker">
                       <input type="date" id="date-picker-bar1-1" name="date-picker-bar1-1" class="date-picker">
                     </div>
                 </div>
               </li>
-              
               <li>
                 <div id="date-picker-container-num2-bar1">
-                  <input type="checkbox" id="checkbox-bar1-4"class="checkbox-bar"  name="checkbox-bar1-4">
+                  <input type="checkbox" id="checkbox-bar1-4"class="checkbox-bar1 clearchecks"  name="checkbox-bar1-4">
                     <div class="datepicker">
                       <input type="date" id="date-picker-bar1-2"name="date-picker-bar1-2" class="date-picker">
                     </div>
                 </div>
               </li>
               <li id="checkboxlist1">
-                <input type="checkbox" id="checkbox-bar1-5" class="checkbox-bar"  name="exclude-overdues-bar1"><p class="checkbox-label" id="overdues-bar1">Exclude Overdues</p>
+                <input type="checkbox" id="checkbox-bar1-5" class="checkbox-bar1 clearchecks"  name="exclude-overdues-bar1"><p class="checkbox-label" id="overdues-bar1">Exclude Overdues</p>
               </li>
               <li id="checkboxlist2">
-                <input type="checkbox" id="checkbox-bar1-6" class="checkbox-bar"  name="exclude-confirmed-bar1"><p class="checkbox-label" id="confirmed-bar1">Exclude Confirmed</p>
+                <input type="checkbox" id="checkbox-bar1-6" class="checkbox-bar1 clearchecks"  name="exclude-confirmed-bar1"><p class="checkbox-label" id="confirmed-bar1">Exclude Confirmed</p>
               </li>
               <li id="checkboxlist3">
-                <input type="checkbox" id="checkbox-bar1-7" class="checkbox-bar"  name="exclude-unreturned-bar1"><p class="checkbox-label" id="unreturned-bar1">Exclude Un-returned</p>
+                <input type="checkbox" id="checkbox-bar1-7" class="checkbox-bar1 clearchecks"  name="exclude-unreturned-bar1"><p class="checkbox-label" id="unreturned-bar1">Exclude Un-returned</p>
+              </li>
+              <li id="checkboxlist4">
+                <input type="checkbox" id="checkbox-bar1-8" class="checkbox-bar1" onclick=clearCheckboxes() name="select-all-bar1"><p class="checkbox-label" id="select-all-bar1">Select All Logs (Default Input)</p>
               </li>
               <p id="to-bar1">To</p>
               <p  id="error-message-bar1" class="error-message"></p>
+              <p id="messages-text-bar1"> </p>
             </ul>        
                 
-            <button class="confirm-button" id="bar1-confirm">Confirm</button>
           </form>
+          
           
         </div>
       </div>
@@ -157,33 +178,52 @@
             <ul>
               <li>
                 <div id="type-picker-container-bar2">
-                  <input type="checkbox" id="checkbox-bar2-1" class="checkbox-bar"  name="checkbox-bar2-1">
+                  <input type="checkbox" id="checkbox-bar2-1" class="checkbox-bar2 clearchecks"  name="checkbox-bar2-1">
+                  <div class="select-container-bar2">
+                    <select id="device-picker-bar2" name="device-picker-bar2" >
+                      <option selected value="">Device Type:</option>
+                      <option value="iPad">iPad</option>
+                      <option value="Laptop">Laptop</option>
+                      <option value="Chromebook">Chromebook</option>
+                    </select>
+                  </div>
                 </div>
               </li>
               <li>
                 <div id="id-picker-container-bar2">
-                  <input type="checkbox" id="checkbox-bar2-2" class="checkbox-bar"  name="checkbox-bar2-2">
+                  <input type="checkbox" id="checkbox-bar2-2" class="checkbox-bar2 clearchecks"  name="checkbox-bar2-2">
+                  <input type="number" id="idpicker-bar2" class="input-field idpicker-bar2" name="device-id-bar2" placeholder="Device ID">
                 </div>
               </li>
               <li>
                 <div id="date-picker-container-num1-bar2">
-                  <input type="checkbox" id="checkbox-bar2-3" class="checkbox-bar"  name="checkbox-bar2-3">
+                  <input type="checkbox" id="checkbox-bar2-3" class="checkbox-bar2 clearchecks"  name="checkbox-bar2-3">
+                    <div class="datepicker">
+                      <input type="date" id="date-picker-bar2-1" name="date-picker-bar2-1" class="date-picker">
+                    </div>
                 </div>
               </li>
               <li>
                 <div id="date-picker-container-num2-bar2">
-                  <input type="checkbox" id="checkbox-bar2-4" class="checkbox-bar"  name="checkbox-bar2-4">
+                  <input type="checkbox" id="checkbox-bar2-4"class="checkbox-bar clearchecks"  name="checkbox-bar2-4">
+                    <div class="datepicker">
+                      <input type="date" id="date-picker-bar2-2"name="date-picker-bar2-2" class="date-picker">
+                    </div>
                 </div>
               </li>
-              <li>
-                <div>
-                  <input type="checkbox" id="checkbox-bar2-5" class="checkbox-bar"  name="checkbox-bar2-5">
-                </div>
+              <li id="checkboxlist1">
+                <input type="checkbox" id="checkbox-bar2-5" class="checkbox-bar2 clearchecks"  name="in-circulation-bar2"><p class="checkbox-label" id="in-circulation-bar2">Exclude In Circulation</p>
               </li>
+              <li id="checkboxlist2">
+                <input type="checkbox" id="checkbox-bar2-6" class="checkbox-bar2 clearchecks"  name="select-all-bar2"><p class="checkbox-label" id="select-all-bar2">Select All Devices (Default Input)</p>
+              </li>
+              
+              <p id="to-bar2">To</p>
+              <p  id="error-message-bar2" class="error-message"></p>
+              <p id="messages-text-bar2"> </p>
             </ul>
           </form>
           <br>
-          <button class="confirm-button">Confirm</button>
         </div>
       </div>
       <div class="bar">
@@ -221,84 +261,16 @@
             </ul>
           </form>
           <br>
-          <button class="confirm-button">Confirm</button>
         </div>
       </div>
     </div>
   </div>
+  
+  <button class="confirm-btn" id="confirm-button" >Confirm Selection</button>
 </div>
-<!--SLIDING/HIDING the main bars -->
-<script>
-function toggleBar(barNumber) {
-    const modalReturn = document.querySelector('.modal-return');
-    const bars = modalReturn.querySelectorAll('.bar');
-    const contentBars = modalReturn.querySelectorAll('.content');
 
-    bars.forEach((bar, index) => {
-      const header = bar.querySelector('.header');
-      const content = bar.querySelector('.content');
-      const arrow = bar.querySelector('.arrow');
+<!-- BAR 1 JAVASCRIPT-->
 
-      if (index + 1 === barNumber) {
-        // Toggle the clicked bar
-        if (bar.classList.contains('open')) {
-          // Close the bar
-          bar.classList.remove('open');
-          content.style.display = 'none';
-          arrow.style.transform = 'rotate(0deg)';
-          modalReturn.classList.remove(`bar${barNumber}`);
-        } else {
-          // Open the bar
-          bar.classList.add('open');
-          content.style.display = 'block';
-          arrow.style.transform = 'rotate(180deg)';
-          expandBar(barNumber);
-
-          modalReturn.classList.remove('bar1', 'bar2', 'bar3'); // Remove all bar-specific classes
-          modalReturn.classList.add(`bar${barNumber}`); // Apply the appropriate class based on the opened bar
-        }
-      } else {
-        // Close other bars
-        bar.classList.remove('open');
-        content.style.display = 'none';
-        arrow.style.transform = 'rotate(0deg)';
-      }
-    });
-  }
-// Rest of the code remains the same
-
-function expandBar(barNumber) {
-  const modalReturn = document.querySelector('.modal-return');
-  const bars = modalReturn.querySelectorAll('.bar');
-
-  bars.forEach((bar, index) => {
-    if (index !== barNumber - 1) {
-      bar.style.animation = 'slideDown 0.7s, slideDownPosition 0.7s ';
-    }
-  });
-
-  setTimeout(() => {
-    bars.forEach((bar, index) => {
-      if (index !== barNumber - 1) {
-        bar.style.opacity = '1';
-        bar.style.transform = 'translateY(0)';
-      }
-    });
-  }, 500);
-}
-
-function resetBars() {
-  const modalReturn = document.querySelector('.modal-return');
-  const bars = modalReturn.querySelectorAll('.bar');
-
-  bars.forEach((bar) => {
-    bar.style.animation = 'slideDown 5s ease, slideDownPosition 5s ease';
-    bar.style.display = 'block';
-  });
-}
-
-
-</script>
 <!--CHECKBOX DATE THING; if the first one is checked/unchecked the second appears/disappears-->
 <!--SLIDING ANIMATIon-->
 <script>
@@ -395,16 +367,504 @@ function resetBars() {
     date1Checkbox.addEventListener('change', validateDates);
     date2Checkbox.addEventListener('change', validateDates);
   });
+</script>   
+<!-- DEVICE ID AND TYPE HAVE TO MATCH-->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var devicepicker = document.getElementById("device-picker-bar1");
+    var idpicker = document.getElementById("idpicker-bar1");
+    var messagesText = document.getElementById("messages-text-bar1");
+    var submitButton = document.getElementById("bar1-confirm");
+
+    function validateInput(input) {
+      input.value = input.value.replace(/[^0-9]/g, ''); 
+      input.value = input.value.slice(0, 4); 
+      if (input.value < 0) {
+        input.value = ''; 
+      }
+      updateMessage();
+      updateSubmitButton();
+    }
+
+    function updateMessage() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (enteredDeviceId !== "" && matchingDeviceIds.indexOf(enteredDeviceId) === -1) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+      } else {
+        messagesText.style.color = "green";
+        messagesText.textContent = enteredDeviceId !== "" ? "Valid selection" : "";
+      }
+    }
+
+    function updateSubmitButton() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        submitButton.disabled = true;
+        submitButton.style.cursor = "disabled";
+      } else {
+        submitButton.disabled = false;
+        submitButton.style.cursor = "pointer";
+      }
+    }
+
+    function submitForm(event) {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+        event.preventDefault(); // Prevent form submission
+      }
+    }
+
+    devicepicker.addEventListener("change", function() {
+      updateMessage();
+      updateSubmitButton();
+    });
+
+    idpicker.addEventListener("input", function() {
+      validateInput(this);
+    });
+
+    document.getElementById("device-form").addEventListener("submit", function(event) {
+      submitForm(event);
+    });
+  });
 </script>
 
 
+<!--------------------------------------------------------------------------------------------------------->
+<!-- BAR 2 JAVASCRIPT-->
+<!--CHECKBOX DATE THING; if the first one is checked/unchecked the second appears/disappears-->
+<!--SLIDING ANIMATION-->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var dateCheckbox2 = document.getElementById('checkbox-bar2-3');
+    var dateContainer2 = document.getElementById('date-picker-container-num2-bar2');
+
+    function toggleDate2() {
+      if (dateCheckbox2.checked) {
+        dateContainer2.classList.add('show-datepicker');
+        dateContainer2.classList.remove('hide-datepicker');
+      } else {
+        dateContainer2.classList.remove('show-datepicker');
+        dateContainer2.classList.add('hide-datepicker');
+      }
+    }
+
+    dateCheckbox2.addEventListener('change', toggleDate2);
+  });
+</script>
+<script>
+  // Get the checkbox elements
+  const checkbox3 = document.getElementById('checkbox-bar2-3');
+  const checkbox4 = document.getElementById('checkbox-bar2-4');
+  const container3 = document.getElementById('date-picker-container-num2-bar2');
+  const tobar2 = document.getElementById('to-bar2');
+  // Hide the container initially
+  container3.style.display = 'none';
+  tobar2.style.display = 'none';
+
+  // Add event listener to checkbox3
+  checkbox3.addEventListener('change', function() {
+    if (checkbox3.checked) {
+      container3.style.display = 'block';
+      tobar2.style.display = 'block';
+    } else {
+      container3.style.display = 'none';
+      tobar2.style.display = 'none';
+
+      checkbox4.checked = false; // Uncheck checkbox4 if it was checked
+    }
+  });
+</script>
+<!-- IF CHECKBOX IS CHECKED THEN INPUT IS SET TO REQUIRED-->
+<script>
+  // Get the checkbox and input elements for content-bar2
+  const checkboxes2 = document.querySelectorAll('#content-bar2 .checkbox-bar');
+  const inputs2 = document.querySelectorAll('#content-bar2 input[type="text"], #content-bar2 input[type="number"], #content-bar2 select, input[type="date"]');
+
+  // Add event listeners to checkboxes2
+  checkboxes2.forEach(function(checkbox) {
+    checkbox.addEventListener('change', function() {
+      const inputContainer = checkbox.closest('.checkbox-bar').nextElementSibling;
+      const input = inputContainer.querySelector('input, select');
+      
+      if (checkbox.checked) {
+        input.required = true;
+      } else {
+        input.required = false;
+      }
+    });
+  });
+</script>
+<!-- DATE 2 CANNOT BE LESS THAN DATE 1 -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var date1Input2 = document.getElementById('date-picker-bar2-1');
+    var date2Input2 = document.getElementById('date-picker-bar2-2');
+    var date1Checkbox2 = document.getElementById('checkbox-bar2-3');
+    var date2Checkbox2 = document.getElementById('checkbox-bar2-4');
+    var errorElement2 = document.getElementById('error-message-bar2');
+
+    function validateDates2() {
+      var date1 = date1Input2.value;
+      var date2 = date2Input2.value;
+
+      if (date2Checkbox2.checked && date1 && date2 && date2 < date1) {
+        errorElement2.textContent = 'End Date cannot be earlier than Start Date.';
+        return false;
+      }
+
+      if (!date1Checkbox2.checked) {
+        errorElement2.textContent = '';
+        return true;
+      }
+
+      errorElement2.textContent = '';
+      return true;
+    }
+
+    date1Input2.addEventListener('input', validateDates2);
+    date2Input2.addEventListener('input', validateDates2);
+    date1Checkbox2.addEventListener('change', validateDates2);
+    date2Checkbox2.addEventListener('change', validateDates2);
+  });
+</script>
+<!-- DEVICE ID AND TYPE HAVE TO MATCH-->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var devicepicker2 = document.getElementById("device-picker-bar2");
+    var idpicker2 = document.getElementById("idpicker-bar2");
+    var messagesText2 = document.getElementById("messages-text-bar2");
+    var submitButton2 = document.getElementById("bar2-confirm");
+
+    function validateInput2(input) {
+      input.value = input.value.replace(/[^0-9]/g, ''); 
+      input.value = input.value.slice(0, 4); 
+      if (input.value < 0) {
+        input.value = ''; 
+      }
+      updateMessage2();
+      updateSubmitButton2();
+    }
+
+    function updateMessage2() {
+      var selectedDeviceType2 = devicepicker2.value;
+      var enteredDeviceId2 = idpicker2.value;
+
+      var deviceIds2 = {{ device_ids|tojson }};
+      var deviceTypes2 = {{ device_types|tojson }};
+
+      var matchingDeviceIds2 = [];
+      for (var i = 0; i < deviceTypes2.length; i++) {
+        if (deviceTypes2[i] === selectedDeviceType2) {
+          matchingDeviceIds2.push(deviceIds2[i]);
+        }
+      }
+
+      if (enteredDeviceId2 !== "" && matchingDeviceIds2.indexOf(enteredDeviceId2) === -1) {
+        messagesText2.style.color = "red";
+        messagesText2.textContent = "Please select valid Device Type and ID.";
+      } else {
+        messagesText2.style.color = "green";
+        messagesText2.textContent = enteredDeviceId2 !== "" ? "Valid selection" : "";
+      }
+    }
+
+    function updateSubmitButton2() {
+      var selectedDeviceType2 = devicepicker2.value;
+      var enteredDeviceId2 = idpicker2.value;
+
+      var deviceIds2 = {{ device_ids|tojson }};
+      var deviceTypes2 = {{ device_types|tojson }};
+
+      var matchingDeviceIds2 = [];
+      for (var i = 0; i < deviceTypes2.length; i++) {
+        if (deviceTypes2[i] === selectedDeviceType2) {
+          matchingDeviceIds2.push(deviceIds2[i]);
+        }
+      }
+
+      if (
+        enteredDeviceId2 === "" || // No ID entered
+        matchingDeviceIds2.indexOf(enteredDeviceId2) === -1 || // Invalid ID
+        (selectedDeviceType2 !== "" && enteredDeviceId2 === "") // Only device type selected
+      ) {
+        submitButton2.disabled = true;
+        submitButton2.style.cursor = "disabled";
+      } else {
+        submitButton2.disabled = false;
+        submitButton2.style.cursor = "pointer";
+      }
+    }
+
+    function submitForm2(event) {
+      var selectedDeviceType2 = devicepicker2.value;
+      var enteredDeviceId2 = idpicker2.value;
+
+      var deviceIds2 = {{ device_ids|tojson }};
+      var deviceTypes2 = {{ device_types|tojson }};
+
+      var matchingDeviceIds2 = [];
+      for (var i = 0; i < deviceTypes2.length; i++) {
+        if (deviceTypes2[i] === selectedDeviceType2) {
+          matchingDeviceIds2.push(deviceIds2[i]);
+        }
+      }
+
+      if (
+        enteredDeviceId2 === "" || // No ID entered
+        matchingDeviceIds2.indexOf(enteredDeviceId2) === -1 || // Invalid ID
+        (selectedDeviceType2 !== "" && enteredDeviceId2 === "") // Only device type selected
+      ) {
+        messagesText2.style.color = "red";
+        messagesText2.textContent = "Please select valid Device Type and ID.";
+        event.preventDefault(); // Prevent form submission
+      }
+    }
+
+    devicepicker2.addEventListener("change", function() {
+      updateMessage2();
+      updateSubmitButton2();
+    });
+
+    idpicker2.addEventListener("input", function() {
+      validateInput2(this);
+    });
+
+    document.getElementById("device-form-bar2").addEventListener("submit", function(event) {
+      submitForm2(event);
+    });
+  });
+</script>
+
+
+<!-- decides what form type is being submitted-->
+<script>
+  var activeBar = "";
+
+  function setActiveBar(bar) {
+    activeBar = bar;
+  }
+
+  function checkActiveBar() {
+    const modalReturn = document.querySelector('.modal-return');
+    const bars = modalReturn.querySelectorAll('.bar');
+
+    var isOpenBar = false;
+    bars.forEach((bar, index) => {
+      if (bar.classList.contains('open')) {
+        isOpenBar = true;
+      }
+    });
+
+    if (!isOpenBar) {
+      activeBar = ""; // Set active bar to blank
+      disableConfirmButton(); // Disable the confirm button
+    }
+  }
+
+  function checkCheckboxes() {
+    const modalReturn = document.querySelector('.modal-return');
+    const activeBarElement = modalReturn.querySelector(`.${activeBar}`);
+    const checkboxes = activeBarElement.querySelectorAll('input[type="checkbox"]');
+    const confirmButton = document.getElementById("confirm-button");
+
+    var isCheckboxSelected = false;
+    checkboxes.forEach((checkbox) => {
+      if (checkbox.checked) {
+        isCheckboxSelected = true;
+      }
+    });
+
+    if (!isCheckboxSelected) {
+      disableConfirmButton(); // Disable the confirm button if no checkboxes are selected
+    } else {
+      enableConfirmButton(); // Enable the confirm button if at least one checkbox is selected
+    }
+  }
+
+  function disableConfirmButton() {
+    const confirmButton = document.getElementById("confirm-button");
+    confirmButton.disabled = true;
+  }
+
+  function enableConfirmButton() {
+    const confirmButton = document.getElementById("confirm-button");
+    confirmButton.disabled = false;
+  }
+
+  function submitActiveForm() {
+  if (activeBar) {
+    var form = document.getElementById(`content-${activeBar}-form`);
+    if (form) {
+      form.action = "/download-logs/";
+      form.method = "POST";
+      // Add a hidden input field for form_type
+      var formTypeInput = document.createElement("input");
+      formTypeInput.type = "hidden";
+      formTypeInput.name = "form_type";
+      formTypeInput.value = activeBar;
+      form.appendChild(formTypeInput);
+      
+      // Add data_format input value if available
+      var dataFormatInput = document.getElementById("format-picker-other-optns");
+      if (dataFormatInput.value) {
+        var dataFormatField = document.createElement("input");
+        dataFormatField.type = "hidden";
+        dataFormatField.name = "data_format";
+        dataFormatField.value = dataFormatInput.value;
+        form.appendChild(dataFormatField);
+      }
+      
+      // Add custom_filename input value if available
+      var customFilenameInput = document.getElementById("set-filename");
+      if (customFilenameInput.value) {
+        var customFilenameField = document.createElement("input");
+        customFilenameField.type = "hidden";
+        customFilenameField.name = "custom_filename";
+        customFilenameField.value = customFilenameInput.value;
+        form.appendChild(customFilenameField);
+      }
+      
+      form.submit();
+    } else {
+      var errorMessage = document.getElementById("error-message");
+      errorMessage.textContent = "No form found.";
+    }
+  } else {
+    var errorMessage = document.getElementById("error-message");
+    errorMessage.textContent = "No active bar selected.";
+  }
+}
 
 
 
+  function toggleBar(barNumber) {
+    const modalReturn = document.querySelector('.modal-return');
+    const bars = modalReturn.querySelectorAll('.bar');
+    const contentBars = modalReturn.querySelectorAll('.content');
 
+    bars.forEach((bar, index) => {
+      const header = bar.querySelector('.header');
+      const content = bar.querySelector('.content');
+      const arrow = bar.querySelector('.arrow');
 
+      if (index + 1 === barNumber) {
+        // Toggle the clicked bar
+        if (bar.classList.contains('open')) {
+          // Close the bar
+          bar.classList.remove('open');
+          content.style.display = 'none';
+          arrow.style.transform = 'rotate(0deg)';
+          modalReturn.classList.remove(`bar${barNumber}`);
+        } else {
+          // Open the bar
+          bar.classList.add('open');
+          content.style.display = 'block';
+          arrow.style.transform = 'rotate(180deg)';
+          expandBar(barNumber);
 
+          modalReturn.classList.remove('bar1', 'bar2', 'bar3'); // removed bar-specific classes
+          modalReturn.classList.add(`bar${barNumber}`); // class based on the opened bar
+        }
+      } else {
+        // Close other bars
+        bar.classList.remove('open');
+        content.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+      }
+    });
 
+    checkActiveBar(); // Check if any bar is active
+    checkCheckboxes(); // Check if any checkboxes are selected
+  }
+
+  function expandBar(barNumber) {
+    setActiveBar(`bar${barNumber}`);
+    const modalReturn = document.querySelector('.modal-return');
+    const bars = modalReturn.querySelectorAll('.bar');
+
+    bars.forEach((bar, index) => {
+      if (index !== barNumber - 1) {
+        bar.style.animation = 'slideDown 0.7s, slideDownPosition 0.7s ';
+      }
+    });
+
+    setTimeout(() => {
+      bars.forEach((bar, index) => {
+        if (index !== barNumber - 1) {
+          bar.style.opacity = '1';
+          bar.style.transform = 'translateY(0)';
+        }
+      });
+    }, 500);
+  }
+
+  function resetBars() {
+    const modalReturn = document.querySelector('.modal-return');
+    const bars = modalReturn.querySelectorAll('.bar');
+
+    bars.forEach((bar) => {
+      bar.style.animation = 'slideDown 5s ease, slideDownPosition 5s ease';
+      bar.style.display = 'block';
+    });
+
+    checkActiveBar(); // Check if any bar is active
+    checkCheckboxes(); // Check if any checkboxes are selected
+  }
+
+  var confirmButton = document.getElementById("confirm-button");
+confirmButton.addEventListener("click", function () {
+  submitActiveForm();
+});
+
+</script>
 
 
 
@@ -414,7 +874,7 @@ function resetBars() {
 <style>
   .main_title {
   position: relative;
-  top: -132px;
+  top: -370px;
   right: -50px;
   z-index: 2;
   }
@@ -427,7 +887,7 @@ function resetBars() {
  border-radius: 5px;
  font-size: 30px;
  position:relative;
- top: -60px;
+ top: -50px;
  cursor: pointer;
  left: -7px;
  }

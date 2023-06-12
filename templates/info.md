@@ -290,3 +290,38 @@ exclude overdues works
 rental log download data working now
 fixed date issues because date inputs had no name set so was null
 fixed date format not using strptime, using an extraction of each year, month and date value, and then putting it back into the query as formatted
+
+please select a constraint added
+type and id check added
+
+select all logs button that clears other inputs done
+
+----
+
+using just one confirm button
+might help with potential css issues
+make clear where it is 
+
+
+tried using javascript to determine what form is being submitted - working
+
+check if devices table data being downloaded barcode works - downloads as weird text content
+
+add download barcodes button to device data div section?
+
+
+fix device data div section css issues - done
+first device_data concept download working
+
+
+do stress testing of active bar form thing - can one be closed but submitted? etc
+
+add checkbox checker to javascript again
+
+device type and id for device data didnt work - working now;changed name
+Select all devices works
+in circulation doesnt - working now; changed name
+
+just download device id worked - removing type and id checker? or for if just one checkbox is selected
+----------------------``````````````````````````
+created function for generating csv and another for fetching rows

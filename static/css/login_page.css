@@ -121,7 +121,6 @@ body {
 
 /* Account type items */
 
-.account-type-item1,
 .account-type-item2 {
   height: 128px;
   width: 160px;
@@ -137,7 +136,7 @@ box-shadow: rgb(17, 78, 145) 0px 0px 0px;
 text-decoration: rgb(17, 78, 145);
 position: relative;
   top: 250px;
-  left: 88px;
+  left: 180px;
 }
 
 .account-type-item1:hover,
@@ -282,7 +281,13 @@ text-decoration: underline;
 #staff-button-back {
   position: relative;
   top: 430px;
-  left: -15px;
+  left: -65px;
+}
+
+#init-button-back{
+  position: relative;
+  top: 380px;
+  left: -220px;
 }
 
 #student-button-back {
