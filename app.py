@@ -777,29 +777,23 @@ def fetch_rows(c, query, params):
 def generate_pdf(filename, headers, rows, constraints, user):
     class PDF(FPDF):
         def header(self):
-            # Set header font and size
-            self.set_font('Arial', '', 10)  # Remove 'B' to make it not bold
+            self.set_font('Arial', '', 10)  
 
-            # Calculate header width and height
             header_width = self.w - 2 * self.l_margin
-            header_height = 5
+            header_height = 10
 
-            # Check if it's the first page
             if self.page_no() == 1:
-                # Print main header in the top left corner
-                self.set_fill_color(255)  # Set background color to white
-                self.set_text_color(0)  # Set text color to black
+                self.set_fill_color(255)  
+                self.set_text_color(0) 
                 self.set_font('Arial', '', 12)
                 self.cell(header_width, header_height, filename, 0, 0, 'L', fill=True)
-                self.set_x((self.w - self.get_string_width(f"Downloaded By: {user}")) / 2-110)  # Move the current position to the center
-                self.cell(0, header_height, f"Downloaded By: {user}", 0, 0, 'C')  # Print "Downloaded By" header in the center
-                self.cell(0, header_height, f"Date Downloaded: {datetime.datetime.now().strftime('%d-%m-%Y %H:%M')}", 0, 0, 'R')  # Print "Date Downloaded" header on the right
-                self.ln(header_height)  # Move to the next line
+                self.set_x((self.w - self.get_string_width(f"Downloaded By: {user}")) / 2-110)  
+                self.cell(0, header_height, f"Downloaded By: {user}", 0, 0, 'C') 
+                self.cell(0, header_height, f"Date Downloaded: {datetime.datetime.now().strftime('%d-%m-%Y %H:%M')}", 0, 0, 'R')  
+                self.ln(header_height)  
             else:
-                # Print an empty header for other pages
                 self.cell(header_width, header_height, "", 0, 0, 'L', fill=False)
 
-            # Add extra space below header
             self.ln(5)
 
 
@@ -825,89 +819,85 @@ def generate_pdf(filename, headers, rows, constraints, user):
 
         
         def table(self, headers, data):
-            # Set table font and size
-            self.set_font('Arial', '', 8)  # Set the font to 'Arial'
-        
-            # Calculate effective page width (epw)
+            self.set_font('Arial', '', 8)  
+
+            # Calculate page width (epw)
             page_width = self.w - 2 * self.l_margin
             num_columns = len(headers)
             column_width = page_width / num_columns
             column_widths = [column_width] * num_columns
-        
+
             # Adjust column widths with custom widths
-            column_widths = [column_widths[i] for i in range(len(column_widths))]
-        
-            # Set table body styling properties
-            self.set_fill_color(243)  # Set table body background color
-            self.set_text_color(0)  # Set table body text color
-            self.set_font('Arial', '', 10)  # Set the font to 'Arial'
-        
+            column_widths[3] = column_width * 0.75
+            column_widths[4] = column_width * 0.8
+            column_widths[5] = column_width * 0.65
+            column_widths[6] = column_width * 0.88
+            column_widths[7] = column_width * 1.3
+            column_widths[9] = column_width * 0.67
+            column_widths[10] = column_width * 1.9
+
+            self.set_fill_color(243)  
+            self.set_text_color(0)  
+            self.set_font('Arial', '', 10) 
+
             # Calculate row height
             row_height = self.font_size + 4
-        
+
             # Print headers on the first page
-            self.set_fill_color(0, 152, 121)  # Set header background color
-            self.set_text_color(255)  # Set header text color
-            self.set_font('Arial', 'B', 8)  # Set the font to 'Arial' and bold
-        
+            self.set_fill_color(0, 152, 121)  
+            self.set_text_color(255)  
+            self.set_font('Arial', 'B', 8)  
+
             for i, header in enumerate(headers):
                 self.cell(column_widths[i], row_height, str(header), 1, 0, 'C', True)
             self.ln()
-        
-            # Keep track of the row number for alternating row colors
+
             row_number = 1
-        
+
             for row in data:
-                # Check if a new page is needed
                 if self.y + row_height > self.page_break_trigger:
                     self.add_page()
-        
+
                     # Print headers on new pages
-                    self.set_fill_color(0, 152, 121)  # Set header background color
-                    self.set_text_color(255)  # Set header text color
-                    self.set_font('Arial', 'B', 8)  # Set the font to 'Arial' and bold
-        
+                    self.set_fill_color(0, 152, 121) 
+                    self.set_text_color(255)  
+                    self.set_font('Arial', 'B', 8)  
+
                     for i, header in enumerate(headers):
                         self.cell(column_widths[i], row_height, str(header), 1, 0, 'C', True)
                     self.ln()
-        
-                # Set row colors
+
                 if row_number % 2 == 0:
-                    self.set_fill_color(255)  # Light grey for even rows
+                    self.set_fill_color(255)  # Grey for even rows
                 else:
                     self.set_fill_color(255, 255, 255)  # White for odd rows
-        
+
                 # Print row data
-                self.set_fill_color(255)  # Set the cell fill color for row data
-                self.set_text_color(0)  # Set the cell text color for row data
-                self.set_font('Arial', '', 8)  # Set the font to 'Arial' for row data
-        
+                self.set_fill_color(255) 
+                self.set_text_color(0) 
+                self.set_font('Arial', '', 8)  
+
                 for i, column in enumerate(row):
                     self.cell(column_widths[i], row_height, str(column), 1, 0, 'L', fill=True)
                 self.ln()
-        
-                # Increment row number
+
                 row_number += 1
-        
-            # Add extra space after the table
+
             self.ln(10)
-
-
 
 
     pdf = PDF(orientation='L')
 
-    # Remove margin for table and its headers
+    # Remove margin
     pdf.set_auto_page_break(auto=True, margin=0)
     pdf.l_margin = 0
     pdf.r_margin = 0
     pdf.t_margin = 0
     pdf.b_margin = 0
 
-    # Generate the table headers at the top of each new page
+    #  table headers 
     pdf.add_page()
 
-    # Generate the constraints text on the first page
     if constraints:
         pdf.set_font('Arial', 'B', 12)
         pdf.cell(0, 10, "Select Constraints:", 0, 1, 'L')
