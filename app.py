@@ -683,7 +683,7 @@ def download_logs():
                     if filter_data['device_type']:
                         query += " AND device_type = ?"
                         params.append(filter_data['device_type'])
-                        filter_string += f"Device Type: {filter_data['device_type']}, "
+                        filter_string += f"Device Type: {filter_data['device_type']},"
                     if filter_data['device_id']:
                         query += " AND device_id = ?"
                         params.append(filter_data['device_id'])
@@ -1054,7 +1054,9 @@ def prev_downloads():
     with opendb('logs.db') as c:
         status = session['logged_in']
         if status is True:
-            return render_template('previous_downloads.html', loginstatus=status)
+            c.execute("SELECT * FROM device_logs")
+            rows = c.fetchall()
+            return render_template('previous_downloads.html', loginstatus=status, rows=rows)
         else:
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
