@@ -1,53 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Date Validation</title>
-  <style>
-    .error {
-      color: red;
-    }
-  </style>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var date1Input = document.getElementById('date1');
-      var date2Input = document.getElementById('date2');
-      var errorElement = document.getElementById('error');
-
-      function validateDates() {
-        var date1 = date1Input.value;
-        var date2 = date2Input.value;
-
-        var isValidFormat = /^(\d{4})-(\d{2})-(\d{2})$/.test(date1) && /^(\d{4})-(\d{2})-(\d{2})$/.test(date2);
-
-        if (!isValidFormat) {
-          errorElement.textContent = 'Invalid date format. Please use the format YYYY-MM-DD.';
-          return false;
+    <title>Download Barcodes</title>
+    <script>
+        function downloadPDF() {
+            var link = document.createElement('a');
+            link.href = '/dev-admin/download-pdf';
+            link.download = 'barcodes.pdf';
+            link.click();
         }
-
-        if (date2 < date1) {
-          errorElement.textContent = 'Date 2 cannot be earlier than Date 1.';
-          return false;
-        }
-
-        errorElement.textContent = '';
-        return true;
-      }
-
-      date1Input.addEventListener('input', validateDates);
-      date2Input.addEventListener('input', validateDates);
-    });
-  </script>
+    </script>
 </head>
 <body>
-  <h1>Date Validation</h1>
-  <form>
-    <label for="date1">Date 1:</label>
-    <input type="date" id="date1" required>
-    <br>
-    <label for="date2">Date 2:</label>
-    <input type="date" id="date2" required>
-    <br>
-    <p id="error" class="error"></p>
-  </form>
+    <h1>Download Barcodes</h1>
+    <button onclick="downloadPDF()">Download PDF</button>
 </body>
 </html>

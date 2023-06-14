@@ -18,6 +18,12 @@ import csv
 import re
 ############ PDF IMPORTS
 from fpdf import FPDF
+import os
+from PIL import Image
+import barcode
+from barcode import Code128
+from barcode.writer import ImageWriter
+
 
 
 
@@ -732,18 +738,27 @@ def download_logs():
                     
                     elif data_format == "PDF":
                         if custom_filename:
-                            filename = custom_filename
+                            filename = "{}.pdf".format(custom_filename)
                         elif custom_filename is None:
-                            filename = "device_data.csv"
+                            filename = "device_data.pdf"
 
                         headers = ["Device ID", "Device Type", "Date Added", "Last Change", "Added By",
-                                   "In Circulation", "Notes", "Barcode", "Num# Rentals",
+                                   "In Circulation", "Notes","Barcode",  "Num# Rentals",
                                    "Last Rental"]
 
-                        generate_csv(filename, headers, rows)
+                         
 
-                        response = make_response(send_file(filename, mimetype='text/csv', as_attachment=True))
+                        # Generate the PDF file
+                        generate_pdf_devices(filename, headers, rows, constraints, user)
+
+                        # Return the PDF file as a response
+                        response = make_response(send_file(filename, mimetype='application/pdf', as_attachment=True))
                         response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+                        # Insert the download_logs entry into the database
+                        c.execute("INSERT INTO download_logs (file_name, data_type, data_format, constraints, num_rows, created_by, created_date, file)VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                                  (filename, data_type, data_format, constraints, num_rows, user, create_date, file))
+
                         return response
                 ################################################################################################################
                 elif form_type == "content-bar3":  # users
@@ -909,6 +924,125 @@ def generate_pdf(filename, headers, rows, constraints, user):
     pdf.table(headers, rows)
 
     # Save the PDF
+    pdf.output(filename)
+
+def generate_pdf_devices(filename, headers, rows, constraints, user):
+    class PDF(FPDF):
+        def header(self):
+            self.set_font('Arial', '', 10)
+
+            header_width = self.w - 2 * self.l_margin
+            header_height = 10
+
+            if self.page_no() == 1:
+                self.set_fill_color(255)
+                self.set_text_color(0)
+                self.set_font('Arial', '', 12)
+                self.cell(header_width, header_height, filename, 0, 0, 'L', fill=True)
+                self.set_x((self.w - self.get_string_width(f"Downloaded By: {user}")) / 2 - 110)
+                self.cell(0, header_height, f"Downloaded By: {user}", 0, 0, 'C')
+                self.cell(0, header_height, f"Date Downloaded: {datetime.datetime.now().strftime('%d-%m-%Y %H:%M')}",
+                          0, 0, 'R')
+                self.ln(header_height)
+            else:
+                self.cell(header_width, header_height, "", 0, 0, 'L', fill=False)
+
+            self.ln(5)
+
+        def footer(self):
+            self.set_font('Arial', 'I', 8)
+            self.set_text_color(128)
+            footer_width = self.w - 2 * self.l_margin
+            footer_height = 10
+            page_number = self.page_no()
+            self.cell(footer_width, footer_height, f"Page {page_number}", 0, 0, 'C')
+
+        def table(self, headers, data):
+            self.set_font('Arial', '', 8)
+            page_width = self.w - 2 * self.l_margin
+            num_columns = len(headers)
+            column_width = page_width / num_columns
+            column_widths = [column_width] * num_columns
+
+            self.set_fill_color(243)
+            self.set_text_color(0)
+            self.set_font('Arial', '', 10)
+
+            row_height = self.font_size + 4
+
+            self.set_fill_color(0, 152, 121)
+            self.set_text_color(255)
+            self.set_font('Arial', 'B', 8)
+
+            for i, header in enumerate(headers):
+                self.cell(column_widths[i], row_height, str(header), 1, 0, 'C', True)
+            self.ln()
+
+            row_number = 1
+
+            for row in data:
+                if self.y + row_height > self.page_break_trigger:
+                    self.add_page()
+                    self.set_fill_color(0, 152, 121)
+                    self.set_text_color(255)
+                    self.set_font('Arial', 'B', 8)
+                    for i, header in enumerate(headers):
+                        self.cell(column_widths[i], row_height, str(header), 1, 0, 'C', True)
+                    self.ln()
+
+                if row_number % 2 == 0:
+                    self.set_fill_color(255)
+                else:
+                    self.set_fill_color(255, 255, 255)
+
+                self.set_fill_color(255)
+                self.set_text_color(0)
+                self.set_font('Arial', '', 8)
+
+                for i, column in enumerate(row):
+                    if i == 7: 
+                        barcode_data = f"{row[1]}-{row[0]}"  
+
+                        barcode_filename = f"{barcode_data}.png"
+                        barcode_path = os.path.join("barcodes", barcode_filename)
+                        if not os.path.exists(barcode_path):
+                            barcode = Code128(barcode_data, writer=ImageWriter())
+                            barcode.save(barcode_path)
+
+                        if os.path.exists(barcode_path):
+                            image_width = column_widths[i] - 2
+                            image_height = row_height - 2
+                            x = self.get_x()
+                            y = self.get_y()
+                            self.cell(column_widths[i], row_height, '', 1, 0, 'C', fill=True)
+                            self.image(barcode_path, x + 1, y + 1, image_width, image_height)
+                        else:
+                            self.cell(column_widths[i], row_height, 'No barcode', 1, 0, 'C', fill=True)
+                    else:
+                        self.cell(column_widths[i], row_height, str(column), 1, 0, 'L', fill=True)
+                self.ln()
+
+                row_number += 1
+
+            self.ln(10)
+
+    pdf = PDF(orientation='L')
+    pdf.set_auto_page_break(auto=True, margin=0)
+    pdf.l_margin = 0
+    pdf.r_margin = 0
+    pdf.t_margin = 0
+    pdf.b_margin = 0
+
+    pdf.add_page()
+
+    if constraints:
+        pdf.set_font('Arial', 'B', 12)
+        pdf.cell(0, 10, "Select Constraints:", 0, 1, 'L')
+        pdf.set_font('Arial', '', 12)
+        pdf.multi_cell(0, 10, constraints.strip(), 0, 'L')
+        pdf.ln(10)
+
+    pdf.table(headers, rows)
     pdf.output(filename)
 
 
@@ -1146,15 +1280,22 @@ def new_item():
                     submitted_by = session['user_id']
                     notes_device = request.form['notes']
                     in_circulation = "No"
-                    # generate barcode image for device
+                    # Generate barcode image for device
                     randInt = random.randint(10000000, 99999999)
                     code128 = barcode.get_barcode_class('code128')
                     barcode_image = code128(str(device_type) + "-" + str(device_id) + "-" + str(randInt), writer=ImageWriter())
                     barcode_buffer = BytesIO()
                     barcode_image.write(barcode_buffer)
                     barcode_data = barcode_buffer.getvalue()
+                    # Save barcode image to a file
+                    barcode_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'barcodes')
+                    os.makedirs(barcode_path, exist_ok=True)
+                    barcode_file = os.path.join(barcode_path, f"{device_type}-{device_id}-{randInt}")
+                    barcode_image.save(barcode_file)
+                
+
                     # insert device data into database
-                    c.execute("INSERT INTO devices (device_id, device_type, date_added, added_by, in_circulation, notes, barcode, num_rentals, last_rental) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted, submitted_by, in_circulation, notes_device, barcode_data, 0, "None"))
+                    c.execute("INSERT INTO devices (device_id, device_type, date_added,last_change, added_by, in_circulation, notes, barcode, num_rentals, last_rental) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?)", (device_id, device_type, date_submitted,"None",submitted_by, in_circulation, notes_device, barcode_data, 0, "None"))
                     return render_template('message.html', message="New device logged", loginstatus=status, message_btn="View_Devices",message_link="device-logs")
                 elif device_exists_check:
                     return render_template('message.html', message="Device already exists", loginstatus=status, message_btn="Try_Again",message_link="new-item")   
@@ -1165,24 +1306,11 @@ def new_item():
         else:
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-        
-        
-#Temporary dev admin page used to display all possible links
+     
 @app.route('/dev-admin', methods=['GET', 'POST'])
 def dev_admin():
-    status = session["logged_in"]
-    if status is True:
-        if request.method == "POST":
-            session['logged_in'] = True
-            session['user_id'] = "Force_Login"
-            return render_template('message.html', message="Successful force login", message_btn="Real_Login",message_link="login-page")
-        else:
-            loginstatus = session.get('logged_in', False)
-            return render_template('dev_admin.html', loginstatus=status)
-    else:
-        message = "Please login to access this feature"
-        return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-    
+    pass
+
 
 #Admin page
 @app.route('/admin')

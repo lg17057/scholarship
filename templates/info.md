@@ -325,3 +325,5 @@ in circulation doesnt - working now; changed name
 just download device id worked - removing type and id checker? or for if just one checkbox is selected
 ----------------------``````````````````````````
 created function for generating csv and another for fetching rows
+
+can try to just save barcodes in a folder 
