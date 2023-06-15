@@ -1054,7 +1054,7 @@ def prev_downloads():
     with opendb('logs.db') as c:
         status = session['logged_in']
         if status is True:
-            c.execute("SELECT * FROM device_logs")
+            c.execute("SELECT * FROM download_logs")
             rows = c.fetchall()
             return render_template('previous_downloads.html', loginstatus=status, rows=rows)
         else:
@@ -1312,6 +1312,7 @@ def new_item():
 @app.route('/dev-admin', methods=['GET', 'POST'])
 def dev_admin():
     pass
+
 
 #Admin page
 @app.route('/admin')
