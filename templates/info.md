@@ -327,3 +327,11 @@ just download device id worked - removing type and id checker? or for if just on
 created function for generating csv and another for fetching rows
 
 can try to just save barcodes in a folder 
+
+making the two account type;
+
+-Admin - controls the teachers and data
+-teacher - controls data
+
+added check to sign up page so an admin has to be logged in to create an account, not a teacher
+this will mean that an admin will have to presently over look the creation of an account

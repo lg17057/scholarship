@@ -1313,17 +1313,24 @@ def new_item():
 def dev_admin():
     pass
 
-
 #Admin page
 @app.route('/admin')
 def admin():
     status = session["logged_in"]
+    account_type = session["account_type"]
     if status is True:
-        return render_template('/admin.html')
+        if account_type == "Admin":
+            return render_template('/admin.html', account_type="Admin", loginstatus=status)        
+        elif account_type == "Teacher":
+            return render_template('/admin.html', account_type="Teacher", loginstatus=status)
+        else:
+            return render_template('/message.html', loginstatus=status, message_link="/login-page", message_btn="Login_Page", message="Please Login as an Admin access this page")
+        
     else:
         message = "Please login to access this feature"
         return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
     
+
 
 #Used to log the user out
 @app.route('/logout', methods=["GET", "POST"])
@@ -1354,7 +1361,7 @@ def login_success(teacher_name, last_login):
     with opendb('main.db') as c:
         c.execute("SELECT logins FROM users WHERE teacher_name = ?", (teacher_name,))
         c.execute("UPDATE users SET logins = logins + 1 WHERE teacher_name = ?", (teacher_name,))
-        c.execute("UPDATE users SET last_login = ?", (last_login,))
+        c.execute("UPDATE users SET last_login = ? WHERE teacher_name = ?", (last_login,teacher_name,))
 
 
 @app.route('/login-page', methods=["POST"])
@@ -1369,19 +1376,27 @@ def login_page_post():
             c.execute('SELECT * FROM users WHERE teacher_name=?', (input_value,))
         user_data = c.fetchone()
         if user_data:
-            stored_password_bytes = user_data[3]  
-            stored_salt_bytes = user_data[4]  
+            stored_password_bytes = user_data[4]  
+            stored_salt_bytes = user_data[5]  
             stored_password = stored_password_bytes.decode('utf-8')
             stored_salt = stored_salt_bytes.decode('utf-8')
             if bcrypt.checkpw(passkey.encode('utf-8'), stored_password.encode('utf-8')):
+                c.execute("SELECT account_type FROM users WHERE teacher_name = ?", (input_value,))
+                account_type = c.fetchone()
+                stripped_text = account_type[0].strip("(),")
+                print(stripped_text)
+
                 session['logged_in'] = True
-                session['user_id'] = user_data[1]  # Assuming the username or email is at index 1
+                session['user_id'] = user_data[2]  # Assuming the username or email is at index 1
+                session['account_type'] = stripped_text
                 last_login = datetime.datetime.now().strftime("%d-%m %H:%M")
-                login_success(user_data[1], last_login)  # Assuming the username or email is at index 1
+                login_success(user_data[2], last_login)  # Assuming the username or email is at index 1
                 loginstatus = session['logged_in']
                 return render_template('message.html', message="Login Success", loginstatus=loginstatus, message_btn="Index_Page",message_link="")
         session['logged_in'] = False
         session['user_id'] = "Invalid"
+        
+        session['account_type'] = "Invalid"
         loginstatus = session['logged_in']
         return render_template('message.html', message="Login Failure", loginstatus=loginstatus, message_btn="Index_Page",message_link="")
 
@@ -1389,7 +1404,13 @@ def login_page_post():
 @app.route('/signup-page')
 def signup_page():
     loginstatus = session.get('logged_in', False)
-    return render_template('/signup_page.html', loginstatus=loginstatus)
+    account_type = session['account_type']
+    if account_type == "Admin":
+        return render_template('/signup_page.html', loginstatus=loginstatus)
+    elif account_type == "Teacher":
+        return render_template('/message.html', loginstatus=loginstatus, message_link="/login-page", message_btn="Login_Page", message="Please Login as an Admin access this page")
+    else:
+        return render_template('/message.html', loginstatus=loginstatus, message_link="/login-page", message_btn="Login_Page", message="Please Login as an Admin access this page")
 
 
 @app.route('/signup-page', methods=['POST'])
@@ -1401,6 +1422,7 @@ def signup_page_post():
                 teacher_name = request.form['teacher_name']
                 email = request.form['email']
                 passkey = request.form['password']
+                account_type = request.form['account_type']
                 c = c.execute('SELECT teacher_name FROM users WHERE teacher_name=? OR email=?', (teacher_name, email,))
                 user_check = c.fetchone()
                 if user_check: 
@@ -1416,7 +1438,7 @@ def signup_page_post():
                     # Store the salt and hashed password as bytes
                     salt_bytes = salt
                     hashed_password_bytes = hashed_password
-                    c.execute('INSERT INTO users (teacher_name, email, password, salt, logins, date_created, last_login) VALUES (?, ?, ?, ?, ?, ?, ?)',(teacher_name, email, hashed_password_bytes, salt_bytes, 0, date_created, "N/A"))
+                    c.execute('INSERT INTO users (account_type,teacher_name, email, password, salt, logins, date_created, last_login) VALUES (?,?, ?, ?, ?, ?, ?, ?)',(account_type,teacher_name, email, hashed_password_bytes, salt_bytes, 0, date_created, "N/A"))
                     loginstatus = session.get('logged_in', False)
                     return render_template('message.html', message="Sign Up success", loginstatus=status, message_btn="Login",message_link="login-page")
             else:

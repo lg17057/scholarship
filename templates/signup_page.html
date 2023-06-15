@@ -31,7 +31,7 @@
 <title>Register Account</title>
 <div class="signup-container">
   <a title="Home Page" style="cursor: pointer;" onclick="window.location.href='/'"><img class="login-logo-shc" src="{{ url_for('static', filename='shc-log1.svg') }}" width="325px" height="72px" alt="sacred heart logo"></a>
-  <p id="sign-in">Create Account</p>
+  <p id="sign-in">Create Account;</p>
 
   <form action="/signup-page" method="POST" onsubmit="return validateForm()">
     <label for="teacher_name" id="username-label">Username:</label><br>
@@ -43,6 +43,13 @@
     <label for="confirm_password" id="confirm-password-label">Confirm Password:</label><br>
     <input type="password" id="confirm-password" name="confirm_password" required><br>
     <input type="submit" value="Register" id="registerbtn">
+    <div class="select-container">
+      <select id="account_type" name="account_type" required>
+        <option selected value="">Account Type:</option>
+        <option value="Admin">Admin</option>
+        <option value="Teacher">Teacher</option>
+      </select>
+    </div>
   </form>
   
   <input type="submit" value="Login" id="loginbtn" onclick="window.location.href='/login-page'">
