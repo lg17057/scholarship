@@ -1,18 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Download Barcodes</title>
-    <script>
-        function downloadPDF() {
-            var link = document.createElement('a');
-            link.href = '/dev-admin/download-pdf';
-            link.download = 'barcodes.pdf';
-            link.click();
+
+
+  <form id="account-search-form" action="/dev-admin" method="GET">
+    <label for="admin-search-input" id="admin-search-input-label"></label>
+    <input type="text" id="admin-search-input" placeholder="Search for a user">
+    <input type="submit" id="admin-search-submit" value="Confirm">
+  </form>
+  
+  <h3 id="messages-text"></h3>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var searchInput = document.getElementById("admin-search-input");
+      var messagesText = document.getElementById("messages-text");
+      var teacherList = {{ teacher_list|tojson }};
+  
+      searchInput.addEventListener("input", function() {
+        var enteredSearchQuery = searchInput.value;
+  
+        var matchingTeachers = teacherList.filter(function(teacher) {
+          return teacher.includes(enteredSearchQuery);
+        });
+  
+        if (enteredSearchQuery !== "" && matchingTeachers.length === 0) {
+          messagesText.style.color = "red";
+          messagesText.textContent = "Teacher Does Not Exist.";
+        } else {
+          messagesText.style.color = "green";
+          messagesText.textContent = "Teacher Exists";
         }
-    </script>
-</head>
-<body>
-    <h1>Download Barcodes</h1>
-    <button onclick="downloadPDF()">Download PDF</button>
-</body>
-</html>
+      });
+    });
+  </script>
+  

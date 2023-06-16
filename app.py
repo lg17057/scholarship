@@ -1308,29 +1308,61 @@ def new_item():
         else:
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-     
-@app.route('/dev-admin', methods=['GET', 'POST'])
-def dev_admin():
-    pass
 
 
-#Admin page
-@app.route('/admin')
-def admin():
+
+@app.route('/dev-admin')
+def devadmin():
+    conn = sql.connect('main.db')  # Establish a database connection
+    c = conn.cursor()  # Create a cursor object to execute queries
+
     status = session["logged_in"]
     account_type = session["account_type"]
     if status is True:
         if account_type == "Admin":
-            return render_template('/admin.html', account_type="Admin", loginstatus=status)        
+            c.execute("SELECT teacher_name FROM users")
+            teacher_list = c.fetchall()
+
+            conn.close()  # Close the database connection
+
+            return render_template('/dev_admin.html', account_type="Admin", loginstatus=status, teacher_list=teacher_list)
+
         elif account_type == "Teacher":
             return render_template('/admin.html', account_type="Teacher", loginstatus=status)
         else:
-            return render_template('/message.html', loginstatus=status, message_link="/login-page", message_btn="Login_Page", message="Please Login as an Admin access this page")
-        
+            return render_template('/message.html', loginstatus=status, message_link="/login-page", message_btn="Login_Page", message="Please Login as an Admin to access this page")
     else:
         message = "Please login to access this feature"
         return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
-    
+
+
+
+
+
+@app.route('/admin')
+def admin():
+    conn = sql.connect('main.db')  # Establish a database connection
+    c = conn.cursor()  # Create a cursor object to execute queries
+
+    status = session["logged_in"]
+    account_type = session["account_type"]
+    if status is True:
+        if account_type == "Admin":
+            c.execute("SELECT teacher_name FROM users")
+            teacher_list = c.fetchall()
+
+            conn.close()  # Close the database connection
+
+            return render_template('/admin.html', account_type="Admin", loginstatus=status, teacher_list=teacher_list)
+
+        elif account_type == "Teacher":
+            return render_template('/admin.html', account_type="Teacher", loginstatus=status)
+        else:
+            return render_template('/message.html', loginstatus=status, message_link="/login-page", message_btn="Login_Page", message="Please Login as an Admin to access this page")
+    else:
+        message = "Please login to access this feature"
+        return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
+
 
 
 #Used to log the user out

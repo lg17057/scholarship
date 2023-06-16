@@ -84,26 +84,74 @@
 
 
 
-{% if account_type == "Admin" %}     
-  <title>Admin Page</title>
-  <h1 class="main_title">Admin page</h1>
-  <div class="primary-container">
-    <form action='/logout' method="GET">
-      <input type="submit" name="logout" value="Logout" id="logoutBtn">
-    </form>
+{% if account_type == "Admin" %}    
+  <div id="admin-container">
+    <title>Admin Page</title>
+    <h1 class="main_title">Admin page</h1>
+    <div class="primary-container">
+      <div id="account-search-div">
+        <form id="account-search-form" action="/admin" method="GET">
+          <lbael for="admin-search-input" id="admin-search-input-label"></lbael>
+          <input type="text" id="admin-search-input" placeholder="Search for a user">
+          <input type="submit" id="admin-search-submit" value="Confirm">
+        </form>
+      </div>
 
-    <input type="submit" value="Delete Account" id="delete-accountbtn" class="delete-account-btn">
+      <h3 id="messages-text"></h3>
+
+
+      <form action='/logout' method="GET">
+        <input type="submit" name="logout" value="Logout" id="logoutBtn">
+      </form>
+
+      <input type="submit" value="Delete Account" id="delete-accountbtn" class="delete-account-btn">
+    </div>
   </div>
-
 {% else %}
-  <title>Teacher Options</title>
-  <h1 class="main_title">Teacher Options</h1>
-  <div class="primary-container">
-    <form action='/logout' method="GET">
-      <input type="submit" name="logout" value="Logout" id="logoutBtn">
-    </form>
+  <div id="teacher-container">
+    <title>Teacher Options</title>
+    <h1 class="main_title">Teacher Options</h1>
+    <div class="primary-container">
+      <form action='/logout' method="GET">
+        <input type="submit" name="logout" value="Logout" id="logoutBtn">
+      </form>
 
-    <input type="submit" value="Delete Account" id="delete-accountbtn" class="delete-account-btn">
+      <input type="submit" value="Delete Account" id="delete-accountbtn" class="delete-account-btn">
+    </div>
   </div>
-
 {% endif %}
+
+<!-- DETERMINE IF A TEACHER ACCOUNT-->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var searchInput = document.getElementById("admin-search-input");
+    var messagesText = document.getElementById("messages-text");
+    var submitButton = document.getElementById("admin-search-submit");
+    var teacherList = {{ teacher_list|tojson }};
+
+    searchInput.addEventListener("input", function() {
+      var enteredSearchQuery = searchInput.value.trim();
+
+      if (enteredSearchQuery === "") {
+        messagesText.textContent = "";
+        submitButton.disabled = true;
+      } else {
+        var teacherExists = teacherList.some(function(teacher) {
+          return teacher.includes(enteredSearchQuery);
+        });
+
+        if (teacherExists) {
+          messagesText.style.color = "green";
+          submitButton.style.cursor = "pointer";
+          messagesText.textContent = "Teacher Exists";
+          submitButton.disabled = false;
+        } else {
+          messagesText.style.color = "red";
+          submitButton.style.cursor = "not-allowed";
+          messagesText.textContent = "Teacher Does Not Exist";
+          submitButton.disabled = true;
+        }
+      }
+    });
+  });
+</script>
