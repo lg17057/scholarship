@@ -32,16 +32,19 @@
           <a title="Home Page" style="cursor: pointer;"onclick="window.location.href='/'"><img class="login-logo-shc"  src="{{ url_for('static', filename='shc-log1.svg') }}"  width="325px" height="72px" alt="sacred heart logo"></a>
           <p id="sign-in">SIGN IN</p>
           <p id="account-type">Please choose your account type</p>
-            <button class="account-type-item1 button1">
-              <img class="student-tag-shc"   src="{{ url_for('static', filename='student-tag.svg') }}" height="50px" width="50px" alt="sacred heart staff tag">
-              <p id="student-tag">Student</p>
-            </button>
+
+            
             <button class="account-type-item2 button2">
               <img class="staff-tag-shc"  src="{{ url_for('static', filename='staff-tag.svg') }}" height="50px" width="50px"  alt="sacred heart student tag">
               <p id="school-tag">School Staff</p>
             </button>   
+            <button  class="button-back" onclick="window.location.href='/'" id="init-button-back">Back to Index</button>
+
+            <!--
             <button id="create-account" onclick="window.location.href='/signup-page'">Create Account</button>
+            -->
         </div>
+        <!--
       <div class="student-login-div">
         <img class="staff-tag-secondary"  src="{{ url_for('static', filename='staff-tag1.svg') }}" height="40px" width="50px" alt="sacred heart staff tag">
 
@@ -58,6 +61,7 @@
         </form>
         <button class="button-back" id="student-button-back">Change Account Type</button>
       </div>
+    -->
       <div class="staff-login-div">
         <img class="staff-tag-secondary"  src="{{ url_for('static', filename='staff-tag1.svg') }}" height="40px" width="50px" alt="sacred heart staff tag">
           <p id="staff-sign-in">SIGN IN</p>
@@ -71,8 +75,9 @@
             <input type="submit" value="Login">
             <div class="g-signin2" data-width="175" data-height="41" border-radius="5" data-longtitle="true"></div>
           </form>
-      <button  class="button-back" id="staff-button-back">Change Account Type</button>
-
+          
+      <button  class="button-back" id="staff-button-back">Back</button>
+          
      </div>
    </div>
     </div>
@@ -120,38 +125,19 @@ function validateForm(event) {
 loginForm.addEventListener('submit', validateForm);
 
 </script>
-<script>// Get the login buttons
+<script>
   var loginDiv = document.querySelector('.login-div')
-  var studentBtn = document.querySelector('.account-type-item1');
   var staffBtn = document.querySelector('.account-type-item2');
   
-  // Get the student and staff login divs
-  var studentLoginDiv = document.querySelector('.student-login-div');
   var staffLoginDiv = document.querySelector('.staff-login-div');
   
-  // Get the "Back" buttons
-  var studentBackBtn = document.querySelector('.student-login-div .button-back');
   var staffBackBtn = document.querySelector('.staff-login-div .button-back');
   
-  // Show the student login div when the student button is clicked
-  studentBtn.addEventListener('click', function() {
-    studentLoginDiv.style.display = 'flex';
-    loginDiv.style.display = 'none';
-    staffLoginDiv.style.display = 'none';
-  });
   
-  // Show the staff login div when the staff button is clicked
   staffBtn.addEventListener('click', function() {
     staffLoginDiv.style.display = 'flex';
     loginDiv.style.display = 'none';
-    studentLoginDiv.style.display = 'none';
 
-  });
-  
-  // Hide the student login div when the "Back" button is clicked
-  studentBackBtn.addEventListener('click', function() {
-    studentLoginDiv.style.display = 'none';
-    loginDiv.style.display = 'flex';
   });
   
   // Hide the staff login div when the "Back" button is clicked

@@ -7,11 +7,12 @@ body {
   background-color: #f1f1f1;
   margin: 0;
   padding: 0;
+  overflow-y:hidden;
 }
 
 .modal-return {
   position: relative;
-  top: 100px;
+  top: -335px;
   left: 200px;
   transform: translate(-50%, -50%);
   margin: auto;
@@ -28,8 +29,8 @@ body {
 .modal-return.bar2,
 .modal-return.bar3 {
   position: relative;
-  top: 100px;
   left: 200px;
+  z-index: 10;
   transform: translate(-50%, -50%);
   margin: auto;
   padding: 20px;
@@ -42,16 +43,25 @@ body {
 
 .modal-return.bar1 {
   position: relative;
-  top: 120px;
-  height: 545px;
+  height: 500px;
+  top: -165px;
+  z-index: 10;
 }
 
 .modal-return.bar2 {
-  height: 450px;
+  height: 500px;
+  position: relative;
+  top: -165px;
+  z-index: 11;
+
 }
 
 .modal-return.bar3 {
   height: 450px;
+  position: relative;
+  top: -185px;
+  z-index: 12;
+
 }
 
 .header {
@@ -83,10 +93,14 @@ body {
 
 
 #content-bar1 {
-  height: 350px;
+  height: 310px;
+  position: relative;
+  top: -10px;
 }
 
-
+#content-bar2 {
+  height: 300px;
+}
 
 
 
@@ -145,11 +159,19 @@ ul {
 }
 
 
-.checkbox-bar {
+.checkbox-bar1 {
   position: relative;
   left: -40px;
 }
 
+.checkbox-bar2 {
+  position: relative;
+  left: -40px;
+}
+.checkbox-bar3 {
+  position: relative;
+  left: -40px;
+}
 .checkbox-label {
   position: relative;
   left: -20px;
@@ -282,16 +304,18 @@ ul {
   }
   #error-message-bar1 {
     position: relative;
-    top: -285px;
+    top: -355px;
     left: -20px;
     font-size: 13px;
   }
 
   #to-bar1 {
+    z-index: 10000;
     font-size: 13px;
     position: relative;
-    top: -305px;
-    left: 125px;
+
+    top: -380px;
+    left: 130px;
   }
 
 
@@ -307,37 +331,192 @@ ul {
   }
   #checkboxlist1 {
     position: relative;
-    top: 5px
+    top: -5px
   }
 
 
   #checkboxlist2 {
     position: relative;
-    top: -45px;
+    top: -65px;
   }
 
   #checkboxlist3 {
     position: relative;
-    top: -95px;
+    top: -125px;
   }
 
-  #bar1-confirm {
+  #checkboxlist4 {
+    position: relative;
+    top: -184px;
+  }
+
+  
+ 
+ 
+ 
+  .openbtn {
+    background-color: #ffffff;
+    color: black;
+    cursor: pointer;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 30px;
+    position:relative;
+    top: -100px;
+    cursor: pointer;
+    left: -7px;
+    }
+    
+    .openbtn:hover {
+    background-color: #f1f1f1;
+    }
+    
+
+
+    #messages-text-bar1 {
+      position: absolute;
+      top: 80px;
+      font-size: 14px;
+      left: 180px;
+    }
+
+/* BAR 2 */
+
+
+
+.select-container-bar2 {
+  position: relative;
+  display: inline-block;
+  top:0px;
+  width: 120px;
+  left: -45px;
+  font-size: 14px;
+  }
+  
+  /* Styling the select element */
+  .select-container-bar2 select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 140px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  }
+  
+  /* Styling the arrow icon */
+  .select-container-bar2::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  left:120px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  }
+  
+  /* Styling when select element is open */
+  .select-container-bar2.select-open select {
+  border-color: #888;
+  }
+  
+  /* Styling the dropdown options */
+  .select-container-bar2 select option {
+  font-size: 16px;
+  }
+  
+  /* Styling when an option is selected */
+  .select-container-bar2.select-open select option:checked {
+  background-color: #f0f0f0;
+  }
+
+  #idpicker-bar2 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 5px;
+    width: 110px;
+    position: relative;
+    left: -45px;
+  }
+    
+#date-picker-container-num1-bar2 {
+  margin-top: 8px;
+
+}
+  
+  #date-picker-bar2-1 {
+    font-size: 14px;
+    padding: 5px;
+    background-color: #f1f1f1;
+    border: none;
+    height: 20px;
+    border-radius: 2px;
+    width: 130px;
+
+    position: relative;
+    left: -20px;
+    top: -23px;
+
+  }
+  #date-picker-bar2-2 {
+    font-size: 14px;
+    padding: 5px;
+    background-color: #f1f1f1;
+    border: none;
+    height: 20px;
+    border-radius: 2px;
+    width: 130px;
+    position: relative;
+    left: -20px;
+    top: -23px;
+    animation-duration: 1s;
+    animation-name: slide-in;
+    animation-fill-mode: forwards;
+  }
+
+  
+  #error-message-bar2 {
+    position: relative;
+    top: -200px;
+    left: -20px;
+    font-size: 12px;
+  }
+
+  #to-bar2 {
+    z-index: 10000;
+    font-size: 13px;
+    position: relative;
+
+    top: -220px;
+    left: 130px;
+  }
+
+  #messages-text-bar2 {
     position: absolute;
+    font-size: 14px;
+    top: 205px;
+    left: 180px;
+  }
+
+  #confirm-button {
+    position: fixed;
     bottom: 20px;
-    left: 90%;
-    transform: translateX(-50%);
-    font-size: 12px;
+    left: 42%;
+    font-size: 17px;
+
     background-color: #ffffff;
     border: none;
     color: #008000;
     border: #008000 1px solid;
-    border-radius: 4px;
+    border-radius: 7px;
     transition: all 0.2s ease-in-out;
-    padding: 6px 12px;
+    padding: 12px 24px;
   }
   
   
-  #bar1-confirm:hover {
+  #confirm-button:hover {
     text-decoration: underline;
     cursor: pointer;
     color: #ffffff;
@@ -345,26 +524,96 @@ ul {
     background-color: #008000;
     border: #008000 1px solid;
   }
- 
+
+
+  /* oTHER OPTIONS DIV */
+
+  .other-options-container {
+    position: relative;
+    left: 370px;
+    top: -110px;
+    margin: auto;
+  padding: 20px;
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  border-radius: 10px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  }
+
+  #other-options-title {
+    position: relative;
+    top: -30px;
+    left: -5px;
+  }
+
   
- #bar2-confirm {
+.select-container-other-optns {
   position: relative;
-  top: -120px;
-    /* Removed 'bottom' and 'left' properties */
+  display: inline-block;
+  top:-40px;
+  width: 120px;
+  left: -10px;
+  font-size: 14px;
+  }
+  
+  /* Styling the select element */
+  .select-container-other-optns select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 140px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  }
+  
+  /* Styling the arrow icon */
+  .select-container-other-optns::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  left:120px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  }
+  
+  /* Styling when select element is open */
+  .select-container-other-optns.select-open select {
+  border-color: #888;
+  }
+  
+  /* Styling the dropdown options */
+  .select-container-other-optns select option {
+  font-size: 16px;
+  }
+  
+  /* Styling when an option is selected */
+  .select-container-other-optns.select-open select option:checked {
+  background-color: #f0f0f0;
+  }
+
+  #view-downloads-button {
+    position: relative;
     font-size: 12px;
+    left: -10px;
+    top: -28px;
+    width: 70%;
+    height: 35px;
     background-color: #ffffff;
     border: none;
     color: #008000;
     border: #008000 1px solid;
-    border-radius: 4px;
+    border-radius: 3px;
     transition: all 0.2s ease-in-out;
     padding: 6px 12px;
-  
-    /* Removed 'transform' property */
   }
   
   
-  #bar2-confirm:hover {
+  #view-downloads-button:hover {
     text-decoration: underline;
     cursor: pointer;
     color: #ffffff;
@@ -372,26 +621,34 @@ ul {
     background-color: #008000;
     border: #008000 1px solid;
   }
- 
-  
- #bar3-confirm {
-  position: relative;
-  top: -120px;
-    /* Removed 'bottom' and 'left' properties */
+
+  #set-filename {
+    position: relative;
+    top: -30px;
+    left: -10px;
     font-size: 12px;
+    height: 10px;
+    width: 56%
+  }
+
+  #view-barcodes-button {
+    position: relative;
+    font-size: 12px;
+    left: -10px;
+    top: -20px;
+    width: 70%;
+    height: 35px;
     background-color: #ffffff;
     border: none;
     color: #008000;
     border: #008000 1px solid;
-    border-radius: 4px;
+    border-radius: 3px;
     transition: all 0.2s ease-in-out;
     padding: 6px 12px;
-  
-    /* Removed 'transform' property */
   }
   
   
-  #bar3-confirm:hover {
+  #view-barcodes-button:hover {
     text-decoration: underline;
     cursor: pointer;
     color: #ffffff;
@@ -399,4 +656,3 @@ ul {
     background-color: #008000;
     border: #008000 1px solid;
   }
- 

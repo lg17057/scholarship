@@ -171,23 +171,7 @@ transition: max-height 0.4s ease-out;
 .panel a:hover{
 color: #007bff;
 }
-.openbtn {
-background-color: #ffffff;
-color: black;
-cursor: pointer;
-padding: 10px 15px;
-border: none;
-border-radius: 5px;
-font-size: 30px;
-position:relative;
-top: -60px;
-cursor: pointer;
-left: -7px;
-}
 
-.openbtn:hover {
-background-color: #f1f1f1;
-}
 
 .closebtn {
 position: relative;
@@ -261,3 +245,23 @@ width: 200px;
 }
 
 
+
+
+
+.openbtn {
+  background-color: #ffffff;
+  color: black;
+  cursor: pointer;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 30px;
+  position:relative;
+  top: -60px;
+  cursor: pointer;
+  left: -7px;
+  }
+  
+  .openbtn:hover {
+  background-color: #f1f1f1;
+  }
