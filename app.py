@@ -1339,6 +1339,72 @@ def devadmin():
 
 
 
+@app.route('/getTeachers', methods=['GET'])
+def get_teachers():
+    # Fetch data from the database (main.db)
+    # Assuming you are using a SQLite database
+    import sqlite3
+    conn = sqlite3.connect('main.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT identifier, teacher_name, email, logins, date_created, last_login FROM users WHERE account_type='Teacher'")
+    teachers = cursor.fetchall()
+    conn.close()
+
+    # Convert data to a list of dictionaries
+    teacher_list = []
+    for teacher in teachers:
+        teacher_dict = {
+            'identifier': teacher[0],
+            'teacher_name': teacher[1],
+            'email': teacher[2],
+            'logins': teacher[3],
+            'date_created': teacher[4],
+            'last_login': teacher[5]
+        }
+        teacher_list.append(teacher_dict)
+
+    # Return JSON response
+    return jsonify(teacher_list)
+
+@app.route('/getAdmins', methods=['GET'])
+def get_admins():
+    import sqlite3
+    conn = sqlite3.connect('main.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT identifier, teacher_name, email, logins, date_created, last_login FROM users WHERE account_type='Admin'")
+    admins = cursor.fetchall()
+    conn.close()
+
+    admin_list = []
+    for admin in admins:
+        admin_dict = {
+            'identifier': admin[0],
+            'teacher_name': admin[1],
+            'email': admin[2],
+            'logins': admin[3],
+            'date_created': admin[4],
+            'last_login': admin[5]
+        }
+        admin_list.append(admin_dict)
+
+    return jsonify(admin_list)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @app.route('/admin')
 def admin():
     conn = sql.connect('main.db')  # Establish a database connection
@@ -1352,7 +1418,6 @@ def admin():
             teacher_list = c.fetchall()
 
             conn.close()  # Close the database connection
-
             return render_template('/admin.html', account_type="Admin", loginstatus=status, teacher_list=teacher_list)
 
         elif account_type == "Teacher":

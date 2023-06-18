@@ -16,6 +16,9 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_page.css') }}">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
@@ -81,9 +84,6 @@
         </div>  
       </div>
 </html>
-
-
-
 {% if account_type == "Admin" %}    
   <div id="admin-container">
     <title>Admin Page</title>
@@ -92,12 +92,36 @@
       <div id="account-search-div">
         <form id="account-search-form" action="/admin" method="GET">
           <lbael for="admin-search-input" id="admin-search-input-label"></lbael>
-          <input type="text" id="admin-search-input" placeholder="Search for a user">
+          <input type="text" class="input-field" id="admin-search-input" placeholder="Search for a user">
           <input type="submit" id="admin-search-submit" value="Confirm">
         </form>
       </div>
 
       <h3 id="messages-text"></h3>
+      <div>
+        <button id="table-teacher-btn">Modify Teachers</button>
+        <button id="table-admin-btn">View Admins</button>
+        <button id="confirmSelection">Confirm</button>
+      </div>
+      
+      <table id="data-table" class="display">
+        <thead>
+          <tr>
+            <th>Identifier</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Logins</th>
+            <th>Date Created</th>
+            <th>Last Login</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+  
+      
+        
 
 
       <form action='/logout' method="GET">
@@ -120,6 +144,66 @@
     </div>
   </div>
 {% endif %}
+<script>
+  $(document).ready(function() {
+    var dataTable = $('#data-table').DataTable();
+
+    // Button 1 click event (Show Teachers)
+    $('#table-teacher-btn').click(function() {
+      dataTable.clear().draw();
+      $.ajax({
+        url: '/getTeachers',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          $.each(data, function(index, row) {
+            var rowData = [
+              row.identifier,
+              row.teacher_name,
+              row.email,
+              row.logins,
+              row.date_created,
+              row.last_login,
+              '<button class="edit-button">Edit</button>'
+            ];
+            dataTable.row.add(rowData).draw(false);
+          });
+        }
+      });
+    });
+
+    // Button 2 click event (Show Admins)
+    $('#table-admin-btn').click(function() {
+      dataTable.clear().draw();
+      $.ajax({
+        url: '/getAdmins',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          $.each(data, function(index, row) {
+            var rowData = [
+              row.identifier,
+              row.teacher_name,
+              row.email,
+              row.logins,
+              row.date_created,
+              row.last_login,
+              '<button class="edit-button">Edit</button>'
+            ];
+            dataTable.row.add(rowData).draw(false);
+          });
+        }
+      });
+    });
+
+    // Edit button click event
+    $(document).on('click', '.edit-button', function() {
+      var row = $(this).closest('tr');
+      row.toggleClass('active-row');
+    });
+  });
+</script>
+
 
 <!-- DETERMINE IF A TEACHER ACCOUNT-->
 <script>
@@ -155,3 +239,4 @@
     });
   });
 </script>
+<!-- STYLING-->

@@ -335,3 +335,14 @@ making the two account type;
 
 added check to sign up page so an admin has to be logged in to create an account, not a teacher
 this will mean that an admin will have to presently over look the creation of an account
+
+--posible admin page features
+
+view admin/teachers accounts
+modify their data
+delete the accounts
+promote them to Admin, but not demote other admins to teacher etc
+view other admins?
+
+
+maybe buttons above the table that stay selected, one for edit and view teachers, one for view admins etc   

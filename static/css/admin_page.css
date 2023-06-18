@@ -77,3 +77,150 @@
     transition: all 0.2s ease-in-out;
   }
   
+
+  .input-field {
+    padding: 10px;
+    margin: 5px 0 18px 0;
+    margin: 0 auto;
+    width: 100px;
+    border: none;
+    border-radius: 2px;
+    background: #f1f1f1;
+  }
+
+  .input-field:focus {
+    background-color: #ddd;
+    outline: none;
+  }
+  
+
+  .devices-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .devices-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+  }
+
+  .devices-table th,
+  .devices-table td {
+    padding: 12px 15px;
+  }
+
+  .devices-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+    background-color: #ffffff; /* Set default background color to white */
+  }
+
+
+  .devices-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+  }
+
+  .devices-table tbody tr.active-row {
+    border: 2px solid #009879; /* Highlight the row with a border */
+  }
+
+  
+#table-teacher-btn {
+    background-color: #ffffff;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 5px;
+    padding: 8px 16px;
+    position: relative;
+    top: -5px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+
+#table-admin-btn {
+    background-color: #ffffff;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 5px;
+    padding: 8px 16px;
+    position: relative;
+    top: -5px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  #table-teacher-btn.active,
+  #table-teacher-btn.active:active {
+    background-color: #008000;
+    border: #008000 1px solid;
+    color: #ffffff;
+  }
+  
+  #table-admin-btn.active,
+  #table-admin-btn.active:active {
+    background-color: #008000;
+    border: #008000 1px solid;
+    color: #ffffff;
+  }
+  
+  
+#confirmSelection {
+    background-color: #ffffff;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 5px;
+    padding: 8px 16px;
+    position: relative;
+    top: -5px;
+    left:1180px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  #confirmSelection:hover {
+    background-color: #008000;
+    border: #008000 1px solid;
+    color: #ffffff;
+    border-radius: 5px;
+    
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+
+  #admin-container {
+    position: fixed;
+    top: 50px;
+  }
+
+  #admin-search-submit {
+    background-color: #ffffff;
+    color: #008000;
+    border: #008000 1px solid;
+    border-radius: 5px;
+    padding: 8px 16px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+
+  
+  #table-admin-btn:hover {
+    background-color: #008000;
+    border: #008000 1px solid;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 8px 16px;
+    
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+
+  #account-search-div {
+    position: relative;
+    top: 50px;
+    left: 255px;
+  }
