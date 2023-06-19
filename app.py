@@ -92,7 +92,9 @@ def main():
 
                 student_name = request.form.get('student_name')
                 student_id = request.form.get('student_id')
-                homeroom = request.form.get('homeroom')
+                homeroom_yearlevel = request.form.get('year_level')
+                homeroom_code = request.form.get('code_select')
+                homeroom = "{}{}".format(homeroom_yearlevel, homeroom_code)
                 device_id = request.form.get('device_id')
                 submitted_under = session['user_id']
                 teacher_signoff = "Unconfirmed"
@@ -241,7 +243,20 @@ def main():
             c.execute("SELECT date_borrowed, device_type, device_id, student_name, homeroom, period_borrowed FROM device_logs WHERE SUBSTR(date_borrowed, 1,10) = ? AND period_returned = ? AND teacher_signoff = ?", (formatted_date,"Not Returned","Unconfirmed"))
             row1 = c.fetchall()
             #selects all devices that have been rented today
-            return render_template('/index.html', row1_descriptor=row1_descriptor, row2_descriptor=row2_descriptor, row3_descriptor=row3_descriptor, row4_descriptor=row4_descriptor, message="Index Page", loginstatus=loginstatus, rows=rows, row1=row1, device_ids=device_ids, device_types=device_types)
+
+            year_levels = ['7', '8', '9', '10', '11', '12', '13']
+
+            homeroom_codes = {}
+            for year_level in year_levels:
+                if year_level == '10' or year_level == '11' or year_level == '12' or year_level == '13':
+                    c.execute("SELECT SUBSTR(code, 3, 5) FROM homerooms WHERE SUBSTR(code, 1, 2) = ?", (year_level,))
+                elif year_level == '7' or year_level == '8' or year_level == '9':
+                    c.execute("SELECT SUBSTR(code, 2, 5) FROM homerooms WHERE SUBSTR(code, 1, 1) = ?", (year_level,))
+
+                codes = [code[0] for code in c.fetchall()]
+                homeroom_codes[f'year{year_level}_codes'] = codes
+
+            return render_template('/index.html', row1_descriptor=row1_descriptor, row2_descriptor=row2_descriptor, row3_descriptor=row3_descriptor, row4_descriptor=row4_descriptor, message="Index Page", loginstatus=loginstatus, rows=rows, row1=row1, device_ids=device_ids, device_types=device_types, codes=codes,homeroom_codes=homeroom_codes)
         else:
             session['logged_in'] = False
             session['user_id'] = "Invalid"
@@ -1309,32 +1324,26 @@ def new_item():
             message = "Please login to access this feature"
             return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
 
-
-
 @app.route('/dev-admin')
-def devadmin():
-    conn = sql.connect('main.db')  # Establish a database connection
-    c = conn.cursor()  # Create a cursor object to execute queries
+def devadmim():
+    conn = sql.connect('logs.db')
+    cursor = conn.cursor()
 
-    status = session["logged_in"]
-    account_type = session["account_type"]
-    if status is True:
-        if account_type == "Admin":
-            c.execute("SELECT teacher_name FROM users")
-            teacher_list = c.fetchall()
+    year_levels = ['7', '8', '9', '10', '11', '12', '13']
 
-            conn.close()  # Close the database connection
+    homeroom_codes = {}
+    for year_level in year_levels:
+        if year_level == '10' or year_level == '11' or year_level == '12' or year_level == '13':
+            cursor.execute("SELECT SUBSTR(code, 3, 5) FROM homerooms WHERE SUBSTR(code, 1, 2) = ?", (year_level,))
+        elif year_level == '7' or year_level == '8' or year_level == '9':
+            cursor.execute("SELECT SUBSTR(code, 2, 5) FROM homerooms WHERE SUBSTR(code, 1, 1) = ?", (year_level,))
 
-            return render_template('/dev_admin.html', account_type="Admin", loginstatus=status, teacher_list=teacher_list)
+        codes = [code[0] for code in cursor.fetchall()]
+        homeroom_codes[f'year{year_level}_codes'] = codes
 
-        elif account_type == "Teacher":
-            return render_template('/admin.html', account_type="Teacher", loginstatus=status)
-        else:
-            return render_template('/message.html', loginstatus=status, message_link="/login-page", message_btn="Login_Page", message="Please Login as an Admin to access this page")
-    else:
-        message = "Please login to access this feature"
-        return render_template('message.html', message=message, loginstatus=status, message_btn="Login",message_link="login-page")
+    conn.close()
 
+    return render_template('dev_admin.html', homeroom_codes=homeroom_codes)
 
 
 
@@ -1388,21 +1397,6 @@ def get_admins():
         admin_list.append(admin_dict)
 
     return jsonify(admin_list)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 @app.route('/admin')

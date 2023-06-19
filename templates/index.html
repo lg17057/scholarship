@@ -213,7 +213,22 @@
                             <br>
                             <div id="homeroom-div-rent">
                               <label for="student_name">Homeroom:</label><br>
-                              <input  type="text" class="input-field" id="homeroom" name="homeroom" placeholder="Homeroom" required>
+                              <div class="homeroom-selector1-manual-rent">
+                                <select name="year_level" id="year_level1" onchange="showLetterCodes(1)">
+                                    <option selected value="">Year Level</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                </select>
+                              </div>
+                              <div class="homeroom-selector2-manual-rent">
+                                <select name="code_select" id="code_select1">
+                                </select>
+                              </div>
                               <br>
                             </div>
                             <label for="device_id" id="labeldeviceid">Device Data:</label><br>
@@ -277,7 +292,22 @@
                           <br>
                           <div id="homeroom-div-rent">
                             <label for="student_name">Homeroom:</label><br>
-                            <input  type="text" class="input-field" id="homeroom" name="homeroom" placeholder="Homeroom" required>
+                            <div class="homeroom-selector1-manual-return">
+                              <select name="year_level" id="year_level2" onchange="showLetterCodes(2)">
+                                  <option selected value="">Year Level</option>
+                                  <option value="7">7</option>
+                                  <option value="8">8</option>
+                                  <option value="9">9</option>
+                                  <option value="10">10</option>
+                                  <option value="11">11</option>
+                                  <option value="12">12</option>
+                                  <option value="13">13</option>
+                              </select>
+                            </div>
+                            <div class="homeroom-selector2-manual-return">
+                              <select name="code_select" id="code_select2">
+                              </select>
+                            </div>
                             <br>
                           </div>
                           <label for="device_id" id="labeldeviceid">Device Data:</label><br>
@@ -340,7 +370,22 @@
                         
                           <div id="homeroom-div-rent-scan1">
                             <label for="student_name">Homeroom:</label><br>
-                            <input required type="text" class="input-field" id="homeroom-input" name="homeroom" placeholder="Homeroom" required>
+                            <div class="homeroom-selector1-rent">
+                              <select name="year_level" id="year_level3" onchange="showLetterCodes(3)">
+                                  <option selected value="">Year Level</option>
+                                  <option value="7">7</option>
+                                  <option value="8">8</option>
+                                  <option value="9">9</option>
+                                  <option value="10">10</option>
+                                  <option value="11">11</option>
+                                  <option value="12">12</option>
+                                  <option value="13">13</option>
+                              </select>
+                            </div>
+                            <div class="homeroom-selector2-rent">
+                              <select name="code_select" id="code_select3">
+                              </select>
+                            </div>
                             <br>
                           </div>
                         
@@ -373,7 +418,7 @@
                 </div>
               <!------------------------------------------------------------------------------------------------------------------------>
               <!------------------------------------------------------------------------------------------------------------------------>
-                <div class="modal-container" id="modal-container-right">
+                <div class="modal-container" id="modal-container-right">  
                   <div class="modal" id="modal-right">
                     <div class="modal-header">
                       <h1 id="modal-title-right">Return Device</h1>
@@ -400,7 +445,22 @@
                           <br>
                           <div id="homeroom-div-rent-scan">
                             <label for="student_name">Homeroom:</label><br>
-                            <input  type="text" class="input-field" id="homeroom" name="homeroom" placeholder="Homeroom" required>
+                            <div class="homeroom-selector1-return">
+                              <select name="year_level" id="year_level4" onchange="showLetterCodes(4)">
+                                  <option selected value="">Year Level</option>
+                                  <option value="7">7</option>
+                                  <option value="8">8</option>
+                                  <option value="9">9</option>
+                                  <option value="10">10</option>
+                                  <option value="11">11</option>
+                                  <option value="12">12</option>
+                                  <option value="13">13</option>
+                              </select>
+                            </div>
+                            <div class="homeroom-selector2-return">
+                              <select name="code_select" id="code_select4">
+                              </select>
+                            </div>
                             <br>
                           <div id="period_returned-div-rental-scan">
                             <label for="period_returned">Period Returned:</label><br>
@@ -861,3 +921,69 @@ studentInput.addEventListener('input', function() {
   
 </script>  
 
+<!-- HOMEROOM SELECTOR JAVASCRIPT-->
+<script>
+  var homeroomCodes = {
+  "7": [
+    {% for code in homeroom_codes['year7_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ],
+  "8": [
+    {% for code in homeroom_codes['year8_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ],
+  "9": [
+    {% for code in homeroom_codes['year9_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ],
+  "10": [
+    {% for code in homeroom_codes['year10_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ],
+  "11": [
+    {% for code in homeroom_codes['year11_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ],
+  "12": [
+    {% for code in homeroom_codes['year12_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ],
+  "13": [
+    {% for code in homeroom_codes['year13_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ]
+};
+
+function showLetterCodes(divNumber) {
+  var numberSelect = document.getElementById("year_level" + divNumber);
+  var selectedNumber = numberSelect.value;
+
+  var letterSelect = document.getElementById("code_select" + divNumber);
+  letterSelect.innerHTML = "";
+
+  var letterCodes = homeroomCodes[selectedNumber] || [];
+
+  for (var i = 0; i < letterCodes.length; i++) {
+    var option = document.createElement("option");
+    option.value = letterCodes[i];
+    option.text = letterCodes[i];
+    letterSelect.appendChild(option);
+  }
+}
+
+// Call the function for each div on page load
+window.addEventListener("DOMContentLoaded", function() {
+  showLetterCodes(1);
+  showLetterCodes(2);
+  showLetterCodes(3);
+  showLetterCodes(4);
+});
+
+</script>
