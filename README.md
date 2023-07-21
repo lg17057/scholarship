@@ -9,20 +9,27 @@ A website framework in which students can sign in and out rental devices based o
 #### My digital outcome will outline the following features;
 
 - A website framework hosted online to be used by potentially several teacher at once on different platforms
-- Simple and accessible UI for easy pickup use by new teachers
-- Ability to create or remove new devices
+- Simple and accessible UI for easy pickup use by new teachers or admins
+- Device Barcodes for students to scan for rental/return
+- Page for teachers to confirm devices have been returned
+- Help page for assistant as a teacher, student or admin
+- Ability to modify device data, create new devices and view devices in circulation
 - Student ID database used to correlate student with their ID - (potential Kamar integration)
 - Rental logs which display all relevant data to teachers
 - Data analysis of rental statistics, and downloadable data of rental logs
 - Ability to add new teachers and moderators
 - Ability to manually add device rental logs
-- Ability to report errors or issues 
+- Ability to report errors or issues
+- Account heirachy system with Admins and Teachers
+- Ability to download other relevant data such as device data, student data, rental logs
+- A page to view previous downloads, list of students
+- Dynamic Homeroom table in database to set list of valid homerooms/current teachers
 
 #### This project may use the following programs / languages
 
 - Written using VSCode
-- Utilising website hosting service
-- Form of SQL
+- Utilising website hosting service (Flask)
+- Form of SQL (DBrowser for SQLite3)
 - HTML
 - Javascript
 - CSS
