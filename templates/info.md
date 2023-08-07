@@ -346,3 +346,8 @@ view other admins?
 
 
 maybe buttons above the table that stay selected, one for edit and view teachers, one for view admins etc   
+
+
+fixed return page issue where device list was ones not in circulation
+
+need to fix issue with

@@ -32,7 +32,7 @@
         </div>
       </head>
       <button class="openbtn" title="Open Nav" onclick="toggleNav()">☰ </button>
-      <div class="sidebar" id="mySidebar">
+      <div class="sidebar" id="mySidebar" style="z-index: 10;">
         <button class="closebtn" title="Close Nav" onclick="toggleNav()">×</button>
         <h3 class="sidenavheader">Options</h3>
         <div class=side-panel1>
@@ -150,10 +150,10 @@
 <div id="download-container" class="download-container" style="position: relative;top: -125px;">
   <a href="/download-logs/" id="downloadbtn" class="download-btn">Download Data</a>
 </div>
-<div class="idpicker-container">
+<div class="idpicker-container" style="z-index: -10;">
   <form action="/overdues" method="POST" id="device_choice">
     <div class="select-container" style="font-size:14px;">  
-      <select id="device_picker_type" style="font-size: 14px;" name="devicepicker" placeholder="Device Type.." value="devicepicker">
+      <select id="device_picker_type" style="font-size: 14px;z-index: -10;" name="devicepicker" placeholder="Device Type.." value="devicepicker">
         <option value="">Device Type: </option>
         <option value="Chromebook">Chromebook</option>
         <option value="iPad">iPad</option>
@@ -162,8 +162,8 @@
       
     </div>
 
-    <input  required type="number"  oninput="validateInput(this)"  name="idpicker" id="idpicker" class="input-field idpicker" name="device_id" placeholder="Device ID">
-    <input type="submit" class="submit-btn" onclick="submitForm()" id="submit-btn" value="Select">
+    <input  required type="number" style="z-index: -10;"  oninput="validateInput(this)"  name="idpicker" id="idpicker" class="input-field idpicker" name="device_id" placeholder="Device ID">
+    <input type="submit" class="submit-btn" style="z-index: -10;" onclick="submitForm()" id="submit-btn" value="Select">
   </form>
   <h3 id="messages-text" >.</h3>
 
