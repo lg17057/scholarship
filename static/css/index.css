@@ -1355,3 +1355,11 @@ background-color: rgba(0, 0, 0, 0.1);
     background-color: #f0f0f0;
     }
     
+
+    #layoutToggleDiv {
+      position: absolute;
+      top: 25px;
+      left: 1250px;
+      z-index: 100;
+      color: #f0f0f0;
+    }

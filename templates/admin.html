@@ -89,13 +89,7 @@
     <title>Admin Page</title>
     <h1 class="main_title">Admin page</h1>
     <div class="primary-container">
-      <div id="account-search-div">
-        <form id="account-search-form" action="/admin" method="GET">
-          <lbael for="admin-search-input" id="admin-search-input-label"></lbael>
-          <input type="text" class="input-field" id="admin-search-input" placeholder="Search for a user">
-          <input type="submit" id="admin-search-submit" value="Confirm">
-        </form>
-      </div>
+      
 
       <h3 id="messages-text"></h3>
       <div>
@@ -104,7 +98,7 @@
         <button id="confirmSelection">Confirm</button>
       </div>
       
-      <table id="data-table" class="display">
+      <table id="data-table" class="display" >
         <thead>
           <tr>
             <th>Identifier</th>
@@ -145,63 +139,92 @@
   </div>
 {% endif %}
 <script>
-  $(document).ready(function() {
-    var dataTable = $('#data-table').DataTable();
+ $(document).ready(function() {
+  var tableVisible = false; // Track if the table is visible
 
-    // Button 1 click event (Show Teachers)
-    $('#table-teacher-btn').click(function() {
-      dataTable.clear().draw();
-      $.ajax({
-        url: '/getTeachers',
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-          $.each(data, function(index, row) {
-            var rowData = [
-              row.identifier,
-              row.teacher_name,
-              row.email,
-              row.logins,
-              row.date_created,
-              row.last_login,
-              '<button class="edit-button">Edit</button>'
-            ];
-            dataTable.row.add(rowData).draw(false);
-          });
-        }
-      });
-    });
-
-    // Button 2 click event (Show Admins)
-    $('#table-admin-btn').click(function() {
-      dataTable.clear().draw();
-      $.ajax({
-        url: '/getAdmins',
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-          $.each(data, function(index, row) {
-            var rowData = [
-              row.identifier,
-              row.teacher_name,
-              row.email,
-              row.logins,
-              row.date_created,
-              row.last_login,
-              '<button class="edit-button">Edit</button>'
-            ];
-            dataTable.row.add(rowData).draw(false);
-          });
-        }
-      });
-    });
-
-    // Edit button click event
-    $(document).on('click', '.edit-button', function() {
-      var row = $(this).closest('tr');
-      row.toggleClass('active-row');
-    });
+  // Button 1 click event (Show Teachers)
+  $('#table-teacher-btn').click(function() {
+    if (!tableVisible) {
+      populateTableWithTeachers();
+      tableVisible = true;
+    }
   });
+
+  // Button 2 click event (Show Admins)
+  $('#table-admin-btn').click(function() {
+    if (!tableVisible) {
+      populateTableWithAdmins();
+      tableVisible = true;
+    }
+  });
+
+  function populateTableWithTeachers() {
+    var tableBody = $('#data-table tbody');
+    tableBody.empty(); // Clear existing rows
+
+    // Fetch teacher data via AJAX and populate the table
+    $.ajax({
+      url: '/getTeachers',
+      type: 'GET',
+      dataType: 'json',
+      success: function(data) {
+        data.forEach(function(row) {
+          var rowData = [
+            row.identifier,
+            row.teacher_name,
+            row.email,
+            row.logins,
+            row.date_created,
+            row.last_login,
+            '<button class="edit-button">Edit</button>'
+          ];
+          var newRow = $('<tr>').appendTo(tableBody);
+          rowData.forEach(function(cellData) {
+            $('<td>').text(cellData).appendTo(newRow);
+          });
+        });
+        $('#data-table thead').show(); // Show table headers
+      }
+    });
+  }
+
+  function populateTableWithAdmins() {
+    var tableBody = $('#data-table tbody');
+    tableBody.empty(); // Clear existing rows
+
+    // Fetch admin data via AJAX and populate the table
+    $.ajax({
+      url: '/getAdmins',
+      type: 'GET',
+      dataType: 'json',
+      success: function(data) {
+        data.forEach(function(row) {
+          var rowData = [
+            row.identifier,
+            row.teacher_name,
+            row.email,
+            row.logins,
+            row.date_created,
+            row.last_login,
+            '<button class="edit-button">Edit</button>'
+          ];
+          var newRow = $('<tr>').appendTo(tableBody);
+          rowData.forEach(function(cellData) {
+            $('<td>').text(cellData).appendTo(newRow);
+          });
+        });
+        $('#data-table thead').show(); // Show table headers
+      }
+    });
+  }
+
+  // Edit button click event
+  $(document).on('click', '.edit-button', function() {
+    var row = $(this).closest('tr');
+    row.toggleClass('active-row');
+  });
+});
+
 </script>
 
 
@@ -240,3 +263,8 @@
   });
 </script>
 <!-- STYLING-->
+<style>
+  #data-table thead {
+    display: none;
+  }
+</style>

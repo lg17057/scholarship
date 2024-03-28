@@ -1,55 +1,38 @@
-<div class="topheader">
-    <div style="width:100%;height:80px;border:none; z-index:-2; background-color: #114e91; position: absolute; top:0px; left:0;"></div>
-    <h2 id="admin-name">Liam Guerin</h2>
-    <h3 id="logout-txt" onclick="window.location.href='/logout'">Sign Out</h3>
-    <button id="account-type">Teacher</button>
-    <span id="admin-span" onclick="window.location.href='/admin'"  title="Admin Page" class="fa fa-user-circle-o" ></span>
+
+
+<div id="container1">
+    <h1>Content in Container 1</h1>
+    <p>This is some text in Container 1.</p>
 </div>
-<style>
-#admin-span {
-    font-size:40px;
-    cursor:pointer;
-    color: #f1f1f1;
-    position: relative;
-    left: 82.5%;
-    top: -42px;
-}
-#account-type {
-  background-color: #28a745;
-  border: none;
-  color: rgb(255, 255, 255);
-  padding: 5px 10px;
-  text-align: center;
-  font-size: 12px;
-  text-decoration: none;
-  display: inline-block;
-  margin: 2px 1px;
-  border-radius: 14px;
-  position: relative;
-  left: 96%;
-  top: -59px;
-  cu
-}
-#logout-txt {
-    font-family: Arial, Helvetica, sans-serif;
-    color: #f1f1f1;
-    position: relative;
-    left: 90%;
-    top: 8px;
-    font-weight: 100;
-    cursor: pointer;
-    font-size: 13px;
-}
-#logout-txt:hover {
-    text-decoration: underline;
-}
-#admin-name {
-    font-family: Arial, Helvetica, sans-serif;
-    color: #f1f1f1;
-    position: relative;
-    left: 90%;
-    top: 20px;
-    font-weight: 300;
-    font-size: 15.5px;
-}
-</style>   
+
+<div id="container2">
+    <h1>Content in Container 2</h1>
+    <!-- Content from Container 1 will be added here dynamically -->
+    <p>This is some text in Container 2.</p>
+</div>
+
+<div class="switch">
+    <input type="checkbox" id="toggleButton" onclick="toggleContent()">
+    <label for="toggleButton">Toggle Content</label>
+</div>
+
+<script>
+    function toggleContent() {
+        var container1 = document.getElementById('container1');
+        var container2 = document.getElementById('container2');
+        var toggleButton = document.getElementById('toggleButton');
+
+        if (toggleButton.checked) {
+            // If the checkbox is checked, hide Container 1 and show Container 2
+            container1.style.display = 'none';
+            container2.style.display = 'block';
+        } else {
+            // If the checkbox is not checked, hide Container 2 and show Container 1
+            container1.style.display = 'block';
+            container2.style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>
