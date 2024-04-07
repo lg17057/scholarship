@@ -24,10 +24,8 @@ import barcode
 from barcode import Code128
 from barcode.writer import ImageWriter
 
-
-
-
-
+############################################## EMAIL IS liamguerin07@gmail.com ###
+####### Student who created this is LG17057, if you need to contact me my email is liamguerin07@gmail.com
 
 #defines static file path
 app = Flask(__name__, static_url_path='/static')   
@@ -92,12 +90,25 @@ def homeroom_data(c):
 
 #function used for providing any relevant date data for different pages
 def date_data():
+    current_time_structured = time.localtime()
+    year = current_time_structured.tm_year
+    month = current_time_structured.tm_mon
+    day = current_time_structured.tm_mday
+    hour = current_time_structured.tm_hour
+    minute = current_time_structured.tm_min
     today = date.today()
     formatted_date = today.strftime("%d-%m-%Y")
     dates = datetime.datetime.now().date().strftime("%d-%m-%yyyy")
     yesterday = date.today() - timedelta(days=1)
     formatted_yesterday = yesterday.strftime("%d-%m-%Y")
-    return today, formatted_date, dates, yesterday, formatted_yesterday
+    current_time_structured = time.localtime()
+    year = current_time_structured.tm_year
+    month = current_time_structured.tm_mon
+    day = current_time_structured.tm_mday
+    hour = current_time_structured.tm_hour
+    minute = current_time_structured.tm_min
+    current_date = "{:02d}-{:02d}-{:04d} {:02d}:{:02d}".format(day, month, year, hour, minute)
+    return today, formatted_date, dates, yesterday,current_date, formatted_yesterday
 #function used for checking whether a device is available for rental or not
 def device_available(device_type, c, device_id):
     query = "SELECT * FROM devices WHERE device_type = ? AND device_id = ? AND in_circulation = 'No'"
@@ -183,7 +194,9 @@ def get_uncirc_device_list(c):
 @app.route('/')
 @app.route('/', methods=['GET','POST'])
 def main():
-    today, formatted_date, dates, yesterday, formatted_date = date_data()
+    
+
+    today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
     session.setdefault('logged_in', False)
     session.setdefault('user_id', "Invalid")
     session.setdefault('account_type', "Invalid")
@@ -200,7 +213,6 @@ def main():
                 homeroom = request.form.get('year_level') + request.form.get('code_select')
                 submitted_under = session['user_id']
                 teacher_signoff = "Unconfirmed"
-                current_date = date.today().strftime("%d-%m-%Y %H:%M")
                 ############################################################################
                 if device_type is None:
                     if device_id is None:
@@ -241,7 +253,7 @@ def main():
 
                     c.execute("UPDATE devices SET in_circulation = ?, last_rental = ?, num_rentals = num_rentals + 1 WHERE device_id = ? AND device_type = ?",("Yes", current_date, device_id, device_type))
                     c.execute("INSERT INTO device_logs (date_borrowed, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, period_returned, teacher_signoff, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",(current_date, submitted_under, student_name, homeroom, device_type, device_id, period_borrowed, reason_borrowed, "Not Returned", "Unconfirmed", notes))
-                    return render_template('message.html', message="Successful Rental", loginstatus=status, message_btn="Rent/Return_Device", message_link="")
+                    return render_template('message.html', message="Successful Rental", loginstatus=status, message_btn="Rent/Return", message_link="")
                 elif form_type == "return":
                     period_returned, notes = form_type_return()
                     rentalexists = rental_exists(device_id,device_type,c)
@@ -273,10 +285,10 @@ def main():
             else:
                 #retrieving all relevant datato put into render template func
                 codes , homeroom_codes,year_levels = homeroom_data(c)
-                today, formatted_date, dates, yesterday, formatted_date = date_data()
+                today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
                 row_1,row_2,row_3,row_4, rows, row1 = index_data(c, formatted_date, yesterday, dates)
                 device_ids, device_types = get_device_list(c)
-                return render_template('/index.html', row1_descriptor=row_1, row2_descriptor=row_2, row3_descriptor=row_3, row4_descriptor=row_4, message="Index Page", loginstatus=status, rows=rows, row1=row1, device_ids=device_ids, device_types=device_types, codes=codes,homeroom_codes=homeroom_codes)
+                return render_template('/index_s.html', row1_descriptor=row_1, row2_descriptor=row_2, row3_descriptor=row_3, row4_descriptor=row_4, message="Index Page", loginstatus=status, rows=rows, row1=row1, device_ids=device_ids, device_types=device_types, codes=codes,homeroom_codes=homeroom_codes)
         else:
             #person not logged in goes here
             codes , homeroom_codes,year_levels = homeroom_data(c)
@@ -285,7 +297,7 @@ def main():
             session['user_id'] = "Invalid"
             #list of device type and id combinations
             device_ids, device_types = get_device_list(c)
-            return render_template('/index.html',homeroom_codes=homeroom_codes, code=codes, message="Index Page. Please login to access data", loginstatus=status, device_ids=device_ids, device_types=device_types)
+            return render_template('/index_s.html',homeroom_codes=homeroom_codes, code=codes, message="Index Page. Please login to access data", loginstatus=status, device_ids=device_ids, device_types=device_types)
 
 
 #device log page
@@ -325,8 +337,9 @@ def get_barcode(device_type, device_id):
 def modify_device_selected(device_type, device_id):
     with opendb('logs.db') as c:
         status = session['logged_in']
-        today = date.today()       
-        formatted_date = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
+        today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
+
+        formatted_date = current_date
         c.execute("SELECT device_id, device_type, date_added, added_by, in_circulation, notes, num_rentals, last_rental, last_change FROM devices where device_type = ? AND device_id = ?", (device_type, device_id))
         data = c.fetchone()
         
@@ -389,7 +402,9 @@ def circulations():
         status = session["logged_in"]
         if status is True:
             today = date.today()       
-            formatted_date = today.strftime("%d-%m-%Y %H:M")
+            today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
+
+            formatted_date = current_date
      
             ipads_circulating = 'None circulating'
             chromebooks_circulating = 'None circulating'
@@ -417,7 +432,9 @@ def overdue_rentals():
     with opendb('logs.db') as c:
         status = session["logged_in"]
         if status is True:    
-            formatted_date = date.today().strftime("%d-%m-%Y %H:M")
+            today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
+
+            formatted_date = current_date
             yesterday = date.today() - timedelta(days=1) #SUBSTR(date_borrowed, 1, 5) = ? AND SUBSTR(date_borrowed, 1, 5) < ? 
             formatted_yesterday = yesterday.strftime("%d-%m-%Y %H:M")
             c.execute("SELECT * FROM device_logs WHERE period_returned = 'Not Returned' AND teacher_signoff = 'Unconfirmed' AND SUBSTR(date_borrowed, 1, 8) < ?", (formatted_date,))
@@ -443,7 +460,9 @@ def overdue_rentals_devicespecific(device_type,device_id):
      with opendb('logs.db') as c:
         status = session["logged_in"]
         if status is True:    
-            formatted_date = date.today().strftime("%d-%m-%Y %H:M")
+            today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
+
+            formatted_date = current_date
             yesterday = date.today() - timedelta(days=1) #SUBSTR(date_borrowed, 1, 5) = ? AND SUBSTR(date_borrowed, 1, 5) < ? 
             formatted_yesterday = yesterday.strftime("%d-%m-%Y %H:M")
             c.execute("SELECT * FROM device_logs WHERE period_returned = 'Not Returned' AND teacher_signoff = 'Unconfirmed' AND SUBSTR(date_borrowed, 1, 8) < ? AND device_type = ? AND device_id = ?", (formatted_date,device_type,device_id,))
@@ -484,8 +503,9 @@ def rental_logs():
     with opendb('logs.db') as c:
         status = session["logged_in"]
         if status is True:
-            today = date.today()
-            formatted_date = today.strftime("%d-%m-%Y %H:M")
+            today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
+
+            formatted_date = current_date
             c.execute("SELECT * from device_logs")
             logs = c.fetchall()
             c.execute("SELECT DISTINCT date_borrowed FROM device_logs")
@@ -593,7 +613,9 @@ def download_logs():
     with opendb('logs.db') as c:
         status = session["logged_in"]
         user = session["user_id"]
-        create_date = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
+        today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
+
+        create_date = current_date
         if status is True:
             if request.method == 'POST':
                 form_type = request.form.get('form_type')
@@ -834,6 +856,8 @@ def fetch_rows(c, query, params):
 
 
 def generate_pdf(filename, headers, rows, constraints, user):
+    today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
+
     class PDF(FPDF):
         def header(self):
             self.set_font('Arial', '', 10)  
@@ -848,7 +872,7 @@ def generate_pdf(filename, headers, rows, constraints, user):
                 self.cell(header_width, header_height, filename, 0, 0, 'L', fill=True)
                 self.set_x((self.w - self.get_string_width(f"Downloaded By: {user}")) / 2-110)  
                 self.cell(0, header_height, f"Downloaded By: {user}", 0, 0, 'C') 
-                self.cell(0, header_height, f"Date Downloaded: {datetime.datetime.now().strftime('%d-%m-%Y %H:%M')}", 0, 0, 'R')  
+                self.cell(0, header_height, f"Date Downloaded: {current_date}", 0, 0, 'R')  
                 self.ln(header_height)  
             else:
                 self.cell(header_width, header_height, "", 0, 0, 'L', fill=False)
@@ -966,6 +990,8 @@ def generate_pdf(filename, headers, rows, constraints, user):
     pdf.output(filename)
 
 def generate_pdf_devices(filename, headers, rows, constraints, user):
+    today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
+
     class PDF(FPDF):
         def header(self):
             self.set_font('Arial', '', 10)
@@ -980,7 +1006,7 @@ def generate_pdf_devices(filename, headers, rows, constraints, user):
                 self.cell(header_width, header_height, filename, 0, 0, 'L', fill=True)
                 self.set_x((self.w - self.get_string_width(f"Downloaded By: {user}")) / 2 - 110)
                 self.cell(0, header_height, f"Downloaded By: {user}", 0, 0, 'C')
-                self.cell(0, header_height, f"Date Downloaded: {datetime.datetime.now().strftime('%d-%m-%Y %H:%M')}",
+                self.cell(0, header_height, f"Date Downloaded: {current_date}",
                           0, 0, 'R')
                 self.ln(header_height)
             else:
@@ -1175,17 +1201,19 @@ def new_log():
         available_devices = c.execute("SELECT * FROM devices WHERE in_circulation = ?", ("No",))
     
         if request.method == "POST":
+            today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
+
             form_type = request.form.get('form_type')
             device_type = request.form.get('device_type')
             # Retrieve form data
-            formatted_date = datetime.datetime.now().strftime("%d-%m-%Y %H:%M")
+            formatted_date = current_date
 
             student_name = request.form.get('student_name')
             homeroom = request.form.get('homeroom')
             device_id = request.form.get('device_id')
             submitted_under = session['user_id']
             teacher_signoff = "Unconfirmed"
-            current_date = date.today().strftime("%d-%m-%Y %H:%M")
+            
             if form_type == "rent":
                 period_borrowed = request.form.get('period_borrowed')
                 reason_borrowed = request.form.get('reason_borrowed')
@@ -1306,6 +1334,8 @@ def new_item():
     with opendb('logs.db') as c:
         status = session["logged_in"]
         if status is True:
+            today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
+
             if request.method == "POST": #when user clicks submit button
                 loginstatus = session['logged_in']
                 #used for creating a new device
@@ -1316,7 +1346,7 @@ def new_item():
                 device_exists_check = c.fetchone()
                 if device_exists_check is None:
                     #get relevant data for writing to database
-                    date_submitted = datetime.datetime.now().strftime("%d-%m %H:%M") #records date and time device was created
+                    date_submitted = current_date #records date and time device was created
                     submitted_by = session['user_id']
                     notes_device = request.form['notes']
                     in_circulation = "No"
@@ -1480,6 +1510,8 @@ def login_success(teacher_name, last_login):
 @app.route('/login-page', methods=["POST"])
 def login_page_post():
     with opendb('main.db') as c:
+        today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
+
         input_value = request.form['teacher_name'] 
         passkey = request.form['password']
         is_email = re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', input_value)
@@ -1502,7 +1534,7 @@ def login_page_post():
                 session['logged_in'] = True
                 session['user_id'] = user_data[2]  # Assuming the username or email is at index 1
                 session['account_type'] = stripped_text
-                last_login = datetime.datetime.now().strftime("%d-%m %H:%M")
+                last_login = current_date
                 login_success(user_data[2], last_login)  # Assuming the username or email is at index 1
                 loginstatus = session['logged_in']
                 return render_template('message.html', message="Login Success", loginstatus=loginstatus, message_btn="Index_Page",message_link="")
@@ -1529,6 +1561,8 @@ def signup_page():
 @app.route('/signup-page', methods=['POST'])
 def signup_page_post():
     with opendb('main.db') as c:
+        today,current_date, formatted_date, dates, yesterday, formatted_date = date_data()
+
         status = session["logged_in"]
         if status is True:
             if request.method == "POST":
@@ -1545,7 +1579,7 @@ def signup_page_post():
                                            loginstatus=status,  message_btn="Try_Again",message_link="signup-page")
                 else:  
                     now = datetime.datetime.now()
-                    date_created = now.strftime("%d-%m %H:%M")
+                    date_created = current_date
                     salt = bcrypt.gensalt()
                     hashed_password = bcrypt.hashpw(passkey.encode('utf-8'), salt)
                     # Store the salt and hashed password as bytes

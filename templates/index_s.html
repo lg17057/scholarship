@@ -93,3 +93,1165 @@
         </div>  
       </div>
 </html>
+    <body>
+      <title>Index Page</title>
+        
+        <h1 class="main_title">{{message}}</h1>
+        <div class="primary-container" id="primary-container">
+          <button class="button" id="left-button" >Check In</button>
+          <button class="button" id="right-button" >Check Out</button>
+          <div class="content">
+            <div id="cards-containers">
+              <div class="card" id="checkout-card">
+                <div class="header" id="checkout-header">
+                  <h2 class="title" id="checkout-title">Checkouts</h2>
+                </div>
+                <div class="table-container-checkout">
+                  <table class="devices" id="checkouts-table">
+                    <thead>
+                      <th>Date Borrowed</th>
+                      <th>Device Type</th>
+                      <th>Device ID</th>
+                      <th>Student Name</th>
+                      <th>Homeroom</th>
+                      <th>Period Borrowed</th>
+                    </thead>
+                    <tbody>
+                      {% for row in row1 %}
+                      <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
+                        <td>{{ row[3] }}</td>
+                        <td>{{ row[4] }}</td>
+                        <td>{{ row[5] }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div> 
+              </div>
+              <div class="card" id="overdue-card">
+                <div class="header" id="overdue-header">
+                  <h2 class="title" id="overdue-title">Overdues</h2>
+                </div>
+                <div class="content">
+                  <div class="table-container" id="overdue-table-container">
+                    <table class="devices" id="overdue-table">
+                      <thead>
+                        <th>Date Borrowed</th>
+                        <th>Device Type</th>
+                        <th>Device ID</th>
+                        <th>Student Name</th>
+                        <th>Homeroom</th>
+                        <th>Period Borrowed</th>
+                      </thead>
+                      <tbody>
+                        {% for row in rows %}
+                        <tr>
+                          <td>{{ row[0] }}</td>
+                          <td>{{ row[1] }}</td>
+                          <td>{{ row[2] }}</td>
+                          <td>{{ row[3] }}</td>
+                          <td>{{ row[4] }}</td>
+                          <td>{{ row[5] }}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                  <button id="view-overdues" onclick="window.location.href='/overdues'">View Overdues</button>
+
+                </div>
+              </div> 
+              <div class="card" id="data-card">
+                <div id="data-header">
+                  <h2 id="data-title">Rental Data Today</h2>
+                </div>
+                <div class="content">
+                  <div class="row-content">
+                    <div class="data-row" id="row1">
+                      <h2 class="datacard-header" id="row1-header">Total Rentals Today:</h2>
+                      <h2 class="datacard-header" id="row1-descriptor">{{row1_descriptor}}</h2>
+                    </div>
+                    <div class="data-row" id="row2">
+                      <h2 class="datacard-header" id="row2-header">Devices Returned:</h2>
+                      <h2 class="datacard-header" id="row2-descriptor">{{row2_descriptor}}</h2>
+                    </div>
+                    <div class="data-row" id="row3">
+                      <h2 class="datacard-header" id="row3-header">Devices Confirmed:</h2>
+                      <h2 class="datacard-header" id="row3-descriptor">{{row3_descriptor}}</h2>
+                    </div>
+                    <div class="data-row" id="row4">
+                      <h2 class="datacard-header" id="row4-header">Overdue Devices:</h2>
+                      <h2 class="datacard-header" id="row4-descriptor">{{row4_descriptor}}</h2>
+                    </div>
+                  </div>
+                  <button id="view-rentals" onclick="window.location.href='/rental-logs'">View All Rentals</button>
+
+                </div>
+              </div> 
+            </div>
+            <div class="rent-content">
+              <!------------------------------------------------------------------------------------------------------------------------>
+              <!------------------------------------------------------------------------------------------------------------------------>
+                <div class="modal-container" id="modal-container-confirm">
+                    <div class="modal" id="modal-confirm">
+                      <div class="modal-header">
+                        <h1 id="modal-title-confirm">Entering Data Manually</h1>
+                        <button class="modal-close" title="Close Modal" id="close-button-confirm">×</button>
+                      </div>
+                      <div class="modal-content">
+                        <div id="form-content">
+                          <!--This is the form used to rent a device-->
+                          <form method="POST" action="/" id="manual_rent">
+                            <input type="hidden" name="form_type" value="rent">
+                          
+                            <!-- Form fields -->
+                            <label for="student_name">Full Name:</label><br>
+                            <input type="text" class="input-field" id="student_name" name="student_name" placeholder="Full Name" required>
+                            <br>
+                            
+                            <div id="homeroom-div-rent">
+                              <label for="student_name">Homeroom:</label><br>
+                              <div class="homeroom-selector1-manual-rent">
+                                <select name="year_level" id="year_level1" onchange="showLetterCodes(1)">
+                                    <option selected value="">Year Level</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                </select>
+                              </div>
+                              <div class="homeroom-selector2-manual-rent">
+                                <select name="code_select" id="code_select1">
+                                </select>
+                              </div>
+                              <br>
+                            </div>
+                            <label for="device_id" id="labeldeviceid">Device Data:</label><br>
+                            <div class="select-container">
+                              <select id="devicepicker" name="device_type" required>
+                                <option selected value="">Device Type:</option>
+                                <option value="iPad">iPad</option>
+                                <option value="Laptop">Laptop</option>
+                                <option value="Chromebook">Chromebook</option>
+                              </select>
+                            </div>
+                            <input  required type="number"  oninput="validateInput(this)"   id="idpicker" class="input-field idpicker" name="device_id" placeholder="Device ID">
+                            <br>
+                            <div id="reason_borrowed-div-rental">
+                               <label for="reason_borrowed">Reason Borrowed:</label><br>
+                              <input type="text" required id="reason_borrowed" name="reason_borrowed" placeholder="Reason..." class="input-field"><br>
+                              <br>
+                            </div>
+                             <div id="period_borrowed-div-rental">
+                              <label for="period_borrowed">Period Borrowed:</label><br>
+                              <div class="select-container1">
+                                <select id="period_borrowed" name="period_borrowed">
+                                  <option selected value="Homeroom">Homeroom</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                                  <option value="6">6</option>
+                                 </select>
+                               </div>
+                            </div>
+                            <input type="submit" class="button" id="confirm-button-left2" value="Confirm" title="Confirm Selection">
+                          </form>
+                          <h3 id="messages-text"></h3>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              <!------------------------------------------------------------------------------------------------------------------------>
+              <!------------------------------------------------------------------------------------------------------------------------>
+                <div class="modal-container" id="modal-container-return">
+                    <div class="modal" id="modal-return">
+                      <div class="modal-header">
+                        <h1 id="modal-title-return">Entering Data Manually</h1>
+                        <button class="modal-close" title="Close Modal" id="close-button-return">×</button>
+                      </div>
+                      <div id="form-content">
+                        <!--THis is the form used to return a device-->
+                        <form method="POST" action="/" id="manual_return">
+                          <input type="hidden" name="form_type" value="return">
+                        
+                          <!-- Form fields -->
+                          <label for="student_name">Full Name:</label><br>
+                          <input type="text" class="input-field" id="student_name" name="student_name" placeholder="Full Name" required>
+                          <br>
+                          
+                          <br>
+                          <div id="homeroom-div-rent">
+                            <label for="student_name">Homeroom:</label><br>
+                            <div class="homeroom-selector1-manual-return">
+                              <select name="year_level" id="year_level2" onchange="showLetterCodes(2)">
+                                  <option selected value="">Year Level</option>
+                                  <option value="7">7</option>
+                                  <option value="8">8</option>
+                                  <option value="9">9</option>
+                                  <option value="10">10</option>
+                                  <option value="11">11</option>
+                                  <option value="12">12</option>
+                                  <option value="13">13</option>
+                              </select>
+                            </div>
+                            <div class="homeroom-selector2-manual-return">
+                              <select name="code_select" id="code_select2">
+                              </select>
+                            </div>
+                            <br>
+                          </div>
+                          <label for="device_id" id="labeldeviceid">Device Data:</label><br>
+                          <div class="select-container">
+                            <select id="device_type_return" name="device_type" required>
+                              <option selected value="">Device Type:</option>
+                              <option value="iPad">iPad</option>
+                              <option value="Laptop">Laptop</option>
+                              <option value="Chromebook">Chromebook</option>
+                            </select>
+                          </div>
+                          <input  required type="number"  oninput="validateInput(this)"   id="device_id_return" class="input-field idpicker" name="device_id" placeholder="Device ID">
+                          <b></b>
+                          <div id="period_returned-div-rental">
+                            <label for="period_returned">Period Returned:</label><br>
+                            <div class="select-container1">
+                              <select id="period_returned" name="period_returned">
+                                <option selected value="Homeroom">Homeroom</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                              </select>
+                            </div>
+                          </div>
+                          <input type="submit" class="button" id="confirm-button-right2" value="Confirm" title="Confirm Selection">
+                        </form>
+                        <h3 id="messages-text1"></h3>
+                      </div>
+                    </div>
+              <!------------------------------------------------------------------------------------------------------------------------>
+              <!------------------------------------------------------------------------------------------------------------------------>
+                </div>                  
+              <!------------------------------------------------------------------------------------------------------------------------>
+              <!------------------------------------------------------------------------------------------------------------------------>
+                <div class="modal-container" id="modal-container-left">
+                  <div class="modal" id="modal-left">
+                    <div class="modal-header">
+                      <h1 id="modal-title-left">Rent Device</h1>
+                      <button class="modal-close" title="Close Modal" id="close-button-left">×</button>
+                    </div>
+                    <div class="modal-content">
+                      <div class="newlog-container-scan">
+                        <form id="form-id" method="POST" action="/">
+                          <input type="hidden" name="form_type" value="rent_scan">
+                        
+                          <div id="barcode-input-container">
+                            <label for="barcode_input">Scan Device</label><br>
+                            <input required type="text" id="barcode_input" name="barcode_input" placeholder="Scan Barcode" class="input-field" pattern="(iPad|Chromebook|Laptop)-\d{4}-\d{8}" title="Please enter the barcode in the format 'DeviceType-XXXX-xxxxxxxx'">
+                            <button type="button" id="clear-button-rent">Scan</button>
+                          </div>
+                        
+                          <div id="student-data-input-container">
+                            <label for="student-data-input">Name:</label><br>
+                            <input required type="text" id="student-data-input" placeholder="Enter Name" name="student_name" class="input-field" >
+                          </div>
+                        
+                          <div id="homeroom-div-rent-scan1">
+                            <label for="student_name">Homeroom:</label><br>
+                            <div class="homeroom-selector1-rent">
+                              <select name="year_level" id="year_level3" onchange="showLetterCodes(3)">
+                                  <option selected value="">Year Level</option>
+                                  <option value="7">7</option>
+                                  <option value="8">8</option>
+                                  <option value="9">9</option>
+                                  <option value="10">10</option>
+                                  <option value="11">11</option>
+                                  <option value="12">12</option>
+                                  <option value="13">13</option>
+                              </select>
+                            </div>
+                            <div class="homeroom-selector2-rent">
+                              <select name="code_select" id="code_select3">
+                              </select>
+                            </div>
+                            <br>
+                          </div>
+                        
+                          <div id="reason_borrowed-div-rental-scan">
+                            <label for="reason_borrowed">Reason Borrowed:</label><br>
+                            <input required type="text" id="reason_borrowed" name="reason_borrowed" placeholder="Reason..." class="input-field"><br>
+                            <br>
+                          </div>
+                        
+                          <div id="period_borrowed-div-rental-scan">
+                            <label for="period_borrowed">Period Borrowed:</label><br>
+                            <div class="select-container1-scan">
+                              <select required id="period_borrowed-scan" name="period_borrowed">
+                                <option selected value="Homeroom">Homeroom</option>
+                                <option value="1">1</option>
+                                 <option value="2">2</option>
+                                <option value="3">3</option>
+                                 <option value="4">4</option>
+                                 <option value="5">5</option>
+                                 <option value="6">6</option>
+                               </select>
+                             </div>
+                          </div>
+                          <button id="confirm-button-left"  value="Confirm" form="form-id" type="submit">Confirm</button>
+                        </form>
+                        <button id="not-working-rent">Not Working?</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <!------------------------------------------------------------------------------------------------------------------------>
+              <!------------------------------------------------------------------------------------------------------------------------>
+                <div class="modal-container" id="modal-container-right">  
+                  <div class="modal" id="modal-right">
+                    <div class="modal-header">
+                      <h1 id="modal-title-right">Return Device</h1>
+                      <button class="modal-close" title="Close Modal" id="close-button-right">×</button>
+                    </div>
+                    <div class="modal-content">
+                      <div id="form-content-manual">
+                        <!--THis is the form used to return a device-->
+                        <form method="POST" action="/">
+                          <input type="hidden" name="form_type" value="return">
+                        
+                          <!-- Form fields -->
+                          <div id="barcode-input-container">
+                            <label for="barcode_input">Scan Device</label><br>
+                            <input required type="text" id="barcode_input" name="barcode_input" placeholder="Scan Barcode" class="input-field" pattern="(iPad|Chromebook|Laptop)-\d{4}-\d{8}" title="Please enter the barcode in the format 'DeviceType-XXXX-xxxxxxxx'">
+                            <button type="button" id="clear-button-rent">Scan</button>
+                          </div>
+                        
+                          <div id="student-data-input-container">
+                            <label for="student-data-input">Student Name</label><br>
+                            <input required type="text" id="student-data-input" placeholder="Enter Name" name="student_name" class="input-field" >
+                          </div>
+                          <br>
+                          <div id="homeroom-div-rent-scan">
+                            <label for="student_name">Homeroom:</label><br>
+                            <div class="homeroom-selector1-return">
+                              <select name="year_level" id="year_level4" onchange="showLetterCodes(4)">
+                                  <option selected value="">Year Level</option>
+                                  <option value="7">7</option>
+                                  <option value="8">8</option>
+                                  <option value="9">9</option>
+                                  <option value="10">10</option>
+                                  <option value="11">11</option>
+                                  <option value="12">12</option>
+                                  <option value="13">13</option>
+                              </select>
+                            </div>
+                            <div class="homeroom-selector2-return">
+                              <select name="code_select" id="code_select4">
+                              </select>
+                            </div>
+                            <br>
+                          <div id="period_returned-div-rental-scan">
+                            <label for="period_returned">Period Returned:</label><br>
+                            <div class="select-container1">
+                              <select id="period_returned" name="period_returned">
+                                <option selected value="Homeroom">Homeroom</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                              </select>
+                            </div>
+                          </div>
+                          <input type="submit" class="button" id="confirm-button-right" value="Confirm" title="Confirm Selection">
+                        </form>
+                        <button id="not-working-return">Not Working?</button>
+                    </div>
+                  </div>
+                </div>
+                </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="secondary-container" id="secondary-container">
+          <button class="button" id="left-button" >Check In</button>
+          <button class="button" id="right-button" >Check Out</button>
+            <div class="modal-container" id="modal-container-confirm">
+            <div class="modal" id="modal-confirm">
+              <div class="modal-header">
+                <h1 id="modal-title-confirm">Entering Data Manually</h1>
+                <button class="modal-close" title="Close Modal" id="close-button-confirm">×</button>
+              </div>
+              <div class="modal-content">
+                <div id="form-content">
+                  <!--This is the form used to rent a device-->
+                  <form method="POST" action="/" id="manual_rent">
+                    <input type="hidden" name="form_type" value="rent">
+                  
+                    <!-- Form fields -->
+                    <label for="student_name">Full Name:</label><br>
+                    <input type="text" class="input-field" id="student_name" name="student_name" placeholder="Full Name" required>
+                    <br>
+                    
+                    <div id="homeroom-div-rent">
+                      <label for="student_name">Homeroom:</label><br>
+                      <div class="homeroom-selector1-manual-rent">
+                        <select name="year_level" id="year_level1" onchange="showLetterCodes(1)">
+                            <option selected value="">Year Level</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                        </select>
+                      </div>
+                      <div class="homeroom-selector2-manual-rent">
+                        <select name="code_select" id="code_select1">
+                        </select>
+                      </div>
+                      <br>
+                    </div>
+                    <label for="device_id" id="labeldeviceid">Device Data:</label><br>
+                    <div class="select-container">
+                      <select id="devicepicker" name="device_type" required>
+                        <option selected value="">Device Type:</option>
+                        <option value="iPad">iPad</option>
+                        <option value="Laptop">Laptop</option>
+                        <option value="Chromebook">Chromebook</option>
+                      </select>
+                    </div>
+                    <input  required type="number"  oninput="validateInput(this)"   id="idpicker" class="input-field idpicker" name="device_id" placeholder="Device ID">
+                    <br>
+                    <div id="reason_borrowed-div-rental">
+                       <label for="reason_borrowed">Reason Borrowed:</label><br>
+                      <input type="text" required id="reason_borrowed" name="reason_borrowed" placeholder="Reason..." class="input-field"><br>
+                      <br>
+                    </div>
+                     <div id="period_borrowed-div-rental">
+                      <label for="period_borrowed">Period Borrowed:</label><br>
+                      <div class="select-container1">
+                        <select id="period_borrowed" name="period_borrowed">
+                          <option selected value="Homeroom">Homeroom</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                         </select>
+                       </div>
+                    </div>
+                    <input type="submit" class="button" id="confirm-button-left2" value="Confirm" title="Confirm Selection">
+                  </form>
+                  <h3 id="messages-text"></h3>
+                </div>
+              </div>
+            </div>
+            </div>
+          <!------------------------------------------------------------------------------------------------------------------------>
+          <!------------------------------------------------------------------------------------------------------------------------>
+            <div class="modal-container" id="modal-container-return">
+                <div class="modal" id="modal-return">
+                  <div class="modal-header">
+                    <h1 id="modal-title-return">Entering Data Manually</h1>
+                    <button class="modal-close" title="Close Modal" id="close-button-return">×</button>
+                  </div>
+                  <div id="form-content">
+                    <!--THis is the form used to return a device-->
+                    <form method="POST" action="/" id="manual_return">
+                      <input type="hidden" name="form_type" value="return">
+                    
+                      <!-- Form fields -->
+                      <label for="student_name">Full Name:</label><br>
+                      <input type="text" class="input-field" id="student_name" name="student_name" placeholder="Full Name" required>
+                      <br>
+
+                      <br>
+                      <div id="homeroom-div-rent">
+                        <label for="student_name">Homeroom:</label><br>
+                        <div class="homeroom-selector1-manual-return">
+                          <select name="year_level" id="year_level2" onchange="showLetterCodes(2)">
+                              <option selected value="">Year Level</option>
+                              <option value="7">7</option>
+                              <option value="8">8</option>
+                              <option value="9">9</option>
+                              <option value="10">10</option>
+                              <option value="11">11</option>
+                              <option value="12">12</option>
+                              <option value="13">13</option>
+                          </select>
+                        </div>
+                        <div class="homeroom-selector2-manual-return">
+                          <select name="code_select" id="code_select2">
+                          </select>
+                        </div>
+                        <br>
+                      </div>
+                      <label for="device_id" id="labeldeviceid">Device Data:</label><br>
+                      <div class="select-container">
+                        <select id="device_type_return" name="device_type" required>
+                          <option selected value="">Device Type:</option>
+                          <option value="iPad">iPad</option>
+                          <option value="Laptop">Laptop</option>
+                          <option value="Chromebook">Chromebook</option>
+                        </select>
+                      </div>
+                      <input  required type="number"  oninput="validateInput(this)"   id="device_id_return" class="input-field idpicker" name="device_id" placeholder="Device ID">
+                      <b></b>
+                      <div id="period_returned-div-rental">
+                        <label for="period_returned">Period Returned:</label><br>
+                        <div class="select-container1">
+                          <select id="period_returned" name="period_returned">
+                            <option selected value="Homeroom">Homeroom</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                          </select>
+                        </div>
+                      </div>
+                      <input type="submit" class="button" id="confirm-button-right2" value="Confirm" title="Confirm Selection">
+                    </form>
+                    <h3 id="messages-text1"></h3>
+                  </div>
+                </div>
+          <!------------------------------------------------------------------------------------------------------------------------>
+          <!------------------------------------------------------------------------------------------------------------------------>
+            </div>                  
+          <!------------------------------------------------------------------------------------------------------------------------>
+          <!------------------------------------------------------------------------------------------------------------------------>
+            <div class="modal-container" id="modal-container-left">
+              <div class="modal" id="modal-left">
+                <div class="modal-header">
+                  <h1 id="modal-title-left">Rent Device</h1>
+                  <button class="modal-close" title="Close Modal" id="close-button-left">×</button>
+                </div>
+                <div class="modal-content">
+                  <div class="newlog-container-scan">
+                    <form id="form-id" method="POST" action="/">
+                      <input type="hidden" name="form_type" value="rent_scan">
+                    
+                      <div id="barcode-input-container">
+                        <label for="barcode_input">Scan Device</label><br>
+                        <input required type="text" id="barcode_input" name="barcode_input" placeholder="Scan Barcode" class="input-field" pattern="(iPad|Chromebook|Laptop)-\d{4}-\d{8}" title="Please enter the barcode in the format 'DeviceType-XXXX-xxxxxxxx'">
+                        <button type="button" id="clear-button-rent">Scan</button>
+                      </div>
+                    
+                      <div id="student-data-input-container">
+                        <label for="student-data-input">Name:</label><br>
+                        <input required type="text" id="student-data-input" placeholder="Enter Name" name="student_name" class="input-field" >
+                      </div>
+                    
+                      <div id="homeroom-div-rent-scan1">
+                        <label for="student_name">Homeroom:</label><br>
+                        <div class="homeroom-selector1-rent">
+                          <select name="year_level" id="year_level3" onchange="showLetterCodes(3)">
+                              <option selected value="">Year Level</option>
+                              <option value="7">7</option>
+                              <option value="8">8</option>
+                              <option value="9">9</option>
+                              <option value="10">10</option>
+                              <option value="11">11</option>
+                              <option value="12">12</option>
+                              <option value="13">13</option>
+                          </select>
+                        </div>
+                        <div class="homeroom-selector2-rent">
+                          <select name="code_select" id="code_select3">
+                          </select>
+                        </div>
+                        <br>
+                      </div>
+                    
+                      <div id="reason_borrowed-div-rental-scan">
+                        <label for="reason_borrowed">Reason Borrowed:</label><br>
+                        <input required type="text" id="reason_borrowed" name="reason_borrowed" placeholder="Reason..." class="input-field"><br>
+                        <br>
+                      </div>
+                    
+                      <div id="period_borrowed-div-rental-scan">
+                        <label for="period_borrowed">Period Borrowed:</label><br>
+                        <div class="select-container1-scan">
+                          <select required id="period_borrowed-scan" name="period_borrowed">
+                            <option selected value="Homeroom">Homeroom</option>
+                            <option value="1">1</option>
+                             <option value="2">2</option>
+                            <option value="3">3</option>
+                             <option value="4">4</option>
+                             <option value="5">5</option>
+                             <option value="6">6</option>
+                           </select>
+                         </div>
+                      </div>
+                      <button id="confirm-button-left"  value="Confirm" form="form-id" type="submit">Confirm</button>
+                    </form>
+                    <button id="not-working-rent">Not Working?</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!------------------------------------------------------------------------------------------------------------------------>
+          <!------------------------------------------------------------------------------------------------------------------------>
+            <div class="modal-container" id="modal-container-right">  
+              <div class="modal" id="modal-right">
+                <div class="modal-header">
+                  <h1 id="modal-title-right">Return Device</h1>
+                  <button class="modal-close" title="Close Modal" id="close-button-right">×</button>
+                </div>
+                <div class="modal-content">
+                  <div id="form-content-manual">
+                    <!--THis is the form used to return a device-->
+                    <form method="POST" action="/">
+                      <input type="hidden" name="form_type" value="return">
+                    
+                      <!-- Form fields -->
+                      <div id="barcode-input-container">
+                        <label for="barcode_input">Scan Device</label><br>
+                        <input required type="text" id="barcode_input" name="barcode_input" placeholder="Scan Barcode" class="input-field" pattern="(iPad|Chromebook|Laptop)-\d{4}-\d{8}" title="Please enter the barcode in the format 'DeviceType-XXXX-xxxxxxxx'">
+                        <button type="button" id="clear-button-rent">Scan</button>
+                      </div>
+                    
+                      <div id="student-data-input-container">
+                        <label for="student-data-input">Student Name</label><br>
+                        <input required type="text" id="student-data-input" placeholder="Enter Name" name="student_name" class="input-field" >
+                      </div>
+                      <br>
+                      <div id="homeroom-div-rent-scan">
+                        <label for="student_name">Homeroom:</label><br>
+                        <div class="homeroom-selector1-return">
+                          <select name="year_level" id="year_level4" onchange="showLetterCodes(4)">
+                              <option selected value="">Year Level</option>
+                              <option value="7">7</option>
+                              <option value="8">8</option>
+                              <option value="9">9</option>
+                              <option value="10">10</option>
+                              <option value="11">11</option>
+                              <option value="12">12</option>
+                              <option value="13">13</option>
+                          </select>
+                        </div>
+                        <div class="homeroom-selector2-return">
+                          <select name="code_select" id="code_select4">
+                          </select>
+                        </div>
+                        <br>
+                      <div id="period_returned-div-rental-scan">
+                        <label for="period_returned">Period Returned:</label><br>
+                        <div class="select-container1">
+                          <select id="period_returned" name="period_returned">
+                            <option selected value="Homeroom">Homeroom</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                          </select>
+                        </div>
+                      </div>
+                      <input type="submit" class="button" id="confirm-button-right" value="Confirm" title="Confirm Selection">
+                    </form>
+                    <button id="not-working-return">Not Working?</button>
+                </div>
+              </div>
+            </div>
+            </div>
+        </div>    
+    </body>
+</html>
+
+<!-- Toggle Dispay-->
+
+<!-- Return form  js-->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var devicepicker = document.getElementById("device_type_return");
+    var idpicker = document.getElementById("device_id_return");
+    var messagesText = document.getElementById("messages-text1");
+    var submitButton = document.getElementById("confirm-button-right2");
+
+    function validateInput(input) {
+      input.value = input.value.replace(/[^0-9]/g, ''); // remove non-digit
+      input.value = input.value.slice(0, 4); // limit to 4 digits
+      if (input.value < 0) {
+        input.value = ''; // clear negative 
+      }
+      updateMessage();
+      updateSubmitButton();
+    }
+
+    function updateMessage() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (enteredDeviceId !== "" && matchingDeviceIds.indexOf(enteredDeviceId) === -1) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+      } else {
+        messagesText.style.color = "green";
+        messagesText.textContent = enteredDeviceId !== "" ? "Valid Type and ID" : "";
+      }
+    }
+
+    function updateSubmitButton() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        submitButton.disabled = true;
+        submitButton.style.cursor = "disabled";
+      } else {
+        submitButton.disabled = false;
+        submitButton.style.cursor = "pointer";
+      }
+    }
+
+    function submitForm(event) {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+        event.preventDefault(); // Prevent form submission
+      }
+    }
+
+    devicepicker.addEventListener("change", function() {
+      updateMessage();
+      updateSubmitButton();
+    });
+
+    idpicker.addEventListener("input", function() {
+      validateInput(this);
+    });
+
+    document.getElementById("manual_return").addEventListener("submit", function(event) {
+      submitForm(event);
+    });
+  });
+</script>
+<!-- STYLE-->
+<style>
+  
+#messages-text {
+  color: red;
+  font-weight: 300;
+  z-index: 100;
+  position: fixed;
+  top: 560px;
+}
+
+#messages-text1 {
+  color: red;
+  position: relative;
+  font-weight: 300;
+  position:relative;
+  top: -50px;
+  
+}
+</style>
+<!--Rent form js-->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var devicepicker = document.getElementById("devicepicker");
+    var idpicker = document.querySelector(".idpicker");
+    var messagesText = document.getElementById("messages-text");
+    var submitButton = document.getElementById("confirm-button-left2");
+
+    function validateInput(input) {
+      input.value = input.value.replace(/[^0-9]/g, ''); // remove non-digit
+      input.value = input.value.slice(0, 4); // limit to 4 digits
+      if (input.value < 0) {
+        input.value = ''; // clear negative 
+      }
+      updateMessage();
+      updateSubmitButton();
+    }
+
+    function updateMessage() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (enteredDeviceId !== "" && matchingDeviceIds.indexOf(enteredDeviceId) === -1) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+      } else {
+        messagesText.style.color = "green";
+        messagesText.textContent = enteredDeviceId !== "" ? "Valid Type and ID" : "";
+      }
+    }
+
+    function updateSubmitButton() {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        submitButton.disabled = true;
+        submitButton.style.cursor = "disabled";
+      } else {
+        submitButton.disabled = false;
+        submitButton.style.cursor = "pointer";
+      }
+    }
+
+    function submitForm(event) {
+      var selectedDeviceType = devicepicker.value;
+      var enteredDeviceId = idpicker.value;
+
+      var deviceIds = {{ device_ids|tojson }};
+      var deviceTypes = {{ device_types|tojson }};
+
+      var matchingDeviceIds = [];
+      for (var i = 0; i < deviceTypes.length; i++) {
+        if (deviceTypes[i] === selectedDeviceType) {
+          matchingDeviceIds.push(deviceIds[i]);
+        }
+      }
+
+      if (
+        enteredDeviceId === "" || // No ID entered
+        matchingDeviceIds.indexOf(enteredDeviceId) === -1 || // Invalid ID
+        (selectedDeviceType !== "" && enteredDeviceId === "") // Only device type selected
+      ) {
+        messagesText.style.color = "red";
+        messagesText.textContent = "Please select valid Device Type and ID.";
+        event.preventDefault(); // Prevent form submission
+      }
+    }
+
+    devicepicker.addEventListener("change", function() {
+      updateMessage();
+      updateSubmitButton();
+    });
+
+    idpicker.addEventListener("input", function() {
+      validateInput(this);
+    });
+
+    document.getElementById("manual_rent").addEventListener("submit", function(event) {
+      submitForm(event);
+    });
+  });
+</script>
+<!-- Table JS-->
+<script>
+  $(document).ready(function() {
+  $('#overdue-table').DataTable({
+    paging: false,
+    pageLength: 20, // num of rows / page
+    lengthMenu: [10, 20, 50, 100], 
+    searching: true, 
+    ordering: true, 
+    info: false, 
+    language: {
+      paginate: {
+        first: 'First',
+        last: 'Last',
+        next: '&raquo;',
+        previous: '&laquo;'
+      },
+      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+    }
+  });
+});
+</script>
+<!-- Table JS-->
+<script>
+  $(document).ready(function() {
+  $('#checkouts-table').DataTable({
+    paging: false,
+    pageLength: 20, // num of rows / page
+    lengthMenu: [10, 20, 50, 100], 
+    searching: true, 
+    ordering: true, 
+    info: false, 
+    language: {
+      paginate: {
+        first: 'First',
+        last: 'Last',
+        next: '&raquo;',
+        previous: '&laquo;'
+      },
+      info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+    }
+  });
+});
+</script>
+<!--Barcode JS-->
+<script>
+const barcodeInput = document.getElementById('barcode_input');
+const clearButtonRent = document.getElementById('clear-button-rent');
+const clearButtonStudentRent = document.getElementById('clear-button-student-rent');
+const confirmButton = document.getElementById('confirm-button-left');
+
+clearButtonRent.addEventListener('click', function() {
+  if (clearButtonRent.textContent === 'Scan') {
+    if (clearButtonStudentRent.textContent === 'Clear') {
+      clearButtonStudentRent.textContent = 'Scan';
+      
+    }
+
+    clearButtonRent.textContent = 'Clear';
+    barcodeInput.readOnly = false;
+    barcodeInput.focus();
+    barcodeInput.select();
+  } else {
+    clearButtonRent.textContent = 'Scan';
+    barcodeInput.value = '';
+    barcodeInput.readOnly = true;
+    barcodeInput.blur();
+  }
+});
+
+barcodeInput.addEventListener('input', function() {
+  if (barcodeInput.value.length > 0) {
+    confirmButton.disabled = false;
+  } else {
+    confirmButton.disabled = true;
+  }
+});
+
+clearButtonStudentRent.addEventListener('click', function() {
+  if (clearButtonStudentRent.textContent === 'Scan') {
+    if (clearButtonRent.textContent === 'Clear') {
+      clearButtonRent.textContent = 'Scan';
+      barcodeInput.readOnly = true;
+      barcodeInput.blur();
+    }
+
+  }
+});
+
+
+
+</script>
+<!-- Modal JS-->
+<script>
+  const leftButton = document.getElementById("left-button");
+  const rightButton = document.getElementById("right-button");
+
+  const modalLeft = document.getElementById("modal-left");
+  const modalRight = document.getElementById("modal-right");
+  const modalConfirm = document.getElementById("modal-confirm");
+  const modalReturn = document.getElementById("modal-return");
+
+
+  const closeButtonLeft = document.getElementById("close-button-left");
+  const closeButtonRight = document.getElementById("close-button-right");
+  const closeButtonReturn = document.getElementById("close-button-return");
+  const closeButtonConfirm = document.getElementById("close-button-confirm");
+
+  const notWorkingRentButton = document.getElementById("not-working-rent");
+  const notWorkingReturnButton = document.getElementById("not-working-return");
+
+  const modalContainerLeft = document.getElementById("modal-container-left");
+  const modalContainerRight = document.getElementById("modal-container-right");
+  const modalContainerConfirm = document.getElementById("modal-container-confirm");
+  const modalContainerReturn = document.getElementById("modal-container-return");
+  
+  leftButton.addEventListener("click", () => {
+    modalContainerLeft.style.display = "block";
+    modalContainerRight.style.display = "none";
+    modalContainerConfirm.style.display = "none";
+    modalContainerReturn.style.display = "none";
+
+  });
+  
+  rightButton.addEventListener("click", () => {
+    modalContainerRight.style.display = "block";
+    modalContainerConfirm.style.display = "none";
+    modalContainerReturn.style.display = "none";
+    modalContainerLeft.style.display = "none";
+
+  });
+  
+  notWorkingRentButton.addEventListener("click", () => {
+    modalContainerConfirm.style.display = "block";
+    modalContainerRight.style.display = "none";
+    modalContainerReturn.style.display = "none";
+
+  });
+  
+  notWorkingReturnButton.addEventListener("click", () => {
+    modalContainerReturn.style.display = "block";
+  });
+  
+  closeButtonLeft.addEventListener("click", () => {
+    modalContainerLeft.style.display = "none";
+  });
+  
+  closeButtonRight.addEventListener("click", () => {
+    modalContainerRight.style.display = "none";
+  });
+  
+  closeButtonConfirm.addEventListener("click", () => {
+    modalContainerConfirm.style.display = "none";
+  });
+  
+  closeButtonReturn.addEventListener("click", () => {
+    modalContainerReturn.style.display = "none";
+  });
+  
+  window.addEventListener("click", (event) => {
+    if (event.target === modalContainerLeft) {
+      modalContainerLeft.style.display = "none";
+    }
+    if (event.target === modalContainerRight) {
+      modalContainerRight.style.display = "none";
+    }
+    if (event.target === modalContainerConfirm) {
+      modalContainerConfirm.style.display = "none";
+    }
+    if (event.target === modalContainerReturn) {
+      modalContainerReturn.style.display = "none";
+    }
+  });
+  
+  
+  
+</script>  
+
+<!-- HOMEROOM SELECTOR JAVASCRIPT-->
+<script>
+  var homeroomCodes = {
+  "7": [
+    {% for code in homeroom_codes['year7_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ],
+  "8": [
+    {% for code in homeroom_codes['year8_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ],
+  "9": [
+    {% for code in homeroom_codes['year9_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ],
+  "10": [
+    {% for code in homeroom_codes['year10_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ],
+  "11": [
+    {% for code in homeroom_codes['year11_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ],
+  "12": [
+    {% for code in homeroom_codes['year12_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ],
+  "13": [
+    {% for code in homeroom_codes['year13_codes'] %}
+      "{{ code }}",
+    {% endfor %}
+  ]
+};
+
+function showLetterCodes(divNumber) {
+  var numberSelect = document.getElementById("year_level" + divNumber);
+  var selectedNumber = numberSelect.value;
+
+  var letterSelect = document.getElementById("code_select" + divNumber);
+  letterSelect.innerHTML = "";
+
+  var letterCodes = homeroomCodes[selectedNumber] || [];
+
+  for (var i = 0; i < letterCodes.length; i++) {
+    var option = document.createElement("option");
+    option.value = letterCodes[i];
+    option.text = letterCodes[i];
+    letterSelect.appendChild(option);
+  }
+}
+
+// Call the function for each div on page load
+window.addEventListener("DOMContentLoaded", function() {
+  showLetterCodes(1);
+  showLetterCodes(2);
+  showLetterCodes(3);
+  showLetterCodes(4);
+});
+
+</script>
