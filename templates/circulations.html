@@ -85,45 +85,46 @@
 <h1 class="main_title">Circulations</h1>
 <div class="circulation-content">
   <button type="submit" id="submit-button" >See Overview</button>
+  <div class="table-contents">
+    <table id="devices-tables" class="devices">
+      <thead>
+        <th>
+          Date Borrowed
+        </th>
+        <th>
+          Device Type
+        </th>
+        <th>
+          Device ID
+        </th>
+        <th>
+          Student Name
+        </th>
+        <th>
+          Homeroom
+        </th>
+        <th>
+          Period Borrowed
+        </th>
+        <th>
+          Notes
+        </th>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+        </tr>
+        {% endfor %}
 
-  <table id="devices-tables" class="devices">
-    <thead>
-      <th>
-        Date Borrowed
-      </th>
-      <th>
-        Device Type
-      </th>
-      <th>
-        Device ID
-      </th>
-      <th>
-        Student Name
-      </th>
-      <th>
-        Homeroom
-      </th>
-      <th>
-        Period Borrowed
-      </th>
-      <th>
-        Notes
-      </th>
-    </thead>
-    <tbody>
-      {% for row in rows %}
-      <tr>
-          <td>{{ row[0] }}</td>
-          <td>{{ row[1] }}</td>
-          <td>{{ row[2] }}</td>
-          <td>{{ row[3] }}</td>
-          <td>{{ row[4] }}</td>
-          <td>{{ row[5] }}</td>
-      </tr>
-      {% endfor %}
-
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
   <div class="popup-overlay" id="popup-overlay"></div>
   <div class="popup" id="popup">
     <h2 class="popup-title">Devices Circulating:</h2>
@@ -138,6 +139,15 @@
     </div>
   </div>
 </div> 
+
+<style>
+
+  
+  #table-contents {
+      position: relative;
+      top: -10px;
+    }
+  </style>
 <script>
   const submitButton = document.getElementById('submit-button');
   const popupOverlay = document.getElementById('popup-overlay');

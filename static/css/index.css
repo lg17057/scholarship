@@ -354,7 +354,7 @@ left: 550px;
 
 #view-rentals {
 position: relative;
-top: -220px;
+top: -270px;
 left: 1250px;
 }
 
@@ -401,7 +401,7 @@ border: #008000 1px solid;
 border-radius: 5px;
 padding: 10px 20px;
 position: relative;
-z-index: 3;
+z-index: 5;
 top: -30px;
 left: 515px;
 
@@ -577,7 +577,7 @@ transition: all 0.2s ease-in-out;
 }
 
 #confirm-button-right {
-top: 115px;
+top: 160px;
 left: 155px;
 }
 
@@ -699,7 +699,7 @@ background-color: #fff;
 content: '\25BC';
 position: absolute;
 top: 50%;
-left:155px;
+left:150px;
 transform: translateY(-50%);
 pointer-events: none;
 }
@@ -897,6 +897,7 @@ background-color: #fff;
 content: '\25BC';
 position: absolute;
 top: 50%;
+left: 160px;
 z-index: 100;
 transform: translateY(-50%);
 pointer-events: none;
@@ -978,3 +979,380 @@ background-color: rgba(0, 0, 0, 0.1);
 .main_title {
   left: 50px;
 }
+
+     
+.homeroom-selector1-rent {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  font-size: 14px;
+  }
+  
+  /* Styling the select element */
+  .homeroom-selector1-rent select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 110px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  }
+  
+  /* Styling the arrow icon */
+  .homeroom-selector1-rent::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  left:90px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  }
+  
+  /* Styling when select element is open */
+  .homeroom-selector1-rent.select-open select {
+  border-color: #888;
+  }
+  
+  /* Styling the dropdown options */
+  .homeroom-selector1-rent select option {
+  font-size: 14px;
+  }
+  
+  /* Styling when an option is selected */
+  .homeroom-selector1-rent.select-open select option:checked {
+  background-color: #f0f0f0;
+  }
+  
+  .homeroom-selector2-rent {
+  position: relative;
+  display: inline-block;
+  width: 70px;
+  left: 20px;
+  font-size: 14px;
+  }
+  
+  /* Styling the select element */
+  .homeroom-selector2-rent select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 70px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  }
+  
+  /* Styling the arrow icon */
+  .homeroom-selector2-rent::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  left:45px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  }
+  
+  /* Styling when select element is open */
+  .homeroom-selector2-rent.select-open select {
+  border-color: #888;
+  }
+  
+  /* Styling the dropdown options */
+  .homeroom-selector2-rent select option {
+  font-size: 14px;
+  }
+  
+  /* Styling when an option is selected */
+  .homeroom-selector2-rent.select-open select option:checked {
+  background-color: #f0f0f0;
+  }
+  
+
+       
+  .homeroom-selector1-manual-rent {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    font-size: 14px;
+    }
+    
+    /* Styling the select element */
+    .homeroom-selector1-manual-rent select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 110px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    }
+    
+    /* Styling the arrow icon */
+    .homeroom-selector1-manual-rent::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    left:90px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    }
+    
+    /* Styling when select element is open */
+    .homeroom-selector1-manual-rent.select-open select {
+    border-color: #888;
+    }
+    
+    /* Styling the dropdown options */
+    .homeroom-selector1manual--rent select option {
+    font-size: 14px;
+    }
+    
+    /* Styling when an option is selected */
+    .homeroom-selector1-manual-rent.select-open select option:checked {
+    background-color: #f0f0f0;
+    }
+    
+    .homeroom-selector2-manual-rent {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    left: 20px;
+    font-size: 14px;
+    }
+    
+    /* Styling the select element */
+    .homeroom-selector2-manual-rent select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 70px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    }
+    
+    /* Styling the arrow icon */
+    .homeroom-selector2-manual-rent::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    left:45px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    }
+    
+    /* Styling when select element is open */
+    .homeroom-selector2-manual-rent.select-open select {
+    border-color: #888;
+    }
+    
+    /* Styling the dropdown options */
+    .homeroom-selector2-manual-rent select option {
+    font-size: 14px;
+    }
+    
+    /* Styling when an option is selected */
+    .homeroom-selector2-manual-rent.select-open select option:checked {
+    background-color: #f0f0f0;
+    }
+    
+
+
+
+
+         
+  .homeroom-selector1-manual-return {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    font-size: 14px;
+    }
+    
+    /* Styling the select element */
+    .homeroom-selector1-manual-return select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 110px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    }
+    
+    /* Styling the arrow icon */
+    .homeroom-selector1-manual-return::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    left:90px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    }
+    
+    /* Styling when select element is open */
+    .homeroom-selector1-manual-return.select-open select {
+    border-color: #888;
+    }
+    
+    /* Styling the dropdown options */
+    .homeroom-selector1-manual-return select option {
+    font-size: 14px;
+    }
+    
+    /* Styling when an option is selected */
+    .homeroom-selector1-manual-return.select-open select option:checked {
+    background-color: #f0f0f0;
+    }
+    
+    .homeroom-selector2-manual-return {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    left: 20px;
+    font-size: 14px;
+    }
+    
+    /* Styling the select element */
+    .homeroom-selector2-manual-return select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 70px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    }
+    
+    /* Styling the arrow icon */
+    .homeroom-selector2-manual-return::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    left:45px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    }
+    
+    /* Styling when select element is open */
+    .homeroom-selector2-manual-return.select-open select {
+    border-color: #888;
+    }
+    
+    /* Styling the dropdown options */
+    .homeroom-selector2-manual-return select option {
+    font-size: 14px;
+    }
+    
+    /* Styling when an option is selected */
+    .homeroom-selector2-manual-return.select-open select option:checked {
+    background-color: #f0f0f0;
+    }
+    
+
+
+
+         
+  .homeroom-selector1-return {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    font-size: 14px;
+    }
+    
+    /* Styling the select element */
+    .homeroom-selector1-return select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 110px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    }
+    
+    /* Styling the arrow icon */
+    .homeroom-selector1-return::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    left:90px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    }
+    
+    /* Styling when select element is open */
+    .homeroom-selector1-return.select-open select {
+    border-color: #888;
+    }
+    
+    /* Styling the dropdown options */
+    .homeroom-selector1-return select option {
+    font-size: 14px;
+    }
+    
+    /* Styling when an option is selected */
+    .homeroom-selector1-return.select-open select option:checked {
+    background-color: #f0f0f0;
+    }
+    
+    .homeroom-selector2-return {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    left: 20px;
+    font-size: 14px;
+    }
+    
+    /* Styling the select element */
+    .homeroom-selector2-return select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 70px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    }
+    
+    /* Styling the arrow icon */
+    .homeroom-selector2-return::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    left:45px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    }
+    
+    /* Styling when select element is open */
+    .homeroom-selector2-return.select-open select {
+    border-color: #888;
+    }
+    
+    /* Styling the dropdown options */
+    .homeroom-selector2-return select option {
+    font-size: 14px;
+    }
+    
+    /* Styling when an option is selected */
+    .homeroom-selector2-return.select-open select option:checked {
+    background-color: #f0f0f0;
+    }
+    

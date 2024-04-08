@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dev Admin</title>
+</head>
+<body>
+    <h1>Homeroom Codes</h1>
+
+    <div class="homeroom-selector1-rent">
+        <select name="year_level" id="year_level" onchange="showLetterCodes()">
+            <option selected value="">Year Level</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+        </select>
+    </div>
+
+    <div class="homeroom-selector2-rent">
+        <select name="code_select" id="code_select">
+        </select>
+    </div>
+    <style>
+        
+.homeroom-selector1-rent {
+position: relative;
+display: inline-block;
+width: 100px;
+font-size: 14px;
+}
+
+/* Styling the select element */
+.homeroom-selector1-rent select {
+appearance: none;
+-webkit-appearance: none;
+-moz-appearance: none;
+width: 110px;
+padding: 10px;
+font-size: 14px;
+border: 1px solid #ccc;
+border-radius: 4px;
+background-color: #fff;
+}
+
+/* Styling the arrow icon */
+.homeroom-selector1-rent::after {
+content: '\25BC';
+position: absolute;
+top: 50%;
+left:90px;
+transform: translateY(-50%);
+pointer-events: none;
+}
+
+/* Styling when select element is open */
+.homeroom-selector1-rent.select-open select {
+border-color: #888;
+}
+
+/* Styling the dropdown options */
+.homeroom-selector1-rent select option {
+font-size: 14px;
+}
+
+/* Styling when an option is selected */
+.homeroom-selector1-rent.select-open select option:checked {
+background-color: #f0f0f0;
+}
+
+.homeroom-selector2-rent {
+position: relative;
+display: inline-block;
+width: 70px;
+left: 20px;
+font-size: 14px;
+}
+
+/* Styling the select element */
+.homeroom-selector2-rent select {
+appearance: none;
+-webkit-appearance: none;
+-moz-appearance: none;
+width: 70px;
+padding: 10px;
+font-size: 14px;
+border: 1px solid #ccc;
+border-radius: 4px;
+background-color: #fff;
+}
+
+/* Styling the arrow icon */
+.homeroom-selector2-rent::after {
+content: '\25BC';
+position: absolute;
+top: 50%;
+left:45px;
+transform: translateY(-50%);
+pointer-events: none;
+}
+
+/* Styling when select element is open */
+.homeroom-selector2-rent.select-open select {
+border-color: #888;
+}
+
+/* Styling the dropdown options */
+.homeroom-selector2-rent select option {
+font-size: 14px;
+}
+
+/* Styling when an option is selected */
+.homeroom-selector2-rent.select-open select option:checked {
+background-color: #f0f0f0;
+}
+
+    </style>
+
+    <script>
+        var homeroomCodes = {
+            "7": [
+                {% for code in homeroom_codes['year7_codes'] %}
+                    "{{ code }}",
+                {% endfor %}
+            ],
+            "8": [
+                {% for code in homeroom_codes['year8_codes'] %}
+                    "{{ code }}",
+                {% endfor %}
+            ],
+            "9": [
+                {% for code in homeroom_codes['year9_codes'] %}
+                    "{{ code }}",
+                {% endfor %}
+            ],
+            "10": [
+                {% for code in homeroom_codes['year10_codes'] %}
+                    "{{ code }}",
+                {% endfor %}
+            ],
+            "11": [
+                {% for code in homeroom_codes['year11_codes'] %}
+                    "{{ code }}",
+                {% endfor %}
+            ],
+            "12": [
+                {% for code in homeroom_codes['year12_codes'] %}
+                    "{{ code }}",
+                {% endfor %}
+            ],
+            "13": [
+                {% for code in homeroom_codes['year13_codes'] %}
+                    "{{ code }}",
+                {% endfor %}
+            ]
+        };
+
+        function showLetterCodes() {
+            var numberSelect = document.getElementById("year_level");
+            var selectedNumber = numberSelect.value;
+
+            var letterSelect = document.getElementById("code_select");
+            letterSelect.innerHTML = "";
+
+            var letterCodes = homeroomCodes[selectedNumber] || [];
+
+
+            for (var i = 0; i < letterCodes.length; i++) {
+                var option = document.createElement("option");
+                option.value = letterCodes[i];
+                option.text = letterCodes[i];
+                letterSelect.appendChild(option);
+            }
+        }
+    </script>
+</body>
+</html>
