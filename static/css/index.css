@@ -354,7 +354,7 @@ left: 550px;
 
 #view-rentals {
 position: relative;
-top: -220px;
+top: -270px;
 left: 1250px;
 }
 
@@ -401,7 +401,7 @@ border: #008000 1px solid;
 border-radius: 5px;
 padding: 10px 20px;
 position: relative;
-z-index: 3;
+z-index: 5;
 top: -30px;
 left: 515px;
 
@@ -577,7 +577,7 @@ transition: all 0.2s ease-in-out;
 }
 
 #confirm-button-right {
-top: 115px;
+top: 160px;
 left: 155px;
 }
 
@@ -699,7 +699,7 @@ background-color: #fff;
 content: '\25BC';
 position: absolute;
 top: 50%;
-left:155px;
+left:150px;
 transform: translateY(-50%);
 pointer-events: none;
 }
@@ -897,6 +897,7 @@ background-color: #fff;
 content: '\25BC';
 position: absolute;
 top: 50%;
+left: 160px;
 z-index: 100;
 transform: translateY(-50%);
 pointer-events: none;
@@ -1355,11 +1356,3 @@ background-color: rgba(0, 0, 0, 0.1);
     background-color: #f0f0f0;
     }
     
-
-    #layoutToggleDiv {
-      position: absolute;
-      top: 25px;
-      left: 1250px;
-      z-index: 100;
-      color: #f0f0f0;
-    }
